@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 215 25% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 15%;
+
+    --primary: 214 60% 23%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 215 25% 15%;
+
+    --muted: 210 20% 96%;
+    --muted-foreground: 215 15% 47%;
+
+    --accent: 210 20% 94%;
+    --accent-foreground: 215 25% 15%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 214 20% 89%;
+    --input: 214 20% 89%;
+    --ring: 214 60% 23%;
+
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border box-border;
+  }
+
+  body {
+    @apply bg-background text-foreground m-0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+    .print-break-before {
+      page-break-before: always;
+    }
+    .print-break-after {
+      page-break-after: always;
+    }
+    body {
+      font-size: 11pt;
+      color: #000;
+    }
+  }
+}
+
+/* MapLibre GL */
+.maplibregl-map {
+  font-family: inherit !important;
+}
+.maplibregl-ctrl-attrib {
+  font-size: 10px !important;
+}
