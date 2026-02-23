@@ -39,11 +39,11 @@ export default function Dashboard() {
           </button>
           <div className="flex items-center gap-2">
             <LayoutDashboard className="h-4 w-4 text-navy-700" />
-            <span className="font-semibold text-navy-900">Mon espace</span>
+            <span className="font-bold text-navy-900">Mon espace EDL&DIAGNOSTIC</span>
           </div>
           <Button
             size="sm"
-            className="bg-navy-900 hover:bg-navy-800"
+            className="bg-edl-700 hover:bg-edl-800"
             onClick={() => navigate('/generer')}
           >
             <PlusCircle className="h-4 w-4 mr-1" />

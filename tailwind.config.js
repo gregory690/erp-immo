@@ -48,18 +48,32 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // ERP custom colors
+        // Palette EDL&DIAGNOSTIC
+        // navy = dark brand color (#211f54 deep navy/purple)
         navy: {
-          50: "#f0f4f8",
-          100: "#d9e2ec",
-          200: "#bcccdc",
-          300: "#9fb3c8",
-          400: "#829ab1",
-          500: "#627d98",
-          600: "#486581",
-          700: "#334e68",
-          800: "#243b53",
-          900: "#1a3a5c",
+          50:  "#f2f1ff",  // fond très clair EDL
+          100: "#e0dffa",
+          200: "#c4c1f5",
+          300: "#a09be8",
+          400: "#7c75d8",
+          500: "#5a52c4",
+          600: "#4640ad",
+          700: "#352f90",
+          800: "#2a2472",
+          900: "#211f54",  // couleur sombre principale EDL
+        },
+        // edl = rouge signature de la marque (#b20f11)
+        edl: {
+          50:  "#fef2f2",
+          100: "#fde3e3",
+          200: "#fbb4b4",
+          300: "#f88585",
+          400: "#f45656",
+          500: "#e63131",
+          600: "#cc1f1f",
+          700: "#b20f11",  // rouge EDL principal
+          800: "#8f0b0d",
+          900: "#6b0809",
         },
         risk: {
           none: "#16a34a",
@@ -72,6 +86,9 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      fontFamily: {
+        sans: ['Montserrat', 'Open Sans', 'system-ui', 'sans-serif'],
       },
       keyframes: {
         "accordion-down": {

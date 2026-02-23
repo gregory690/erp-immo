@@ -69,7 +69,7 @@ export function AddressConfirmation({
       <Card>
         <CardContent className="pt-4 space-y-3">
           <div className="flex items-start gap-3">
-            <MapPin className="h-5 w-5 text-navy-700 mt-0.5 shrink-0" />
+            <MapPin className="h-5 w-5 text-edl-700 mt-0.5 shrink-0" />
             <div>
               <p className="text-sm font-semibold text-gray-900">{adresse}</p>
               <p className="text-sm text-gray-600">{codePostal} {commune}</p>
@@ -79,7 +79,7 @@ export function AddressConfirmation({
 
           <div className="border-t pt-3">
             <div className="flex items-center gap-2 mb-2">
-              <Building2 className="h-4 w-4 text-navy-700" />
+              <Building2 className="h-4 w-4 text-edl-700" />
               <span className="text-sm font-medium text-gray-700">Références cadastrales</span>
             </div>
 

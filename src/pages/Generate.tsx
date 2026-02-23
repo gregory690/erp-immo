@@ -137,7 +137,7 @@ export default function Generate() {
             <ChevronLeft className="h-4 w-4" />
             Retour
           </button>
-          <span className="font-semibold text-navy-900">Génération ERP</span>
+          <span className="font-bold text-navy-900">EDL&DIAGNOSTIC · Génération ERP</span>
           <div className="w-16" />
         </div>
       </header>
@@ -206,7 +206,7 @@ export default function Generate() {
               <Button
                 onClick={goToStep2}
                 disabled={!addressState}
-                className="w-full bg-navy-900 hover:bg-navy-800"
+                className="w-full bg-edl-700 hover:bg-edl-800"
                 size="lg"
               >
                 Confirmer l'adresse
@@ -251,7 +251,7 @@ export default function Generate() {
                 </Button>
                 <Button
                   onClick={goToStep3}
-                  className="flex-1 bg-navy-900 hover:bg-navy-800"
+                  className="flex-1 bg-edl-700 hover:bg-edl-800"
                   size="lg"
                 >
                   Calculer les risques
@@ -342,7 +342,7 @@ export default function Generate() {
                     </Button>
                     <Button
                       onClick={() => setStep(4)}
-                      className="flex-1 bg-navy-900 hover:bg-navy-800"
+                      className="flex-1 bg-edl-700 hover:bg-edl-800"
                       size="lg"
                     >
                       Choisir ma formule

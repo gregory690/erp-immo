@@ -115,7 +115,7 @@ export function ServiceSelector({ selected, onSelect, onConfirm }: ServiceSelect
         onClick={onConfirm}
         disabled={!isSelected}
         size="lg"
-        className="w-full bg-navy-900 hover:bg-navy-800 text-base font-semibold h-12"
+        className="w-full bg-edl-700 hover:bg-edl-800 text-base font-semibold h-12"
       >
         Télécharger mon ERP — 9,99 €
       </Button>

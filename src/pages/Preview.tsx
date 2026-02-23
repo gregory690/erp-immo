@@ -28,7 +28,7 @@ export default function Preview() {
           <AlertCircle className="h-12 w-12 text-gray-400 mx-auto" />
           <p className="text-gray-600">Aucun ERP trouvé.</p>
           <Button
-            className="bg-navy-900 hover:bg-navy-800"
+            className="bg-edl-700 hover:bg-edl-800"
             onClick={() => navigate('/generer')}
           >
             Générer un ERP
@@ -49,7 +49,7 @@ export default function Preview() {
             <ChevronLeft className="h-4 w-4" />
             Retour
           </button>
-          <span className="font-semibold text-navy-900">Aperçu ERP</span>
+          <span className="font-bold text-navy-900">EDL&DIAGNOSTIC · Aperçu ERP</span>
           <div className="w-16" />
         </div>
       </header>

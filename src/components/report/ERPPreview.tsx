@@ -55,7 +55,7 @@ export function ERPPreview({ document: erp, onNew }: ERPPreviewProps) {
           </Button>
           <Button
             size="sm"
-            className="bg-navy-900 hover:bg-navy-800"
+            className="bg-edl-700 hover:bg-edl-800"
             onClick={handleDownload}
             disabled={downloading}
           >

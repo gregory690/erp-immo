@@ -45,8 +45,8 @@ export function OrderHistory({ history, onView }: OrderHistoryProps) {
           <Card key={erp.metadata.reference ?? i} className="hover:shadow-md transition-shadow">
             <CardContent className="p-4">
               <div className="flex items-start gap-4">
-                <div className="bg-navy-50 rounded-lg p-2 shrink-0">
-                  <FileText className="h-5 w-5 text-navy-700" />
+                <div className="bg-edl-50 rounded-lg p-2 shrink-0">
+                  <FileText className="h-5 w-5 text-edl-700" />
                 </div>
 
                 <div className="flex-1 min-w-0">
