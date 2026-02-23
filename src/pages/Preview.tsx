@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, AlertCircle } from 'lucide-react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { ChevronLeft, AlertCircle, CheckCircle2, PartyPopper } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { ERPPreview } from '../components/report/ERPPreview';
 import { getERPHistory } from '../hooks/useRiskCalculation';
@@ -8,7 +8,11 @@ import type { ERPDocument } from '../types/erp.types';
 
 export default function Preview() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [erp, setErp] = useState<ERPDocument | null>(null);
+
+  const paymentSuccess = searchParams.get('payment') === 'success';
+  const erpRef = searchParams.get('ref');
 
   useEffect(() => {
     const history = getERPHistory();
@@ -50,7 +54,30 @@ export default function Preview() {
         </div>
       </header>
 
-      <div className="max-w-5xl mx-auto px-4 py-8">
+      <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
+        {/* Bannière de succès paiement */}
+        {paymentSuccess && (
+          <div className="flex items-start gap-4 bg-green-50 border border-green-200 rounded-xl p-5 animate-fade-in no-print">
+            <div className="bg-green-100 rounded-full p-2 shrink-0">
+              <PartyPopper className="h-6 w-6 text-green-700" />
+            </div>
+            <div className="flex-1">
+              <p className="font-bold text-green-900 text-base">
+                Paiement confirmé — votre ERP est prêt !
+              </p>
+              <p className="text-sm text-green-800 mt-1">
+                Merci pour votre achat. Téléchargez votre document ci-dessous.
+                {erpRef && (
+                  <span className="block text-xs text-green-600 mt-0.5 font-mono">
+                    Réf. paiement : {erpRef}
+                  </span>
+                )}
+              </p>
+            </div>
+            <CheckCircle2 className="h-5 w-5 text-green-600 shrink-0 mt-0.5" />
+          </div>
+        )}
+
         <ERPPreview document={erp} onNew={() => navigate('/generer')} />
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Check, Loader2, AlertCircle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check, Loader2, AlertCircle, CreditCard } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
@@ -12,6 +12,8 @@ import { RiskSummaryTable } from '../components/report/RiskSummaryTable';
 import { useRiskCalculation } from '../hooks/useRiskCalculation';
 import { getParcellesFromCoords, extractReferenceCadastrale } from '../services/cadastre.service';
 import { buildRiskSummary, getGlobalRiskLevel } from '../utils/risk-aggregator';
+import { createCheckoutSession } from '../services/stripe.service';
+import { formatERPReference } from '../utils/erp-validator';
 import type { BANFeature } from '../types/ban.types';
 import type { ERPMode } from '../types/erp.types';
 import type { ReferenceCadastrale } from '../services/cadastre.service';
@@ -48,6 +50,8 @@ export default function Generate() {
   const [cadastreLoading, setCadastreLoading] = useState(false);
   const [cadastreError, setCadastreError] = useState<string | null>(null);
   const [selectedMode, setSelectedMode] = useState<ERPMode | null>(null);
+  const [paymentLoading, setPaymentLoading] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
 
   const { loading, progress, document: erpDocument, error, calculate } = useRiskCalculation();
 
@@ -99,19 +103,23 @@ export default function Generate() {
   }
 
   async function handleConfirm() {
-    if (!addressState || !selectedMode) return;
-    // Re-run with selected mode
-    await calculate({
-      adresse_complete: addressState.feature.properties.label,
-      code_insee: addressState.feature.properties.citycode,
-      code_postal: addressState.feature.properties.postcode,
-      commune: addressState.feature.properties.city,
-      lat: addressState.lat,
-      lng: addressState.lng,
-      cadastre,
-      mode: selectedMode,
-    });
-    navigate('/apercu');
+    if (!addressState || !selectedMode || !erpDocument) return;
+    setPaymentError(null);
+    setPaymentLoading(true);
+    try {
+      const checkoutUrl = await createCheckoutSession({
+        erp_reference: formatERPReference(erpDocument.metadata.reference),
+        adresse: addressState.feature.properties.label,
+        commune: addressState.feature.properties.city,
+      });
+      // Redirection vers la page de paiement Stripe
+      window.location.href = checkoutUrl;
+    } catch (err) {
+      setPaymentError(
+        err instanceof Error ? err.message : 'Erreur de connexion au service de paiement'
+      );
+      setPaymentLoading(false);
+    }
   }
 
   const riskSummary = erpDocument ? buildRiskSummary(erpDocument.risques, erpDocument.catnat) : [];
@@ -358,21 +366,46 @@ export default function Generate() {
         {step === 4 && (
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Choisissez votre formule</CardTitle>
+              <CardTitle className="text-lg">Téléchargez votre ERP</CardTitle>
               <CardDescription>
-                Téléchargez immédiatement en self-service ou faites certifier par un expert.
+                Paiement sécurisé par Stripe — vous serez redirigé vers la page de paiement.
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <ServiceSelector
                 selected={selectedMode}
                 onSelect={setSelectedMode}
                 onConfirm={handleConfirm}
               />
+
+              {/* Payment loading overlay */}
+              {paymentLoading && (
+                <div className="flex items-center justify-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg animate-fade-in">
+                  <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
+                  <div>
+                    <p className="text-sm font-medium text-blue-900">Redirection vers Stripe…</p>
+                    <p className="text-xs text-blue-700">Création de votre session de paiement sécurisée</p>
+                  </div>
+                  <CreditCard className="h-5 w-5 text-blue-400 ml-auto" />
+                </div>
+              )}
+
+              {/* Payment error */}
+              {paymentError && (
+                <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <AlertCircle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-red-900">Erreur de paiement</p>
+                    <p className="text-sm text-red-700">{paymentError}</p>
+                  </div>
+                </div>
+              )}
+
               <Button
                 variant="ghost"
-                className="w-full mt-3 text-sm text-gray-500"
+                className="w-full text-sm text-gray-500"
                 onClick={() => setStep(3)}
+                disabled={paymentLoading}
               >
                 <ChevronLeft className="h-4 w-4 mr-1" />
                 Retour aux résultats
