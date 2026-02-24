@@ -5,6 +5,7 @@ import { Button } from '../components/ui/button';
 import { ERPPreview } from '../components/report/ERPPreview';
 import { getERPHistory } from '../hooks/useRiskCalculation';
 import { sendERPByEmail, fetchERPByReference } from '../services/email.service';
+import { formatERPReference } from '../utils/erp-validator';
 import type { ERPDocument } from '../types/erp.types';
 
 export default function Preview() {
@@ -124,7 +125,7 @@ export default function Preview() {
                 Téléchargez votre document ci-dessous ou recevez-le par email.
                 {erpRef && (
                   <span className="block text-xs text-green-600 mt-0.5 font-mono">
-                    Réf. paiement : {erpRef}
+                    Réf. : {formatERPReference(erpRef)}
                   </span>
                 )}
               </p>

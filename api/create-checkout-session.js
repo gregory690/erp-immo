@@ -1,6 +1,7 @@
 // Vercel Function — create-checkout-session
 // La clé secrète Stripe n'est JAMAIS exposée au navigateur.
 import Stripe from 'stripe';
+import { kv } from '@vercel/kv';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -16,12 +17,25 @@ export default async function handler(req, res) {
   const stripe = new Stripe(secretKey, { apiVersion: '2024-06-20' });
 
   try {
-    const { erp_reference, adresse, commune } = req.body;
+    const { erp_reference, adresse, commune, erpDocument } = req.body;
 
     // Validation et sanitisation des inputs
     const safeRef = String(erp_reference || '').slice(0, 64).replace(/[<>"'&]/g, '');
     const safeAdresse = String(adresse || '').slice(0, 200).replace(/[<>"'&]/g, '');
     const safeCommune = String(commune || '').slice(0, 100).replace(/[<>"'&]/g, '');
+
+    // Sauvegarde préventive du document ERP dans KV avant la redirection Stripe.
+    // Indispensable sur mobile (Safari vide le localStorage lors de la navigation externe).
+    if (erpDocument?.metadata?.reference && safeRef) {
+      try {
+        await kv.set(safeRef, JSON.stringify(erpDocument), {
+          ex: 60 * 60 * 24 * 180, // 180 jours
+        });
+      } catch (kvErr) {
+        // Non bloquant — le paiement continue même si KV est indisponible
+        console.error('KV pre-save error:', kvErr.message);
+      }
+    }
 
     const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`

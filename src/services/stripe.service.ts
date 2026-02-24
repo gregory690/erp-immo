@@ -1,7 +1,10 @@
+import type { ERPDocument } from '../types/erp.types';
+
 export interface CheckoutSessionInput {
   erp_reference: string;
   adresse: string;
   commune: string;
+  erpDocument: ERPDocument;
 }
 
 /**

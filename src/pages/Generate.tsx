@@ -13,7 +13,7 @@ import { useRiskCalculation } from '../hooks/useRiskCalculation';
 import { getParcellesFromCoords, extractReferenceCadastrale } from '../services/cadastre.service';
 import { buildRiskSummary, getGlobalRiskLevel } from '../utils/risk-aggregator';
 import { createCheckoutSession } from '../services/stripe.service';
-import { formatERPReference } from '../utils/erp-validator';
+
 import type { BANFeature } from '../types/ban.types';
 import type { ERPMode } from '../types/erp.types';
 import type { ReferenceCadastrale } from '../services/cadastre.service';
@@ -108,9 +108,10 @@ export default function Generate() {
     setPaymentLoading(true);
     try {
       const checkoutUrl = await createCheckoutSession({
-        erp_reference: formatERPReference(erpDocument.metadata.reference),
+        erp_reference: erpDocument.metadata.reference, // UUID complet — clé KV et URL de retour
         adresse: addressState.feature.properties.label,
         commune: addressState.feature.properties.city,
+        erpDocument,
       });
       // Redirection vers la page de paiement Stripe
       window.location.href = checkoutUrl;
