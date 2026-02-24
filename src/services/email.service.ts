@@ -8,7 +8,7 @@ export async function sendERPByEmail(
   email: string,
   erpDocument: ERPDocument
 ): Promise<void> {
-  const response = await fetch('/.netlify/functions/send-erp-email', {
+  const response = await fetch('/api/send-erp-email', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, erpDocument }),
@@ -26,7 +26,7 @@ export async function sendERPByEmail(
  */
 export async function fetchERPByReference(reference: string): Promise<ERPDocument | null> {
   const response = await fetch(
-    `/.netlify/functions/get-erp-document?ref=${encodeURIComponent(reference)}`
+    `/api/get-erp-document?ref=${encodeURIComponent(reference)}`
   );
 
   if (response.status === 404) return null;

@@ -5,11 +5,11 @@ export interface CheckoutSessionInput {
 }
 
 /**
- * Appelle la Netlify Function qui crée une session Stripe Checkout côté serveur.
+ * Appelle la Vercel Function qui crée une session Stripe Checkout côté serveur.
  * Retourne l'URL de la page de paiement Stripe vers laquelle rediriger l'utilisateur.
  */
 export async function createCheckoutSession(input: CheckoutSessionInput): Promise<string> {
-  const response = await fetch('/.netlify/functions/create-checkout-session', {
+  const response = await fetch('/api/create-checkout-session', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(input),
