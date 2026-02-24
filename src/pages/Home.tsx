@@ -149,9 +149,6 @@ export default function Home() {
             <span className="hidden sm:block text-xs text-gray-500 font-medium">ERP en ligne — Vente &amp; Location</span>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" className="text-navy-900 hover:text-edl-700" onClick={() => navigate('/dashboard')}>
-              Mon espace
-            </Button>
             <Button
               size="sm"
               className="bg-edl-700 hover:bg-edl-800 text-white font-semibold"

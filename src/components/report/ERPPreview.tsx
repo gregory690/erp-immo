@@ -45,9 +45,14 @@ export function ERPPreview({ document: erp, onNew, demoMode = false }: ERPPrevie
     <div className="space-y-4">
       {/* Action bar */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between no-print">
-        <div className="flex items-center gap-2 text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-2">
-          <CheckCircle2 className="h-4 w-4" />
-          <span className="text-sm font-medium">ERP généré avec succès</span>
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2 text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-2">
+            <CheckCircle2 className="h-4 w-4" />
+            <span className="text-sm font-medium">ERP généré avec succès</span>
+          </div>
+          <div className="flex items-start gap-2 text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 no-print">
+            <span className="text-sm">⚠️ <strong>Ce document doit être daté, signé et paraphé par le vendeur ou bailleur</strong> avant annexion au contrat (art. L125-5 C. Env.).</span>
+          </div>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" onClick={printERPDocument}>
@@ -277,16 +282,22 @@ export function ERPPreview({ document: erp, onNew, demoMode = false }: ERPPrevie
 
           <Separator />
 
-          <footer className="text-xs text-gray-400 text-center space-y-1">
-            <p>
-              Document généré via ERP.immo — Source officielle : georisques.gouv.fr
-            </p>
-            <p>
-              Référence : {formatERPReference(erp.metadata.reference)} — Conforme à l'arrêté du 27 septembre 2022
-            </p>
-            <p>
-              Ce document doit être annexé au compromis de vente ou au contrat de bail (art. L125-5 Code de l'Env.)
-            </p>
+          <footer className="text-xs text-gray-500 space-y-2">
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-amber-900">
+              <p className="font-semibold mb-1">Responsabilité du vendeur / bailleur</p>
+              <p>
+                Ce document constitue une aide à la rédaction de l'État des Risques et Pollutions (ERP). Il
+                incombe au vendeur ou bailleur de vérifier les informations, de compléter les sections manquantes
+                (sinistres déclarés, section V), de <strong>dater, parapher et signer</strong> le présent
+                formulaire avant de l'annexer au compromis de vente ou au contrat de bail, conformément à
+                l'article L125-5 du Code de l'Environnement.
+              </p>
+            </div>
+            <div className="text-center text-gray-400 space-y-0.5 pt-1">
+              <p>Document généré via EDL&amp;DIAGNOSTIC ERP — Source officielle : georisques.gouv.fr</p>
+              <p>Référence : {formatERPReference(erp.metadata.reference)} — Conforme à l'arrêté du 27 septembre 2022</p>
+              <p>Données issues de Géorisques, BRGM, BAN et IGN — Valable 6 mois à compter de la date d'établissement</p>
+            </div>
           </footer>
         </div>
       </div>

@@ -123,6 +123,20 @@ export function buildRiskSummary(
       : 'Aucun site dans le rayon de 500m',
   });
 
+  // Recul du trait de côte (obligatoire depuis le 01/01/2023 — Loi Climat & Résilience)
+  const rtc = risques.recul_trait_cote;
+  items.push({
+    category: 'Risques côtiers',
+    label: "Recul du trait de côte",
+    expose: rtc.applicable && (rtc.expose ?? false),
+    niveau: rtc.applicable && rtc.expose ? 'high' : 'none',
+    detail: !rtc.applicable
+      ? 'Commune non concernée (non littorale)'
+      : rtc.expose
+        ? `Zone exposée — horizon ${rtc.horizon ?? '2100'}${rtc.libelle ? ` · ${rtc.libelle}` : ''}`
+        : 'Commune littorale — bien non exposé',
+  });
+
   // CatNat
   items.push({
     category: 'Catastrophes naturelles',

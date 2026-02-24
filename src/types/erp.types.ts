@@ -39,6 +39,12 @@ export interface ERPRisques {
   };
   basias: SiteIndustriel[];
   basol: SiteIndustriel[];
+  recul_trait_cote: {
+    applicable: boolean;
+    expose?: boolean;
+    horizon?: '2050' | '2100';
+    libelle?: string;
+  };
 }
 
 export interface Prescription {
