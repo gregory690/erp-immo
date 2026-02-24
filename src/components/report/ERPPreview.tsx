@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Download, Printer, Clock, MapPin, Building2, CheckCircle2 } from 'lucide-react';
+import { Download, Printer, Clock, MapPin, Building2, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Separator } from '../ui/separator';
@@ -16,6 +16,7 @@ interface ERPPreviewProps {
   document: ERPDocument;
   onNew?: () => void;
   demoMode?: boolean;
+  emailSent?: boolean;
 }
 
 function formatDate(d: Date): string {
@@ -26,8 +27,10 @@ function formatDate(d: Date): string {
   });
 }
 
-export function ERPPreview({ document: erp, onNew, demoMode = false }: ERPPreviewProps) {
+export function ERPPreview({ document: erp, onNew, demoMode = false, emailSent = false }: ERPPreviewProps) {
   const [downloading, setDownloading] = useState(false);
+  const [hasDownloaded, setHasDownloaded] = useState(false);
+  const [showNewERPWarning, setShowNewERPWarning] = useState(false);
   const riskSummary = buildRiskSummary(erp.risques, erp.catnat);
   const exposedCount = riskSummary.filter(r => r.expose).length;
   const totalCount = riskSummary.length;
@@ -36,9 +39,18 @@ export function ERPPreview({ document: erp, onNew, demoMode = false }: ERPPrevie
     setDownloading(true);
     try {
       await generatePDFFromElement('erp-document-preview', generateERPFilename(erp));
+      setHasDownloaded(true);
     } finally {
       setDownloading(false);
     }
+  }
+
+  function handleNewERP() {
+    if (!hasDownloaded && !emailSent) {
+      setShowNewERPWarning(true);
+      return;
+    }
+    onNew?.();
   }
 
   return (
@@ -69,12 +81,53 @@ export function ERPPreview({ document: erp, onNew, demoMode = false }: ERPPrevie
             {downloading ? 'Génération...' : 'Télécharger PDF'}
           </Button>
           {onNew && (
-            <Button variant="outline" size="sm" onClick={onNew}>
+            <Button variant="outline" size="sm" onClick={handleNewERP}>
               Nouvel ERP
             </Button>
           )}
         </div>
       </div>
+
+      {/* Avertissement si le user clique "Nouvel ERP" sans avoir sauvegardé */}
+      {showNewERPWarning && (
+        <div className="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl p-4 no-print">
+          <AlertTriangle className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <p className="font-bold text-red-900 text-sm mb-1">
+              Vous n'avez pas encore sauvegardé votre ERP !
+            </p>
+            <p className="text-sm text-red-800 mb-3">
+              Téléchargez le PDF ou entrez votre email ci-dessus avant de continuer — sinon vous perdrez définitivement ce document.
+            </p>
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                size="sm"
+                className="bg-edl-700 hover:bg-edl-800 text-white"
+                onClick={() => { setShowNewERPWarning(false); handleDownload(); }}
+              >
+                <Download className="h-3.5 w-3.5 mr-1" />
+                Télécharger d'abord
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-red-300 text-red-700 hover:bg-red-100"
+                onClick={() => { setShowNewERPWarning(false); onNew?.(); }}
+              >
+                Continuer sans sauvegarder
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="text-gray-500"
+                onClick={() => setShowNewERPWarning(false)}
+              >
+                Annuler
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ERP Document */}
       <div

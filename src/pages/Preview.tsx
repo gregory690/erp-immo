@@ -177,7 +177,7 @@ export default function Preview() {
           </div>
         )}
 
-        <ERPPreview document={erp} onNew={() => navigate('/generer')} />
+        <ERPPreview document={erp} onNew={() => navigate('/generer')} emailSent={emailSent} />
       </div>
     </div>
   );
