@@ -284,7 +284,7 @@ export function ERPPreview({ document: erp, onNew, demoMode = false, emailSent =
               </p>
               <div className="space-y-2">
                 <label className="flex items-center gap-3 cursor-pointer">
-                  <input type="radio" name="sinistres" value="non" className="h-4 w-4" defaultChecked />
+                  <input type="radio" name="sinistres" value="non" className="h-4 w-4" />
                   <span className="text-sm">
                     À ma connaissance, ce bien n'a pas subi de sinistre ayant donné lieu à indemnisation.
                   </span>
