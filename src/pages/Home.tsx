@@ -573,7 +573,7 @@ export default function Home() {
           </div>
           <div className="border-t border-white/10 pt-6 text-center">
             <p className="text-xs text-gray-500">
-              © 2025 EDL&amp;DIAGNOSTIC · Ce service ne constitue pas un avis juridique. Les données proviennent des APIs
+              © 2026 EDL&amp;DIAGNOSTIC · Ce service ne constitue pas un avis juridique. Les données proviennent des APIs
               officielles publiques françaises. L'utilisateur est responsable de la vérification des informations avant usage.
             </p>
           </div>
