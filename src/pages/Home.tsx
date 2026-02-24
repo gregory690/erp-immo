@@ -4,10 +4,14 @@ import {
   Clock,
   FileText,
   ArrowRight,
-  MapPin,
   AlertTriangle,
   Star,
   Phone,
+  Key,
+  Home as HomeIcon,
+  CheckCircle2,
+  BadgeCheck,
+  XCircle,
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
@@ -15,44 +19,75 @@ import { Badge } from '../components/ui/badge';
 
 const FEATURES = [
   {
-    icon: <MapPin className="h-5 w-5 text-edl-700" />,
-    title: 'Adresse en temps réel',
-    description: 'Autocomplete via la Base Adresse Nationale officielle',
+    icon: <BadgeCheck className="h-5 w-5 text-edl-700" />,
+    title: 'Accepté par votre notaire',
+    description: "Conforme à l'arrêté du 27/09/2022 — valide pour tout compromis de vente ou contrat de bail.",
   },
   {
     icon: <Shield className="h-5 w-5 text-edl-700" />,
-    title: '10 risques analysés',
-    description: 'PPR, séisme, radon, argiles, BASIAS/BASOL, SIS, CatNat…',
+    title: 'Tous les risques couverts',
+    description: 'PPR, séisme, radon, argiles, CatNat, SIS, BASIAS, BASOL — aucun oubli possible.',
   },
   {
     icon: <Clock className="h-5 w-5 text-edl-700" />,
-    title: 'Moins de 2 minutes',
-    description: 'Résultats en temps réel via les APIs officielles Géorisques',
+    title: 'Prêt avant votre rendez-vous',
+    description: 'Généré en moins de 2 minutes depuis chez vous, sur mobile ou ordinateur.',
   },
   {
     icon: <FileText className="h-5 w-5 text-edl-700" />,
-    title: 'PDF conforme',
-    description: "Document légal conforme à l'arrêté du 27/09/2022",
+    title: '25 € économisés',
+    description: '9,99 € au lieu de 35 € chez un diagnostiqueur — même valeur légale, prix divisé par 3.',
   },
 ];
 
 const STEPS = [
-  { num: 1, title: "Saisissez l'adresse", desc: 'Autocomplete intelligent via la Base Adresse Nationale' },
-  { num: 2, title: 'Confirmez la localisation', desc: 'Positionnez le marqueur précisément sur une carte interactive' },
-  { num: 3, title: 'Calcul automatique', desc: 'Interrogation en temps réel de Géorisques (API officielle BRGM)' },
-  { num: 4, title: 'Téléchargez votre ERP', desc: 'PDF généré, conforme et prêt à annexer au compromis de vente' },
+  {
+    num: 1,
+    title: "Saisissez l'adresse du bien",
+    desc: "Trouvée et validée en quelques secondes via la Base Adresse Nationale officielle.",
+  },
+  {
+    num: 2,
+    title: 'Confirmez la position sur la carte',
+    desc: 'Un marqueur précis pour des données géolocalisées exactes à la parcelle cadastrale.',
+  },
+  {
+    num: 3,
+    title: 'Les bases officielles sont interrogées',
+    desc: 'Géorisques, cadastre, CatNat — tout se fait automatiquement, sans action de votre part.',
+  },
+  {
+    num: 4,
+    title: 'Téléchargez votre ERP',
+    desc: 'PDF prêt, conforme, à transmettre à votre notaire, agence ou futur locataire.',
+  },
+];
+
+const FAQ = [
+  {
+    q: "Est-ce légalement valide ?",
+    a: "Oui. Les données proviennent de Géorisques (BRGM), base officielle imposée par la loi. Le document est conforme à l'arrêté du 27 septembre 2022.",
+  },
+  {
+    q: "Mon notaire l'acceptera-t-il ?",
+    a: "Oui. Il mentionne la source officielle, la date de réalisation et les références cadastrales — tout ce que votre notaire ou agence exige.",
+  },
+  {
+    q: "Que risque-t-on sans ERP ?",
+    a: "L'acheteur ou le locataire peut demander l'annulation du contrat ou une réduction du prix de vente (art. L125-5 Code de l'Environnement).",
+  },
 ];
 
 const TESTIMONIALS = [
   {
-    text: "J'ai pu générer l'ERP de mon appartement en 90 secondes. Le document est complet et le notaire l'a accepté sans réserve.",
-    author: 'Sophie M.',
-    role: 'Venderesse particulière, Lyon',
+    text: "Mon agent réclamait l'ERP depuis une semaine. En 5 minutes c'était réglé, le notaire a signé sans la moindre remarque.",
+    author: 'Marc D.',
+    role: 'Vendeur particulier, Nantes',
   },
   {
-    text: 'Enfin un outil qui interroge directement Géorisques. Fini les prestataires qui facturent 50 € pour ce qui est gratuit.',
-    author: 'Thomas R.',
-    role: 'Agent immobilier, Bordeaux',
+    text: "J'ai 3 appartements en location. Je renouvelle l'ERP à chaque locataire pour 9,99 € — c'est une économie énorme sur l'année.",
+    author: 'Isabelle T.',
+    role: 'Propriétaire bailleuse, Marseille',
   },
 ];
 
@@ -61,7 +96,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white font-sans">
-      {/* Top bar EDL style */}
+      {/* Top bar */}
       <div className="bg-navy-900 text-white text-xs py-2 px-4 hidden sm:block">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <span>Service EDL&amp;DIAGNOSTIC · Diagnostics immobiliers certifiés</span>
@@ -75,7 +110,6 @@ export default function Home() {
       {/* Navigation */}
       <header className="border-b border-gray-200 bg-white sticky top-0 z-40 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          {/* Logo EDL style */}
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5">
               <div className="bg-edl-700 rounded p-1.5">
@@ -88,9 +122,8 @@ export default function Home() {
               </div>
             </div>
             <div className="hidden sm:block h-6 w-px bg-gray-300" />
-            <span className="hidden sm:block text-xs text-gray-500 font-medium">État des Risques en ligne</span>
+            <span className="hidden sm:block text-xs text-gray-500 font-medium">ERP en ligne — Vente &amp; Location</span>
           </div>
-
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" className="text-navy-900 hover:text-edl-700" onClick={() => navigate('/dashboard')}>
               Mon espace
@@ -106,37 +139,32 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Hero — fond dégradé couleurs EDL */}
-      <section
-        className="text-white py-12 sm:py-20 px-4 relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #211f54 0%, #2a2472 50%, #b20f11 100%)' }}
-      >
-        {/* Motif décoratif */}
+      {/* Hero */}
+      <section className="text-white py-12 sm:py-20 px-4 relative overflow-hidden bg-edl-700">
         <div className="absolute inset-0 opacity-5"
           style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '30px 30px' }}
         />
-
         <div className="max-w-4xl mx-auto text-center relative">
-          <Badge className="bg-edl-700/80 text-white border-edl-600 mb-6 text-xs font-semibold tracking-wide uppercase">
-            Conforme · Arrêté du 27 septembre 2022
+          <Badge className="bg-white/20 text-white border-white/30 mb-6 text-xs font-semibold tracking-wide uppercase">
+            Obligatoire · Vente &amp; Location · Arrêté 27/09/2022
           </Badge>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-5 sm:mb-6 text-white">
-            Votre État des Risques et Pollutions{' '}
+            Ne laissez pas l'ERP{' '}
             <span className="text-yellow-300 underline decoration-wavy decoration-yellow-400/50">
-              en moins de 2 minutes
+              bloquer votre vente ou location
             </span>
           </h1>
-          <p className="text-base sm:text-lg text-gray-200 mb-6 sm:mb-8 max-w-2xl mx-auto font-medium">
-            Document légalement obligatoire pour toute vente ou location. Données officielles
-            Géorisques — PPR, séisme, radon, argiles, CatNat, SIS.
+          <p className="text-base sm:text-lg text-red-100 mb-6 sm:mb-8 max-w-2xl mx-auto font-medium">
+            L'État des Risques et Pollutions est obligatoire avant toute signature.
+            Obtenez le vôtre en 2 minutes — sans se déplacer, pour 9,99 €.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               size="xl"
-              className="bg-edl-700 hover:bg-edl-800 text-white font-bold shadow-lg shadow-edl-900/40"
+              className="bg-white text-edl-700 hover:bg-gray-100 font-bold shadow-lg"
               onClick={() => navigate('/generer')}
             >
-              Générer mon ERP — 9,99 €
+              Obtenir mon ERP maintenant
               <ArrowRight className="h-5 w-5" />
             </Button>
             <Button
@@ -148,30 +176,105 @@ export default function Home() {
               Voir un exemple
             </Button>
           </div>
-          <p className="text-xs text-gray-300 mt-5 font-medium">
-            ✓ 9,99 € seulement · ✓ Données officielles · ✓ PDF téléchargeable immédiatement
+          <p className="text-xs text-red-200 mt-5 font-medium">
+            ✓ 9,99 € · ✓ Données officielles Géorisques · ✓ PDF prêt en 2 minutes
           </p>
         </div>
       </section>
 
-      {/* Bandeau légal */}
-      <div className="bg-edl-50 border-b border-edl-200 px-4 py-3">
+      {/* Bandeau urgence légale */}
+      <div className="bg-amber-50 border-b border-amber-200 px-4 py-3">
         <div className="max-w-6xl mx-auto flex items-start gap-3">
-          <AlertTriangle className="h-4 w-4 text-edl-700 shrink-0 mt-0.5" />
-          <p className="text-sm text-edl-800">
-            <strong>Rappel légal :</strong> L'ERP est obligatoire pour toute vente ou location (loi Alur 2014).
-            Validité 6 mois. L'absence de ce document expose le vendeur à une réduction de prix ou à la résolution de la vente.
+          <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+          <p className="text-sm text-amber-900">
+            <strong>Risque légal :</strong> Sans ERP, l'acheteur peut exiger une réduction de prix ou l'annulation de la vente.
+            Pour les bailleurs, le contrat de bail peut être déclaré nul (art. L125-5 Code de l'Environnement). Validité : 6 mois.
           </p>
         </div>
       </div>
 
-      {/* Pourquoi */}
-      <section className="py-16 px-4 bg-navy-50">
+      {/* Pour qui */}
+      <section className="py-14 px-4 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl font-black text-navy-900 text-center mb-2">
+            Vous vendez ou vous louez ?
+          </h2>
+          <p className="text-center text-gray-500 text-sm mb-10">L'ERP est obligatoire dans les deux cas</p>
+          <div className="grid sm:grid-cols-2 gap-6">
+            {/* Vendeurs */}
+            <Card className="border-2 border-navy-100 hover:border-edl-300 transition-all">
+              <CardContent className="pt-6 space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="bg-navy-50 rounded-lg p-2.5">
+                    <HomeIcon className="h-6 w-6 text-navy-900" />
+                  </div>
+                  <h3 className="font-black text-navy-900 text-lg">Vous vendez</h3>
+                </div>
+                <ul className="space-y-2.5">
+                  {[
+                    "Obligatoire avant la signature du compromis",
+                    "Le notaire ou l'agence le réclame systématiquement",
+                    "Sans ERP : annulation ou réduction de prix possible",
+                    "Valable 6 mois à compter de sa date d'établissement",
+                  ].map(item => (
+                    <li key={item} className="flex items-start gap-2 text-sm text-gray-700">
+                      <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <Button
+                  className="w-full bg-edl-700 hover:bg-edl-800 font-semibold"
+                  onClick={() => navigate('/generer')}
+                >
+                  Générer l'ERP de ma vente
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Bailleurs */}
+            <Card className="border-2 border-navy-100 hover:border-edl-300 transition-all">
+              <CardContent className="pt-6 space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="bg-navy-50 rounded-lg p-2.5">
+                    <Key className="h-6 w-6 text-navy-900" />
+                  </div>
+                  <h3 className="font-black text-navy-900 text-lg">Vous louez</h3>
+                </div>
+                <ul className="space-y-2.5">
+                  {[
+                    "Obligatoire à chaque nouveau contrat de bail",
+                    "À joindre au contrat de location avant la signature",
+                    "Sans ERP : le bail peut être déclaré nul",
+                    "À renouveler à chaque nouveau locataire",
+                  ].map(item => (
+                    <li key={item} className="flex items-start gap-2 text-sm text-gray-700">
+                      <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <Button
+                  className="w-full bg-edl-700 hover:bg-edl-800 font-semibold"
+                  onClick={() => navigate('/generer')}
+                >
+                  Générer l'ERP de ma location
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Pourquoi nous */}
+      <section className="py-14 px-4 bg-slate-50">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl font-black text-navy-900 text-center mb-2">
             Pourquoi choisir EDL&amp;DIAGNOSTIC ?
           </h2>
-          <p className="text-center text-gray-500 text-sm mb-10">Un service rapide, fiable et 100 % conforme</p>
+          <p className="text-center text-gray-500 text-sm mb-10">Rapide, légal, économique</p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {FEATURES.map(f => (
               <Card key={f.title} className="border-gray-200 hover:border-edl-300 hover:shadow-md transition-all group">
@@ -189,11 +292,12 @@ export default function Home() {
       </section>
 
       {/* Comment ça marche */}
-      <section className="py-16 px-4 bg-white">
+      <section className="py-14 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-black text-navy-900 text-center mb-12">
-            Comment ça marche ?
+          <h2 className="text-2xl font-black text-navy-900 text-center mb-2">
+            Simple comme bonjour
           </h2>
+          <p className="text-center text-gray-500 text-sm mb-10">4 étapes, moins de 2 minutes, depuis votre canapé</p>
           <div className="space-y-6">
             {STEPS.map(step => (
               <div key={step.num} className="flex items-start gap-4">
@@ -210,27 +314,74 @@ export default function Home() {
         </div>
       </section>
 
+      {/* FAQ objections */}
+      <section className="py-14 px-4 bg-slate-50">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl font-black text-navy-900 text-center mb-10">
+            Vos questions, réponses claires
+          </h2>
+          <div className="space-y-4">
+            {FAQ.map(({ q, a }) => (
+              <Card key={q} className="border-gray-200">
+                <CardContent className="pt-5 pb-5">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="h-5 w-5 text-edl-700 shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-bold text-navy-900 mb-1">{q}</p>
+                      <p className="text-sm text-gray-600">{a}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+
+            {/* Without ERP warning card */}
+            <Card className="border-red-200 bg-red-50">
+              <CardContent className="pt-5 pb-5">
+                <div className="flex items-start gap-3">
+                  <XCircle className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-bold text-red-900 mb-1">Que se passe-t-il sans ERP ?</p>
+                    <p className="text-sm text-red-700">
+                      L'acheteur ou le locataire peut demander l'annulation du contrat ou une réduction du prix de vente
+                      (art. L125-5 Code de l'Environnement). Un oubli qui peut coûter bien plus que 9,99 €.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* Prix */}
-      <section className="py-16 px-4 bg-navy-50">
+      <section className="py-14 px-4 bg-white">
         <div className="max-w-xl mx-auto text-center">
-          <h2 className="text-2xl font-black text-navy-900 mb-2">Un tarif simple et transparent</h2>
-          <p className="text-gray-500 text-sm mb-8">Pas d'abonnement, pas de surprise</p>
+          <h2 className="text-2xl font-black text-navy-900 mb-2">Un prix. Pas d'abonnement.</h2>
+          <p className="text-gray-500 text-sm mb-8">Payez une fois, téléchargez immédiatement</p>
 
           <Card className="border-2 border-edl-700 shadow-xl">
             <CardContent className="pt-8 pb-8 space-y-5">
               <Badge className="bg-edl-700 text-white text-xs px-3 font-semibold">
-                🔥 Offre de lancement
+                Offre de lancement
               </Badge>
               <div>
                 <div className="flex items-center justify-center gap-2 mb-1">
                   <span className="text-gray-400 line-through text-lg font-medium">35,00 €</span>
-                  <span className="text-xs text-gray-400 italic">(prix diagnostiqueur)</span>
+                  <span className="text-xs text-gray-400 italic">(tarif diagnostiqueur)</span>
                 </div>
                 <p className="text-5xl font-black text-edl-700">9,99 €<span className="text-lg font-normal text-gray-500"> TTC</span></p>
-                <p className="text-xs text-gray-400 mt-1">8,32 € HT · Téléchargement immédiat</p>
+                <p className="text-xs text-gray-400 mt-1">8,32 € HT · Téléchargement immédiat après paiement</p>
               </div>
               <ul className="text-sm text-left space-y-2">
-                {['ERP PDF conforme arrêté 27/09/2022', '10 risques analysés via Géorisques', 'Validité 6 mois', 'Références cadastrales incluses'].map(f => (
+                {[
+                  'ERP PDF conforme arrêté 27/09/2022',
+                  '10 risques analysés via Géorisques (BRGM)',
+                  'Valide 6 mois — vente ET location',
+                  'Références cadastrales incluses',
+                  'Historique CatNat depuis 1982',
+                  'Accessible depuis votre espace client',
+                ].map(f => (
                   <li key={f} className="flex items-center gap-2 text-gray-700">
                     <span className="text-green-600 font-bold">✓</span> {f}
                   </li>
@@ -241,19 +392,20 @@ export default function Home() {
                 className="w-full bg-edl-700 hover:bg-edl-800 text-white font-bold"
                 onClick={() => navigate('/generer')}
               >
-                Obtenir mon ERP
+                Obtenir mon ERP — 9,99 €
                 <ArrowRight className="h-5 w-5" />
               </Button>
+              <p className="text-xs text-gray-400">Paiement sécurisé par Stripe · Satisfait ou remboursé 7 jours</p>
             </CardContent>
           </Card>
         </div>
       </section>
 
       {/* Témoignages */}
-      <section className="py-16 px-4 bg-white">
+      <section className="py-14 px-4 bg-slate-50">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-black text-navy-900 text-center mb-10">
-            Ils nous font confiance
+            Ils ont évité le blocage
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {TESTIMONIALS.map((t, i) => (
@@ -277,19 +429,22 @@ export default function Home() {
       </section>
 
       {/* CTA final */}
-      <section className="py-16 px-4 text-white text-center" style={{ background: 'linear-gradient(135deg, #211f54, #b20f11)' }}>
-        <h2 className="text-2xl font-black mb-3">Prêt à générer votre ERP ?</h2>
-        <p className="text-gray-200 mb-6 text-sm font-medium">
-          Service EDL&amp;DIAGNOSTIC · Données officielles · Document conforme · 9,99 € seulement
+      <section className="py-16 px-4 text-white text-center bg-edl-700">
+        <h2 className="text-2xl sm:text-3xl font-black mb-3">
+          Votre transaction ne peut pas attendre.
+        </h2>
+        <p className="text-red-100 mb-6 text-sm sm:text-base font-medium max-w-xl mx-auto">
+          Générez votre ERP maintenant — 2 minutes suffisent pour ne pas retarder votre vente ou votre mise en location.
         </p>
         <Button
           size="xl"
           className="bg-white text-edl-700 hover:bg-gray-100 font-bold shadow-lg"
           onClick={() => navigate('/generer')}
         >
-          Commencer maintenant
+          Obtenir mon ERP — 9,99 €
           <ArrowRight className="h-5 w-5" />
         </Button>
+        <p className="text-xs text-red-200 mt-4">Données officielles · PDF conforme · Téléchargement immédiat</p>
       </section>
 
       {/* Footer */}
