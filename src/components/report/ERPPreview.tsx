@@ -122,7 +122,7 @@ function SummaryPage({ erp, demoMode }: { erp: ERPDocument; demoMode: boolean })
   const totalPages = catnat.length > 0 ? 4 : 3;
 
   return (
-    <div className="p-6 sm:p-8 font-sans text-sm min-h-[297mm] flex flex-col">
+    <div className="p-6 sm:p-8 font-sans text-sm">
       {/* En-tête */}
       <div className="flex items-start justify-between pb-3 mb-4 border-b-2 border-gray-900">
         <div>
@@ -261,7 +261,7 @@ function SummaryPage({ erp, demoMode }: { erp: ERPDocument; demoMode: boolean })
         </table>
       </div>
 
-      <div className="mt-auto text-[9px] text-gray-400 text-center pt-3 border-t border-gray-200">
+      <div className="mt-6 text-[9px] text-gray-400 text-center pt-3 border-t border-gray-200">
         <p>Source officielle : georisques.gouv.fr · BAN · APICarto IGN</p>
         <p className="mt-3 font-semibold text-gray-500">1 / {totalPages}</p>
       </div>
@@ -298,7 +298,7 @@ function ERPFormPage({ erp }: { erp: ERPDocument }) {
   const totalPages = catnat.length > 0 ? 4 : 3;
 
   return (
-    <div className="p-4 sm:p-6 font-sans min-h-[297mm] flex flex-col text-gray-900">
+    <div className="p-4 sm:p-6 font-sans text-gray-900">
       {/* Titre officiel */}
       <div className="text-center mb-3">
         <h2 className="text-[13px] font-black uppercase tracking-wide">État des Risques et Pollutions</h2>
@@ -493,7 +493,7 @@ function ERPFormPage({ erp }: { erp: ERPDocument }) {
         </div>
       </div>
 
-      <div className="mt-auto pt-3 text-[8px] text-gray-400 text-center border-t border-gray-200">
+      <div className="mt-6 pt-3 text-[8px] text-gray-400 text-center border-t border-gray-200">
         <p>Modèle État des risques, pollutions et sols en application des articles L.125-5, L.125-6 et L.125-7 du Code de l'environnement — Arrêté du 27 septembre 2022</p>
         <p className="mt-2 font-semibold text-gray-500">2 / {totalPages}</p>
       </div>
@@ -509,7 +509,7 @@ function ENSAPage({ erp }: { erp: ERPDocument }) {
   const totalPages = catnat.length > 0 ? 4 : 3;
 
   return (
-    <div className="p-4 sm:p-6 font-sans min-h-[297mm] flex flex-col text-gray-900">
+    <div className="p-4 sm:p-6 font-sans text-gray-900">
       {/* Titre officiel */}
       <div className="text-center mb-3">
         <h2 className="text-[13px] font-black uppercase tracking-wide">État des Nuisances Sonores Aériennes</h2>
@@ -627,7 +627,7 @@ function ENSAPage({ erp }: { erp: ERPDocument }) {
         </div>
       </div>
 
-      <div className="mt-auto pt-3 text-[8px] text-gray-400 text-center border-t border-gray-200">
+      <div className="mt-6 pt-3 text-[8px] text-gray-400 text-center border-t border-gray-200">
         <p>Information sur les nuisances sonores aériennes : <strong>https://www.ecologie.gouv.fr/</strong></p>
         <p className="mt-2 font-semibold text-gray-500">3 / {totalPages}</p>
       </div>
@@ -641,7 +641,7 @@ function CatNatPage({ erp }: { erp: ERPDocument }) {
   const { bien, catnat } = erp;
 
   return (
-    <div className="p-4 sm:p-6 font-sans min-h-[297mm] flex flex-col text-gray-900">
+    <div className="p-4 sm:p-6 font-sans text-gray-900">
       <div className="flex items-start justify-between mb-4">
         <div className="text-[10px] text-gray-600 space-y-0.5">
           <p className="font-bold">Ministère du Développement Durable</p>
@@ -721,7 +721,7 @@ function CatNatPage({ erp }: { erp: ERPDocument }) {
         </div>
       </div>
 
-      <div className="mt-auto pt-3 text-[8px] text-gray-400 text-center border-t border-gray-200">
+      <div className="mt-6 pt-3 text-[8px] text-gray-400 text-center border-t border-gray-200">
         <p>Pour en savoir plus, chacun peut consulter en préfecture ou en mairie, le dossier départemental sur les risques majeurs, le document d'information communal sur les risques majeurs et, sur internet, le site portail dédié à la prévention des risques majeurs : <strong>www.georisques.gouv.fr</strong></p>
         <p className="mt-2 font-semibold text-gray-500">4 / 4</p>
       </div>
