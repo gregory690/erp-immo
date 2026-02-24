@@ -46,7 +46,7 @@ export async function generatePDFFromElement(
 }
 
 export function generateERPFilename(document: ERPDocument): string {
-  const date = document.metadata.date_realisation.toISOString().split('T')[0];
+  const date = new Date(document.metadata.date_realisation).toISOString().split('T')[0];
   const commune = document.bien.commune.toLowerCase().replace(/\s+/g, '-');
   return `ERP-${commune}-${date}-${document.metadata.reference.slice(0, 8)}.pdf`;
 }
