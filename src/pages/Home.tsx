@@ -173,8 +173,8 @@ export default function Home() {
             État des Risques et Pollutions en ligne
           </h1>
           <p className="text-base sm:text-lg text-red-100 mb-6 sm:mb-8 max-w-2xl mx-auto font-medium">
-            ERP obligatoire pour votre vente ou location — obtenez votre document conforme
-            à la réglementation en moins de 2 minutes, sans vous déplacer.
+            ERP obligatoire pour votre vente ou location — document conforme, accepté par
+            les notaires et agences, disponible 7j/7 et 24h/24.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
@@ -427,7 +427,7 @@ export default function Home() {
       <section className="py-14 px-4 bg-white">
         <div className="max-w-xl mx-auto text-center">
           <h2 className="text-2xl font-black text-navy-900 mb-2">Votre ERP en 2 minutes, pour 9,99 €</h2>
-          <p className="text-gray-500 text-sm mb-8">Sans rendez-vous. Sans déplacement. Sans surprise.</p>
+          <p className="text-gray-500 text-sm mb-8">Disponible 7j/7, 24h/24 · Accepté par les notaires et agences immobilières</p>
 
           <Card className="border-2 border-edl-700 shadow-xl">
             <CardContent className="pt-8 pb-8 space-y-5">
