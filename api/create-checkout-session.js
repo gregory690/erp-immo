@@ -1,15 +1,15 @@
 // Vercel Function — create-checkout-session
 // La clé secrète Stripe n'est JAMAIS exposée au navigateur.
-const Stripe = require('stripe');
+import Stripe from 'stripe';
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const secretKey = process.env.STRIPE_SECRET_KEY;
   if (!secretKey) {
-    console.error('STRIPE_SECRET_KEY manquante dans les variables d\'environnement');
+    console.error("STRIPE_SECRET_KEY manquante dans les variables d'environnement");
     return res.status(500).json({ error: 'Configuration serveur incomplète' });
   }
 
@@ -53,4 +53,4 @@ module.exports = async (req, res) => {
     console.error('Stripe error:', err.message);
     return res.status(500).json({ error: err.message });
   }
-};
+}

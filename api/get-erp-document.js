@@ -1,8 +1,9 @@
 // Vercel Function — get-erp-document
 // Récupère un document ERP depuis Vercel KV via sa référence.
 // Paramètre GET : ?ref=<erp_reference>
+import { kv } from '@vercel/kv';
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -14,7 +15,6 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { kv } = require('@vercel/kv');
     const data = await kv.get(ref);
 
     if (!data) {
@@ -27,4 +27,4 @@ module.exports = async (req, res) => {
     console.error('KV get error:', err.message);
     return res.status(500).json({ error: 'Erreur serveur' });
   }
-};
+}

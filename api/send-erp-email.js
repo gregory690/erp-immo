@@ -8,8 +8,10 @@
 //   RESEND_FROM_EMAIL               → ex: erp@edletdiagnostic.fr (domaine vérifié dans Resend)
 //   KV_REST_API_URL + KV_REST_API_TOKEN → configurés automatiquement par Vercel KV
 //   VERCEL_PROJECT_PRODUCTION_URL   → injecté automatiquement par Vercel en production
+import { kv } from '@vercel/kv';
+import { Resend } from 'resend';
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -28,7 +30,6 @@ module.exports = async (req, res) => {
 
   // ─── 1. Sauvegarde dans Vercel KV ───────────────────────────────────────────
   try {
-    const { kv } = require('@vercel/kv');
     await kv.set(reference, JSON.stringify(erpDocument), {
       ex: 60 * 60 * 24 * 180, // expire après 180 jours
     });
@@ -45,7 +46,6 @@ module.exports = async (req, res) => {
     return res.status(200).json({ success: true, warning: 'email_not_sent_no_api_key' });
   }
 
-  const { Resend } = require('resend');
   const resend = new Resend(resendKey);
 
   const fromEmail = process.env.RESEND_FROM_EMAIL || 'erp@edletdiagnostic.fr';
@@ -73,7 +73,7 @@ module.exports = async (req, res) => {
     console.error('Resend error:', err.message);
     return res.status(500).json({ error: "Erreur lors de l'envoi de l'email" });
   }
-};
+}
 
 // ─── Template email HTML ──────────────────────────────────────────────────────
 function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount, dateRealisation, dateExpiration }) {
@@ -131,7 +131,7 @@ function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount, dateRealis
       <hr style="border:none;border-top:1px solid #f3f4f6;margin:20px 0;">
       <p style="margin:0;font-size:11px;color:#9ca3af;text-align:center;">
         Réf. ${metadata.reference}<br>
-        EDL&amp;DIAGNOSTIC · <a href="${redownloadUrl}" style="color:#b20f11;">Mon espace ERP</a>
+        EDL&amp;DIAGNOSTIC · <a href="${redownloadUrl}" style="color:#b20f11;">Accéder à mon ERP</a>
       </p>
     </div>
   </div>
