@@ -1,19 +1,16 @@
 const IGN_BASE_URL = 'https://apicarto.ign.fr/api';
 
 export interface CadastreParcelleProperties {
-  id: string;
-  departmentcode: string;
-  municipalitycode: string;
-  oldmunicipalitycode: string;
-  districtcode: string;
+  idu: string;
+  code_dep: string;
+  code_com: string;
+  com_abs?: string;
   section: string;
-  sheet: string;
-  number: string;
-  city?: string;
-  commune?: string;
-  created?: string;
-  updated?: string;
-  source: string;
+  feuille: number;
+  numero: string;
+  nom_com?: string;
+  code_insee?: string;
+  contenance?: number;
 }
 
 export interface CadastreFeature {
@@ -67,10 +64,10 @@ export function extractReferenceCadastrale(
   const p = feature.properties;
   return {
     section: p.section,
-    numero: p.number,
-    departement: p.departmentcode,
-    commune: p.municipalitycode,
-    feuille: p.sheet,
-    identifiant: p.id,
+    numero: p.numero,
+    departement: p.code_dep,
+    commune: p.code_com,
+    feuille: String(p.feuille),
+    identifiant: p.idu,
   };
 }
