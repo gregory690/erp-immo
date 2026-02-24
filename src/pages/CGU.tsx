@@ -59,7 +59,7 @@ export default function CGU() {
             <h2 className="text-base font-bold text-navy-900 mb-3 pb-2 border-b border-gray-100">5. Droit de rétractation</h2>
             <p>Conformément à l'article L221-28 du Code de la consommation, le droit de rétractation de 14 jours ne s'applique pas aux contenus numériques dont l'exécution a commencé avec l'accord préalable du consommateur et sa renonciation expresse à son droit de rétractation.</p>
             <p className="mt-2">En procédant au paiement et au téléchargement du document, l'utilisateur reconnaît renoncer expressément à son droit de rétractation.</p>
-            <p className="mt-2">Toutefois, en cas d'insatisfaction avérée, EDL &amp; DIAGNOSTIC SAS s'engage à examiner toute réclamation dans les 7 jours suivant l'achat. Contact : <strong>contact@edl-diagnostic.fr</strong></p>
+            <p className="mt-2">Toutefois, en cas d'insatisfaction avérée, EDL &amp; DIAGNOSTIC SAS s'engage à examiner toute réclamation dans les 7 jours suivant l'achat. Contact : <strong>notifications@edl-diagnostic-erp.fr</strong></p>
           </div>
 
           <div>
@@ -92,7 +92,7 @@ export default function CGU() {
 
           <div>
             <h2 className="text-base font-bold text-navy-900 mb-3 pb-2 border-b border-gray-100">9. Médiation des litiges</h2>
-            <p>En cas de litige, l'utilisateur peut recourir gratuitement à un médiateur de la consommation. Pour toute réclamation préalable : <strong>contact@edl-diagnostic.fr</strong></p>
+            <p>En cas de litige, l'utilisateur peut recourir gratuitement à un médiateur de la consommation. Pour toute réclamation préalable : <strong>notifications@edl-diagnostic-erp.fr</strong></p>
             <p className="mt-2">Plateforme européenne de règlement en ligne des litiges : <strong>https://ec.europa.eu/consumers/odr</strong></p>
           </div>
 

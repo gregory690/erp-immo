@@ -38,7 +38,7 @@ export default function Confidentialite() {
               <li><strong>Société :</strong> EDL &amp; DIAGNOSTIC SAS</li>
               <li><strong>RCS :</strong> Brest n° 832 877 179</li>
               <li><strong>Siège :</strong> 60 Allée de Provence, 29280 Plouzané, France</li>
-              <li><strong>Contact DPO :</strong> contact@edl-diagnostic.fr</li>
+              <li><strong>Contact DPO :</strong> notifications@edl-diagnostic-erp.fr</li>
             </ul>
           </div>
 
@@ -120,7 +120,7 @@ export default function Confidentialite() {
               <li><strong>Opposition :</strong> vous opposer à un traitement basé sur l'intérêt légitime</li>
               <li><strong>Limitation :</strong> limiter le traitement de vos données dans certains cas</li>
             </ul>
-            <p className="mt-3">Pour exercer vos droits : <strong>contact@edl-diagnostic.fr</strong> — Réponse sous 30 jours.</p>
+            <p className="mt-3">Pour exercer vos droits : <strong>notifications@edl-diagnostic-erp.fr</strong> — Réponse sous 30 jours.</p>
           </div>
 
           <div>

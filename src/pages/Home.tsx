@@ -124,7 +124,7 @@ export default function Home() {
       <div className="bg-navy-900 text-white text-xs py-2 px-4 hidden sm:block">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <span>Un service proposé par EDL&amp;DIAGNOSTIC · Diagnostiqueurs immobiliers certifiés</span>
-          <span>contact@edl-diagnostic.fr</span>
+          <span>notifications@edl-diagnostic-erp.fr</span>
         </div>
       </div>
 
