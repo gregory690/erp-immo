@@ -35,8 +35,8 @@ export function ServiceSelector({ selected, onSelect, onConfirm }: ServiceSelect
       >
         {/* Top badge */}
         <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 flex gap-2">
-          <Badge className="bg-orange-500 text-white text-xs px-3 shadow-sm">
-            🔥 Offre de lancement
+          <Badge className="bg-navy-900 text-white text-xs px-3 shadow-sm">
+            ✓ Prêt en moins de 2 minutes
           </Badge>
         </div>
 

@@ -426,13 +426,13 @@ export default function Home() {
       {/* Prix */}
       <section className="py-14 px-4 bg-white">
         <div className="max-w-xl mx-auto text-center">
-          <h2 className="text-2xl font-black text-navy-900 mb-2">Un prix. Pas d'abonnement.</h2>
-          <p className="text-gray-500 text-sm mb-8">Payez une fois, téléchargez immédiatement</p>
+          <h2 className="text-2xl font-black text-navy-900 mb-2">Votre ERP en 2 minutes, pour 9,99 €</h2>
+          <p className="text-gray-500 text-sm mb-8">Simple, rapide, moins cher qu'un café au diagnostiqueur</p>
 
           <Card className="border-2 border-edl-700 shadow-xl">
             <CardContent className="pt-8 pb-8 space-y-5">
-              <Badge className="bg-edl-700 text-white text-xs px-3 font-semibold">
-                Offre de lancement
+              <Badge className="bg-green-100 text-green-800 border border-green-200 text-xs px-3 font-semibold">
+                ✓ Téléchargement immédiat après paiement
               </Badge>
               <div>
                 <div className="flex items-center justify-center gap-2 mb-1">
