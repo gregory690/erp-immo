@@ -76,6 +76,7 @@ const DEMO_ERP: ERPDocument = {
     ],
     basol: [],
     recul_trait_cote: { applicable: true, expose: false, libelle: "Commune littorale — bien non situé en zone de recul" },
+    ensa: { en_zone_peb: false, prescriptions_insonorisation: false },
   },
   catnat: [
     {

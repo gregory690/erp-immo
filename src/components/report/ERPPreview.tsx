@@ -4,7 +4,6 @@ import { Button } from '../ui/button';
 import { generatePDFFromElement, generateERPFilename, printERPDocument } from '../../services/pdf.service';
 import { formatERPReference } from '../../utils/erp-validator';
 import type { ERPDocument, ERPRisques } from '../../types/erp.types';
-import type { CatNatArrete } from '../../types/georisques.types';
 
 interface ERPPreviewProps {
   document: ERPDocument;
@@ -77,12 +76,6 @@ function formatDateFr(d: Date | string): string {
   const date = typeof d === 'string' ? new Date(d) : new Date(d);
   if (isNaN(date.getTime())) return typeof d === 'string' ? d : '';
   return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-}
-
-function formatDateLong(d: Date | string): string {
-  const date = typeof d === 'string' ? new Date(d) : new Date(d);
-  if (isNaN(date.getTime())) return typeof d === 'string' ? d : '';
-  return date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
 }
 
 function formatCatNatDate(s: string): string {
