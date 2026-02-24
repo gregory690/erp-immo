@@ -8,7 +8,11 @@ interface CatNatHistoryProps {
 
 function formatDate(dateStr: string): string {
   if (!dateStr) return '—';
+  // API returns DD/MM/YYYY — already French format, return as-is
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) return dateStr;
+  // Fallback for ISO dates
   const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return dateStr;
   return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
@@ -45,17 +49,17 @@ export function CatNatHistory({ arretes }: CatNatHistoryProps) {
             {arretes.map((a, i) => (
               <tr key={i} className="hover:bg-slate-50 transition-colors">
                 <td className="px-3 py-2.5">
-                  <span className="text-xs font-medium text-gray-800">{a.libRisqueJo}</span>
+                  <span className="text-xs font-medium text-gray-800">{a.libelle_risque_jo}</span>
                 </td>
                 <td className="px-3 py-2.5 text-xs text-gray-600 hidden sm:table-cell">
-                  {formatDate(a.datDebutEvt)}
+                  {formatDate(a.date_debut_evt)}
                 </td>
                 <td className="px-3 py-2.5 text-xs text-gray-600 hidden sm:table-cell">
-                  {formatDate(a.datFinEvt)}
+                  {formatDate(a.date_fin_evt)}
                 </td>
                 <td className="px-3 py-2.5">
                   <Badge variant="warning" className="text-xs">
-                    {formatDate(a.datPubliArrete)}
+                    {formatDate(a.date_publication_arrete)}
                   </Badge>
                 </td>
               </tr>

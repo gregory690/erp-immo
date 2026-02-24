@@ -51,14 +51,15 @@ export interface SISData {
 }
 
 export interface CatNatArrete {
-  codGaspar?: string;
-  libRisqueJo: string;
-  codRisque?: string;
-  datDebutEvt: string;
-  datFinEvt: string;
-  datPubliArrete: string;
-  codeInsee?: string;
-  nomCommune?: string;
+  code_national_catnat?: string;
+  libelle_risque_jo: string;
+  code_risque?: string;
+  date_debut_evt: string;
+  date_fin_evt: string;
+  date_publication_arrete: string;
+  date_publication_jo?: string;
+  code_insee?: string;
+  libelle_commune?: string;
 }
 
 export interface ArgilesData {
