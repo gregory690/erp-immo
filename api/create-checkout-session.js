@@ -18,6 +18,11 @@ export default async function handler(req, res) {
   try {
     const { erp_reference, adresse, commune } = req.body;
 
+    // Validation et sanitisation des inputs
+    const safeRef = String(erp_reference || '').slice(0, 64).replace(/[<>"'&]/g, '');
+    const safeAdresse = String(adresse || '').slice(0, 200).replace(/[<>"'&]/g, '');
+    const safeCommune = String(commune || '').slice(0, 100).replace(/[<>"'&]/g, '');
+
     const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
       : process.env.URL || 'http://localhost:3000';
@@ -31,7 +36,7 @@ export default async function handler(req, res) {
             currency: 'eur',
             product_data: {
               name: 'État des Risques et Pollutions (ERP)',
-              description: `${adresse || 'Bien immobilier'} · Réf. ${erp_reference || ''}`,
+              description: `${safeAdresse || 'Bien immobilier'} · Réf. ${safeRef || ''}`,
             },
             unit_amount: 1999, // 19,99 € en centimes
           },
@@ -39,12 +44,12 @@ export default async function handler(req, res) {
         },
       ],
       mode: 'payment',
-      success_url: `${baseUrl}/apercu?payment=success&ref=${encodeURIComponent(erp_reference || '')}`,
+      success_url: `${baseUrl}/apercu?payment=success&ref=${encodeURIComponent(safeRef)}`,
       cancel_url: `${baseUrl}/generer?payment=cancel`,
       metadata: {
-        erp_reference: erp_reference || '',
-        adresse: adresse || '',
-        commune: commune || '',
+        erp_reference: safeRef,
+        adresse: safeAdresse,
+        commune: safeCommune,
       },
     });
 

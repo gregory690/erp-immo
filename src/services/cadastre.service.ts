@@ -62,12 +62,11 @@ export function extractReferenceCadastrale(
   if (!feature) return null;
 
   const p = feature.properties;
-  console.log('[cadastre] raw properties:', JSON.stringify(p));
 
   // p.numero is the standard field; fallback to last 4 chars of idu if empty
   const numero = p.numero || (p.idu ? p.idu.slice(-4) : '');
 
-  const result = {
+  return {
     section: p.section,
     numero,
     departement: p.code_dep,
@@ -75,6 +74,4 @@ export function extractReferenceCadastrale(
     feuille: String(p.feuille),
     identifiant: p.idu,
   };
-  console.log('[cadastre] extracted:', JSON.stringify(result));
-  return result;
 }

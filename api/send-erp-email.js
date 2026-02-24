@@ -22,6 +22,18 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Email et document ERP requis' });
   }
 
+  // Validation format email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (!emailRegex.test(email) || email.length > 254) {
+    return res.status(400).json({ error: 'Adresse email invalide' });
+  }
+
+  // Validation référence (UUID v4)
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  if (!uuidRegex.test(erpDocument.metadata.reference)) {
+    return res.status(400).json({ error: 'Référence document invalide' });
+  }
+
   const reference = erpDocument.metadata.reference;
   const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
