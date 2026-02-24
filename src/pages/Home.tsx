@@ -12,10 +12,34 @@ import {
   CheckCircle2,
   BadgeCheck,
   XCircle,
+  Lock,
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
+
+const GOV_SOURCES = [
+  {
+    name: 'Géorisques',
+    domain: 'georisques.gouv.fr',
+    desc: 'Risques naturels & technologiques',
+  },
+  {
+    name: 'BRGM',
+    domain: 'brgm.fr',
+    desc: 'Bureau de Recherches Géologiques',
+  },
+  {
+    name: 'Base Adresse Nationale',
+    domain: 'data.gouv.fr',
+    desc: 'Géocodage adresses officielles',
+  },
+  {
+    name: 'IGN — Géoportail',
+    domain: 'apicarto.ign.fr',
+    desc: 'Données cadastrales',
+  },
+];
 
 const FEATURES = [
   {
@@ -145,18 +169,12 @@ export default function Home() {
           style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '30px 30px' }}
         />
         <div className="max-w-4xl mx-auto text-center relative">
-          <Badge className="bg-white/20 text-white border-white/30 mb-6 text-xs font-semibold tracking-wide uppercase">
-            Obligatoire · Vente &amp; Location · Arrêté 27/09/2022
-          </Badge>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-5 sm:mb-6 text-white">
-            Ne laissez pas l'ERP{' '}
-            <span className="text-yellow-300 underline decoration-wavy decoration-yellow-400/50">
-              bloquer votre vente ou location
-            </span>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-5 sm:mb-6 text-white uppercase tracking-tight">
+            État des Risques et Pollutions en ligne
           </h1>
           <p className="text-base sm:text-lg text-red-100 mb-6 sm:mb-8 max-w-2xl mx-auto font-medium">
-            L'État des Risques et Pollutions est obligatoire avant toute signature.
-            Obtenez le vôtre en 2 minutes — sans se déplacer, pour 9,99 €.
+            ERP obligatoire pour votre vente ou location — obtenez votre document conforme
+            à la réglementation en moins de 2 minutes, sans vous déplacer.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
@@ -164,13 +182,12 @@ export default function Home() {
               className="bg-white text-edl-700 hover:bg-gray-100 font-bold shadow-lg"
               onClick={() => navigate('/generer')}
             >
-              Obtenir mon ERP maintenant
+              Établir mon état des risques
               <ArrowRight className="h-5 w-5" />
             </Button>
             <Button
               size="xl"
-              variant="outline"
-              className="border-white/40 text-white hover:bg-white/10 font-semibold"
+              className="bg-navy-900 text-white hover:bg-navy-800 font-semibold shadow-lg"
               onClick={() => navigate('/dashboard')}
             >
               Voir un exemple
@@ -178,6 +195,58 @@ export default function Home() {
           </div>
           <p className="text-xs text-red-200 mt-5 font-medium">
             ✓ 9,99 € · ✓ Données officielles Géorisques · ✓ PDF prêt en 2 minutes
+          </p>
+        </div>
+      </section>
+
+      {/* Trust strip — sources officielles */}
+      <section className="bg-white border-b border-gray-100 py-6 px-4">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-center text-xs text-gray-400 uppercase tracking-widest font-semibold mb-5">
+            Données issues des sources officielles de l'État français
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            {/* Badges gouvernementaux */}
+            {GOV_SOURCES.map(src => (
+              <div
+                key={src.name}
+                className="flex items-center gap-2.5 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg shadow-sm"
+              >
+                {/* Drapeau tricolore FR */}
+                <div className="flex flex-col h-7 w-2 rounded-sm overflow-hidden shrink-0">
+                  <div className="flex-1 bg-[#003189]" />
+                  <div className="flex-1 bg-white border-y border-gray-200" />
+                  <div className="flex-1 bg-[#E1000F]" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-gray-900 leading-none">{src.name}</p>
+                  <p className="text-[10px] text-gray-400 leading-none mt-0.5">{src.domain}</p>
+                </div>
+              </div>
+            ))}
+
+            {/* Badge conformité légale */}
+            <div className="flex items-center gap-2.5 px-3 py-2 bg-green-50 border border-green-200 rounded-lg shadow-sm">
+              <BadgeCheck className="h-5 w-5 text-green-600 shrink-0" />
+              <div>
+                <p className="text-xs font-bold text-green-900 leading-none">Conforme</p>
+                <p className="text-[10px] text-green-700 leading-none mt-0.5">Arrêté du 27/09/2022</p>
+              </div>
+            </div>
+
+            {/* Badge Stripe */}
+            <div className="flex items-center gap-2.5 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg shadow-sm">
+              <Lock className="h-4 w-4 text-[#635BFF] shrink-0" />
+              <div>
+                <p className="text-xs font-bold text-gray-900 leading-none">Paiement sécurisé</p>
+                <p className="text-[10px] text-gray-400 leading-none mt-0.5">Stripe · SSL / 3D Secure</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Mention République Française */}
+          <p className="text-center text-[10px] text-gray-300 mt-5 tracking-wide uppercase">
+            Service réalisé en partenariat avec les données ouvertes de la République Française
           </p>
         </div>
       </section>
