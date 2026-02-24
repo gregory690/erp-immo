@@ -124,7 +124,7 @@ export default function Home() {
       {/* Top bar */}
       <div className="bg-navy-900 text-white text-xs py-2 px-4 hidden sm:block">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <span>Service EDL&amp;DIAGNOSTIC · Diagnostics immobiliers certifiés</span>
+          <span>Un service proposé par EDL&amp;DIAGNOSTIC · Diagnostiqueurs immobiliers certifiés</span>
           <a href="tel:+33622775769" className="flex items-center gap-1.5 hover:text-edl-300 transition-colors font-medium">
             <Phone className="h-3 w-3" />
             06 22 77 57 69
