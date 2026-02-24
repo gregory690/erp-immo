@@ -165,6 +165,10 @@ export function buildERPDocument(input: ERPCalculationInput): ERPDocument {
     basias: basiasSites,
     basol: basolSites,
     recul_trait_cote: { applicable: false },
+    ensa: {
+      en_zone_peb: false,
+      prescriptions_insonorisation: false,
+    },
   };
 
   const catnatList: CatNatArrete[] = input.catnat?.data ?? r?.catnat?.arretes ?? [];

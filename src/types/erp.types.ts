@@ -45,6 +45,12 @@ export interface ERPRisques {
     horizon?: '2050' | '2100';
     libelle?: string;
   };
+  ensa: {
+    en_zone_peb: boolean;
+    zone_peb?: 'A' | 'B' | 'C' | 'D';
+    nom_aerodrome?: string;
+    prescriptions_insonorisation: boolean;
+  };
 }
 
 export interface Prescription {
