@@ -190,9 +190,16 @@ export default function Home() {
               Voir un exemple
             </Button>
           </div>
-          <p className="text-xs text-red-200 mt-5 font-medium">
-            ✓ 9,99 € · ✓ Données officielles Géorisques · ✓ PDF prêt en 2 minutes
-          </p>
+          <div className="flex items-center justify-center gap-2 mt-5">
+            <div className="flex h-4 w-[11px] rounded-sm overflow-hidden shrink-0 opacity-80">
+              <div className="w-1/3 bg-[#002395]" />
+              <div className="w-1/3 bg-white" />
+              <div className="w-1/3 bg-[#ED2939]" />
+            </div>
+            <p className="text-xs text-red-200 font-medium">
+              Données officielles de l'État · ✓ 9,99 € · ✓ PDF prêt en 2 minutes
+            </p>
+          </div>
         </div>
       </section>
 
@@ -203,17 +210,32 @@ export default function Home() {
             Données issues des sources officielles de l'État français
           </p>
           <div className="flex flex-wrap justify-center gap-3">
+
+            {/* République Française — bloc principal */}
+            <div className="flex items-center gap-3 px-4 py-2.5 bg-[#f0f3fb] border border-[#c5d0e8] rounded-lg shadow-sm">
+              {/* Drapeau FR horizontal */}
+              <div className="flex h-8 w-[22px] rounded-sm overflow-hidden shadow-sm shrink-0 border border-gray-200">
+                <div className="w-1/3 bg-[#002395]" />
+                <div className="w-1/3 bg-white" />
+                <div className="w-1/3 bg-[#ED2939]" />
+              </div>
+              <div>
+                <p className="text-[9px] font-semibold text-[#002395] uppercase tracking-widest leading-none">République Française</p>
+                <p className="text-xs font-black text-gray-900 leading-tight mt-0.5">Données publiques officielles</p>
+                <p className="text-[10px] text-gray-500 leading-none mt-0.5">data.gouv.fr</p>
+              </div>
+            </div>
+
             {/* Badges gouvernementaux */}
             {GOV_SOURCES.map(src => (
               <div
                 key={src.name}
                 className="flex items-center gap-2.5 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg shadow-sm"
               >
-                {/* Drapeau tricolore FR */}
-                <div className="flex flex-col h-7 w-2 rounded-sm overflow-hidden shrink-0">
-                  <div className="flex-1 bg-[#003189]" />
-                  <div className="flex-1 bg-white border-y border-gray-200" />
-                  <div className="flex-1 bg-[#E1000F]" />
+                <div className="flex h-7 w-[14px] rounded-sm overflow-hidden shrink-0 border border-gray-200">
+                  <div className="w-1/3 bg-[#002395]" />
+                  <div className="w-1/3 bg-white" />
+                  <div className="w-1/3 bg-[#ED2939]" />
                 </div>
                 <div>
                   <p className="text-xs font-bold text-gray-900 leading-none">{src.name}</p>
@@ -227,7 +249,16 @@ export default function Home() {
               <BadgeCheck className="h-5 w-5 text-green-600 shrink-0" />
               <div>
                 <p className="text-xs font-bold text-green-900 leading-none">Conforme</p>
-                <p className="text-[10px] text-green-700 leading-none mt-0.5">Arrêté du 27/09/2022</p>
+                <p className="text-[10px] text-green-700 leading-none mt-0.5">Arrêté 27/09/2022</p>
+              </div>
+            </div>
+
+            {/* Badge RGPD */}
+            <div className="flex items-center gap-2.5 px-3 py-2 bg-blue-50 border border-blue-200 rounded-lg shadow-sm">
+              <Shield className="h-4 w-4 text-blue-600 shrink-0" />
+              <div>
+                <p className="text-xs font-bold text-blue-900 leading-none">RGPD</p>
+                <p className="text-[10px] text-blue-600 leading-none mt-0.5">Données protégées</p>
               </div>
             </div>
 
@@ -240,11 +271,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-          {/* Mention République Française */}
-          <p className="text-center text-[10px] text-gray-300 mt-5 tracking-wide uppercase">
-            Service réalisé en partenariat avec les données ouvertes de la République Française
-          </p>
         </div>
       </section>
 
@@ -525,15 +551,29 @@ export default function Home() {
                 EDL<span className="text-edl-400">&</span>DIAGNOSTIC
               </span>
             </div>
+
+            {/* Bloc RF officiel */}
+            <div className="flex items-center gap-2.5 border border-white/10 rounded-lg px-3 py-2">
+              <div className="flex h-7 w-[18px] rounded-sm overflow-hidden shrink-0">
+                <div className="w-1/3 bg-[#002395]" />
+                <div className="w-1/3 bg-white/90" />
+                <div className="w-1/3 bg-[#ED2939]" />
+              </div>
+              <div>
+                <p className="text-[9px] font-semibold text-gray-300 uppercase tracking-widest leading-none">République Française</p>
+                <p className="text-[10px] text-white font-bold leading-none mt-0.5">Données publiques officielles</p>
+              </div>
+            </div>
+
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 text-xs text-gray-400">
-              <span>Données : georisques.gouv.fr (BRGM)</span>
-              <span>Adresses : api-adresse.data.gouv.fr</span>
-              <span>Cadastre : apicarto.ign.fr</span>
+              <span>georisques.gouv.fr (BRGM)</span>
+              <span>api-adresse.data.gouv.fr</span>
+              <span>apicarto.ign.fr</span>
             </div>
           </div>
           <div className="border-t border-white/10 pt-6 text-center">
             <p className="text-xs text-gray-500">
-              © 2024 EDL&amp;DIAGNOSTIC · Ce service ne constitue pas un avis juridique. Les données proviennent des APIs
+              © 2025 EDL&amp;DIAGNOSTIC · Ce service ne constitue pas un avis juridique. Les données proviennent des APIs
               officielles publiques françaises. L'utilisateur est responsable de la vérification des informations avant usage.
             </p>
           </div>
