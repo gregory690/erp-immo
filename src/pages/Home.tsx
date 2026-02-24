@@ -115,23 +115,6 @@ const TESTIMONIALS = [
   },
 ];
 
-function MarianneIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 32 44"
-      fill="currentColor"
-      className={className}
-      aria-label="Marianne — République Française"
-    >
-      {/* Bonnet phrygien */}
-      <path d="M16 2 C17 0 21 1 20 5 L27 21 H5 L12 5 C11 1 15 0 16 2 Z" />
-      {/* Tête */}
-      <ellipse cx="16" cy="29" rx="8" ry="9" />
-      {/* Buste */}
-      <path d="M3 44 Q5 35 16 33 Q27 35 29 44 Z" />
-    </svg>
-  );
-}
 
 export default function Home() {
   const navigate = useNavigate();
@@ -187,8 +170,8 @@ export default function Home() {
           {/* Badge Marianne */}
           <div className="flex justify-center mb-5">
             <div className="inline-flex items-center gap-2.5 bg-white/15 border border-white/25 rounded-full px-4 py-2 backdrop-blur-sm">
-              <div className="bg-white rounded-full h-7 w-7 flex items-center justify-center shrink-0">
-                <MarianneIcon className="h-4 w-auto text-[#002395]" />
+              <div className="bg-white rounded-full h-8 w-8 flex items-center justify-center shrink-0 overflow-hidden p-0.5">
+                <img src="/marianne.png" alt="Marianne RF" className="h-full w-full object-contain" />
               </div>
               <span className="text-[11px] font-semibold text-white/95 uppercase tracking-widest">
                 <span className="sm:hidden">Données officielles de l'État</span>
@@ -235,11 +218,13 @@ export default function Home() {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
 
-            {/* République Française — bloc principal avec Marianne */}
-            <div className="flex items-center gap-3 px-4 py-2.5 bg-[#f0f3fb] border border-[#c5d0e8] rounded-lg shadow-sm">
-              <div className="bg-[#002395] rounded-full h-9 w-9 flex items-center justify-center shrink-0">
-                <MarianneIcon className="h-5 w-auto text-white" />
-              </div>
+            {/* République Française — Marianne officielle */}
+            <div className="flex items-center gap-3 px-4 py-2.5 bg-white border border-[#c5d0e8] rounded-lg shadow-sm">
+              <img
+                src="/marianne.png"
+                alt="Marianne — République Française"
+                className="h-12 w-auto object-contain shrink-0"
+              />
               <div>
                 <p className="text-[9px] font-semibold text-[#002395] uppercase tracking-widest leading-none">République Française</p>
                 <p className="text-xs font-black text-gray-900 leading-tight mt-0.5">Données publiques officielles</p>
@@ -571,8 +556,8 @@ export default function Home() {
 
             {/* Bloc RF officiel avec Marianne */}
             <div className="flex items-center gap-2.5 border border-white/10 rounded-lg px-3 py-2">
-              <div className="bg-white/10 rounded-full h-8 w-8 flex items-center justify-center shrink-0">
-                <MarianneIcon className="h-4 w-auto text-white/90" />
+              <div className="bg-white rounded p-1 shrink-0">
+                <img src="/marianne.png" alt="Marianne RF" className="h-7 w-auto object-contain" />
               </div>
               <div>
                 <p className="text-[9px] font-semibold text-gray-300 uppercase tracking-widest leading-none">République Française</p>
