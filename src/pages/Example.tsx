@@ -131,7 +131,7 @@ export default function Example() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 overflow-x-hidden">
       {/* Header */}
       <header className="bg-white border-b border-border sticky top-0 z-40 no-print">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">

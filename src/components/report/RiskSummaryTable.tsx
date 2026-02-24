@@ -38,7 +38,7 @@ const LEVEL_CONFIG: Record<RiskLevel, {
   },
 };
 
-const categories = ['Risques naturels', 'Risques technologiques', 'Risques miniers', 'Pollution des sols', 'Catastrophes naturelles'];
+const categories = ['Risques naturels', 'Risques côtiers', 'Risques technologiques', 'Risques miniers', 'Pollution des sols', 'Catastrophes naturelles'];
 
 export function RiskSummaryTable({ items }: RiskSummaryTableProps) {
   return (

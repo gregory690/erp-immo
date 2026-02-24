@@ -126,7 +126,7 @@ export default function Generate() {
   const globalRisk = erpDocument ? getGlobalRiskLevel(riskSummary) : null;
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 overflow-x-hidden">
       {/* Header */}
       <header className="bg-white border-b border-border sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
@@ -137,7 +137,9 @@ export default function Generate() {
             <ChevronLeft className="h-4 w-4" />
             Retour
           </button>
-          <span className="font-bold text-navy-900">EDL&DIAGNOSTIC · Génération ERP</span>
+          <span className="font-bold text-navy-900 text-sm">
+            <span className="hidden sm:inline">EDL&DIAGNOSTIC · </span>Génération ERP
+          </span>
           <div className="w-16" />
         </div>
       </header>

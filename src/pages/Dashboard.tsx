@@ -27,7 +27,7 @@ export default function Dashboard() {
   const validCount = history.filter(e => new Date(e.metadata.validite_jusqu_au) > new Date()).length;
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 overflow-x-hidden">
       <header className="bg-white border-b border-border sticky top-0 z-40">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
           <button
@@ -54,25 +54,19 @@ export default function Dashboard() {
 
       <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4">
-          <Card>
-            <CardContent className="pt-4">
-              <p className="text-2xl font-bold text-navy-900">{history.length}</p>
-              <p className="text-xs text-gray-500 mt-1">ERP générés</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-4">
-              <p className="text-2xl font-bold text-green-700">{validCount}</p>
-              <p className="text-xs text-gray-500 mt-1">ERP valides</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-4">
-              <p className="text-2xl font-bold text-orange-600">{history.length - validCount}</p>
-              <p className="text-xs text-gray-500 mt-1">ERP expirés</p>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-3 gap-2 sm:gap-4">
+          <div className="bg-white rounded-lg border border-border p-3 sm:p-5">
+            <p className="text-xl sm:text-2xl font-bold text-navy-900">{history.length}</p>
+            <p className="text-xs text-gray-500 mt-0.5 leading-tight">ERP générés</p>
+          </div>
+          <div className="bg-white rounded-lg border border-border p-3 sm:p-5">
+            <p className="text-xl sm:text-2xl font-bold text-green-700">{validCount}</p>
+            <p className="text-xs text-gray-500 mt-0.5 leading-tight">ERP valides</p>
+          </div>
+          <div className="bg-white rounded-lg border border-border p-3 sm:p-5">
+            <p className="text-xl sm:text-2xl font-bold text-orange-600">{history.length - validCount}</p>
+            <p className="text-xs text-gray-500 mt-0.5 leading-tight">ERP expirés</p>
+          </div>
         </div>
 
         {/* Renewal alerts */}

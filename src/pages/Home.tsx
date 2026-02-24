@@ -191,7 +191,8 @@ export default function Home() {
                 <MarianneIcon className="h-4 w-auto text-[#002395]" />
               </div>
               <span className="text-[11px] font-semibold text-white/95 uppercase tracking-widest">
-                République Française · Données officielles
+                <span className="sm:hidden">Données officielles de l'État</span>
+                <span className="hidden sm:inline">République Française · Données officielles</span>
               </span>
             </div>
           </div>
