@@ -89,6 +89,7 @@ export default function Generate() {
 
   async function goToStep3() {
     if (!addressState) return;
+    console.log('[goToStep3] cadastre state:', JSON.stringify(cadastre));
     setStep(3);
     await calculate({
       adresse_complete: addressState.feature.properties.label,
