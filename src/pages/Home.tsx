@@ -188,7 +188,7 @@ export default function Home() {
             <Button
               size="xl"
               className="bg-navy-900 text-white hover:bg-navy-800 font-semibold shadow-lg"
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate('/exemple')}
             >
               Voir un exemple
             </Button>

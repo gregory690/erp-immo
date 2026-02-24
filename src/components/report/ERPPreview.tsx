@@ -15,6 +15,7 @@ import type { ERPDocument } from '../../types/erp.types';
 interface ERPPreviewProps {
   document: ERPDocument;
   onNew?: () => void;
+  demoMode?: boolean;
 }
 
 function formatDate(d: Date): string {
@@ -25,7 +26,7 @@ function formatDate(d: Date): string {
   });
 }
 
-export function ERPPreview({ document: erp, onNew }: ERPPreviewProps) {
+export function ERPPreview({ document: erp, onNew, demoMode = false }: ERPPreviewProps) {
   const [downloading, setDownloading] = useState(false);
   const riskSummary = buildRiskSummary(erp.risques, erp.catnat);
   const exposedCount = riskSummary.filter(r => r.expose).length;
@@ -129,7 +130,7 @@ export function ERPPreview({ document: erp, onNew }: ERPPreviewProps) {
                   <Building2 className="h-4 w-4 text-navy-700 mt-0.5 shrink-0" />
                   <div>
                     <p className="text-xs text-gray-500 uppercase tracking-wide">Références cadastrales</p>
-                    <div className="flex gap-2 mt-1">
+                    <div className={`flex gap-2 mt-1 ${demoMode ? 'blur-sm select-none pointer-events-none' : ''}`}>
                       <Badge variant="outline" className="font-mono">
                         Section {erp.bien.references_cadastrales.section || 'N/R'}
                       </Badge>
@@ -147,11 +148,11 @@ export function ERPPreview({ document: erp, onNew }: ERPPreviewProps) {
                 </div>
                 <div className="flex justify-between py-1 border-b border-dashed border-border">
                   <span className="text-gray-500">Latitude</span>
-                  <span className="font-mono">{erp.bien.coordonnees.lat.toFixed(6)}</span>
+                  <span className={`font-mono ${demoMode ? 'blur-sm select-none' : ''}`}>{erp.bien.coordonnees.lat.toFixed(6)}</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-dashed border-border">
                   <span className="text-gray-500">Longitude</span>
-                  <span className="font-mono">{erp.bien.coordonnees.lng.toFixed(6)}</span>
+                  <span className={`font-mono ${demoMode ? 'blur-sm select-none' : ''}`}>{erp.bien.coordonnees.lng.toFixed(6)}</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-dashed border-border">
                   <span className="text-gray-500">Version réglementaire</span>
@@ -234,10 +235,15 @@ export function ERPPreview({ document: erp, onNew }: ERPPreviewProps) {
           </section>
 
           {/* Section V — Signature */}
-          <section>
+          <section className="relative">
             <h2 className="text-base font-bold text-navy-900 uppercase tracking-wide border-b-2 border-navy-900 pb-2 mb-4">
               Section V — Déclaration et signature
             </h2>
+            {demoMode && (
+              <div className="absolute inset-0 top-10 bg-white/80 backdrop-blur-sm rounded-lg flex items-center justify-center z-10 border border-dashed border-gray-300">
+                <p className="text-sm text-gray-500 font-medium italic">Section complétée et signée par le vendeur / bailleur</p>
+              </div>
+            )}
             <p className="text-sm text-gray-700 mb-4">
               Je soussigné(e) certifie avoir complété le présent formulaire en tenant compte des
               informations disponibles sur <strong>www.georisques.gouv.fr</strong> et des informations
