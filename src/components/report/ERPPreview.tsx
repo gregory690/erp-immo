@@ -41,9 +41,9 @@ function SectionHeader({ children }: { children: React.ReactNode }) {
 
 function Block({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="border border-gray-800 mb-1.5">
+    <div className="border border-gray-800 mb-1">
       <SectionHeader>{title}</SectionHeader>
-      <div className="px-2 py-1 space-y-0.5">{children}</div>
+      <div className="px-2 py-0.5 space-y-0.5">{children}</div>
     </div>
   );
 }
@@ -298,15 +298,15 @@ function ERPFormPage({ erp }: { erp: ERPDocument }) {
   const totalPages = catnat.length > 0 ? 4 : 3;
 
   return (
-    <div className="p-4 sm:p-6 font-sans text-gray-900">
+    <div className="p-3 sm:p-4 font-sans text-gray-900">
       {/* Titre officiel */}
-      <div className="text-center mb-3">
+      <div className="text-center mb-1.5">
         <h2 className="text-[13px] font-black uppercase tracking-wide">État des Risques et Pollutions</h2>
         <p className="text-[9px] text-gray-600">Aléas naturels, miniers ou technologiques, sismicité, potentiel radon, sols pollués et nuisances sonores</p>
       </div>
 
       {/* Arrêté préfectoral */}
-      <div className="border border-gray-800 mb-2 text-[10px]">
+      <div className="border border-gray-800 mb-1.5 text-[10px]">
         <div className="bg-gray-200 px-2 py-0.5 text-[9px] font-bold border-b border-gray-800">
           Cet état est établi sur la base des informations mises à disposition par arrêté préfectoral
         </div>
@@ -318,7 +318,7 @@ function ERPFormPage({ erp }: { erp: ERPDocument }) {
       </div>
 
       {/* Adresse */}
-      <div className="border border-gray-800 mb-2 text-[10px]">
+      <div className="border border-gray-800 mb-1.5 text-[10px]">
         <div className="grid grid-cols-3 divide-x divide-gray-800">
           <div className="px-2 py-1">
             <span className="text-gray-500 font-semibold">2. Adresse ou parcelles</span>
@@ -420,18 +420,18 @@ function ERPFormPage({ erp }: { erp: ERPDocument }) {
         <Row label="Extraits des documents de référence → Cf: cartographies (www.georisques.gouv.fr)" />
         <Row label="&gt; L'immeuble est situé en secteur d'expropriation ou de délaissement" value={false} />
         <Row label="L'immeuble est situé en zone de prescription" value={hasPPRT} />
-        <SubRow>Si la transaction concerne un logement, les travaux prescrits ont été réalisés&nbsp;
-          <span className="inline-flex items-center gap-3 text-[10px]">
+        <div className="text-[9px] text-gray-600 pl-3 leading-relaxed">Si logement — travaux prescrits réalisés&nbsp;
+          <span className="inline-flex items-center gap-2 text-[9px]">
             <span className="flex items-center gap-0.5"><Check checked={false} />&nbsp;Oui</span>
             <span className="flex items-center gap-0.5"><Check checked={false} />&nbsp;Non</span>
           </span>
-        </SubRow>
-        <SubRow>Si la transaction ne concerne pas un logement, l'information sur le type de risques auxquels l'immeuble est exposé ainsi que leur gravité, probabilité et cinétique, est jointe à l'acte de vente ou au contrat de location&nbsp;
-          <span className="inline-flex items-center gap-3 text-[10px]">
+        </div>
+        <div className="text-[9px] text-gray-600 pl-3 leading-relaxed">Si hors logement — information sur les risques (gravité, probabilité, cinétique) jointe à l'acte&nbsp;
+          <span className="inline-flex items-center gap-2 text-[9px]">
             <span className="flex items-center gap-0.5"><Check checked={false} />&nbsp;Oui</span>
             <span className="flex items-center gap-0.5"><Check checked={false} />&nbsp;Non</span>
           </span>
-        </SubRow>
+        </div>
       </Block>
 
       {/* ─── Sismique ─── */}
@@ -475,27 +475,27 @@ function ERPFormPage({ erp }: { erp: ERPDocument }) {
       </Block>
 
       {/* ─── Signature ─── */}
-      <div className="border border-gray-800 mt-1 text-[10px]">
+      <div className="border border-gray-800 mt-0 text-[10px]" style={{ pageBreakInside: 'avoid' }}>
         <div className="grid grid-cols-3 divide-x divide-gray-800">
           <div className="p-2">
             <p className="font-semibold text-gray-600">Vendeur ou Bailleur</p>
-            <div className="h-10 border-b border-gray-400 mt-4" />
+            <div className="h-7 border-b border-gray-400 mt-3" />
           </div>
           <div className="p-2">
             <p className="font-semibold text-gray-600">Date / Lieu</p>
             <p className="mt-1">{formatDateFr(erp.metadata.date_realisation)} /</p>
-            <div className="h-6 border-b border-gray-400 mt-1" />
+            <div className="h-4 border-b border-gray-400 mt-1" />
           </div>
           <div className="p-2">
             <p className="font-semibold text-gray-600">Acquéreur ou Locataire</p>
-            <div className="h-10 border-b border-gray-400 mt-4" />
+            <div className="h-7 border-b border-gray-400 mt-3" />
           </div>
         </div>
       </div>
 
-      <div className="mt-6 pt-3 text-[8px] text-gray-400 text-center border-t border-gray-200">
+      <div className="mt-3 pt-2 text-[8px] text-gray-400 text-center border-t border-gray-200">
         <p>Modèle État des risques, pollutions et sols en application des articles L.125-5, L.125-6 et L.125-7 du Code de l'environnement — Arrêté du 27 septembre 2022</p>
-        <p className="mt-2 font-semibold text-gray-500">2 / {totalPages}</p>
+        <p className="mt-1 font-semibold text-gray-500">2 / {totalPages}</p>
       </div>
     </div>
   );
