@@ -59,8 +59,8 @@ const FEATURES = [
   },
   {
     icon: <FileText className="h-5 w-5 text-edl-700" />,
-    title: '25 € économisés',
-    description: '9,99 € au lieu de 35 € chez un diagnostiqueur — même valeur légale, prix divisé par 3.',
+    title: '10 € économisés',
+    description: '19,99 € au lieu de 30 € chez un concurrent — même valeur légale, prix divisé par 2.',
   },
 ];
 
@@ -109,7 +109,7 @@ const TESTIMONIALS = [
     role: 'Vendeur particulier, Nantes',
   },
   {
-    text: "J'ai 3 appartements en location. Je renouvelle l'ERP à chaque locataire pour 9,99 € — c'est une économie énorme sur l'année.",
+    text: "J'ai 3 appartements en location. Je renouvelle l'ERP à chaque locataire pour 19,99 € — c'est une économie énorme sur l'année.",
     author: 'Isabelle T.',
     role: 'Propriétaire bailleuse, Marseille',
   },
@@ -205,7 +205,7 @@ export default function Home() {
             </Button>
           </div>
           <p className="text-xs text-red-200 mt-5 font-medium">
-            ✓ 9,99 € · ✓ Données officielles Géorisques · ✓ PDF prêt en 2 minutes
+            ✓ 19,99 € · ✓ Données officielles Géorisques · ✓ PDF prêt en 2 minutes
           </p>
         </div>
       </section>
@@ -438,7 +438,7 @@ export default function Home() {
                     <p className="font-bold text-red-900 mb-1">Que se passe-t-il sans ERP ?</p>
                     <p className="text-sm text-red-700">
                       L'acheteur ou le locataire peut demander l'annulation du contrat ou une réduction du prix de vente
-                      (art. L125-5 Code de l'Environnement). Un oubli qui peut coûter bien plus que 9,99 €.
+                      (art. L125-5 Code de l'Environnement). Un oubli qui peut coûter bien plus que 19,99 €.
                     </p>
                   </div>
                 </div>
@@ -451,7 +451,7 @@ export default function Home() {
       {/* Prix */}
       <section className="py-14 px-4 bg-white">
         <div className="max-w-xl mx-auto text-center">
-          <h2 className="text-2xl font-black text-navy-900 mb-2">Votre ERP en 2 minutes, pour 9,99 €</h2>
+          <h2 className="text-2xl font-black text-navy-900 mb-2">Votre ERP en 2 minutes, pour 19,99 €</h2>
           <p className="text-gray-500 text-sm mb-8">Disponible 7j/7, 24h/24 · Accepté par les notaires et agences immobilières</p>
 
           <Card className="border-2 border-edl-700 shadow-xl">
@@ -461,11 +461,11 @@ export default function Home() {
               </Badge>
               <div>
                 <div className="flex items-center justify-center gap-2 mb-1">
-                  <span className="text-gray-400 line-through text-lg font-medium">35,00 €</span>
-                  <span className="text-xs text-gray-400 italic">(tarif diagnostiqueur)</span>
+                  <span className="text-gray-400 line-through text-lg font-medium">30,00 €</span>
+                  <span className="text-xs text-gray-400 italic">(tarif concurrent)</span>
                 </div>
-                <p className="text-5xl font-black text-edl-700">9,99 €<span className="text-lg font-normal text-gray-500"> TTC</span></p>
-                <p className="text-xs text-gray-400 mt-1">8,32 € HT · Téléchargement immédiat après paiement</p>
+                <p className="text-5xl font-black text-edl-700">19,99 €<span className="text-lg font-normal text-gray-500"> TTC</span></p>
+                <p className="text-xs text-gray-400 mt-1">16,66 € HT · Téléchargement immédiat après paiement</p>
               </div>
               <ul className="text-sm text-left space-y-2">
                 {[
@@ -486,7 +486,7 @@ export default function Home() {
                 className="w-full bg-edl-700 hover:bg-edl-800 text-white font-bold"
                 onClick={() => navigate('/generer')}
               >
-                Obtenir mon ERP — 9,99 €
+                Obtenir mon ERP — 19,99 €
                 <ArrowRight className="h-5 w-5" />
               </Button>
               <p className="text-xs text-gray-400">Paiement sécurisé par Stripe · Satisfait ou remboursé 7 jours</p>
@@ -535,7 +535,7 @@ export default function Home() {
           className="bg-white text-edl-700 hover:bg-gray-100 font-bold shadow-lg"
           onClick={() => navigate('/generer')}
         >
-          Obtenir mon ERP — 9,99 €
+          Obtenir mon ERP — 19,99 €
           <ArrowRight className="h-5 w-5" />
         </Button>
         <p className="text-xs text-red-200 mt-4">Données officielles · PDF conforme · Téléchargement immédiat</p>

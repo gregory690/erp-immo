@@ -171,7 +171,7 @@ export default function Example() {
             className="bg-edl-700 hover:bg-edl-800 shrink-0 font-semibold"
             onClick={() => navigate('/generer')}
           >
-            Établir mon ERP — 9,99 €
+            Établir mon ERP — 19,99 €
             <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
@@ -190,7 +190,7 @@ export default function Example() {
             className="bg-white text-edl-700 hover:bg-gray-100 font-bold"
             onClick={() => navigate('/generer')}
           >
-            Établir mon état des risques — 9,99 €
+            Établir mon état des risques — 19,99 €
             <ArrowRight className="h-5 w-5" />
           </Button>
         </div>

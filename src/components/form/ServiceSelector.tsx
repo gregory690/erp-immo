@@ -74,21 +74,21 @@ export function ServiceSelector({ selected, onSelect, onConfirm }: ServiceSelect
               <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-1">
                 <Tag className="h-3.5 w-3.5 text-gray-400 shrink-0" />
                 <span className="text-sm text-gray-500 line-through decoration-red-400 decoration-2 font-medium">
-                  35,00 €
+                  30,00 €
                 </span>
                 <span className="text-xs text-gray-400 italic">
                   (prix moyen facturé par votre diagnostiqueur)
                 </span>
               </div>
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-extrabold text-navy-900">9,99 €</span>
+                <span className="text-4xl font-extrabold text-navy-900">19,99 €</span>
                 <span className="text-sm text-gray-500 font-medium">TTC</span>
               </div>
-              <p className="text-xs text-gray-400 mt-0.5">8,32 € HT</p>
+              <p className="text-xs text-gray-400 mt-0.5">16,66 € HT</p>
             </div>
             <div className="sm:ml-auto text-left sm:text-right">
               <Badge className="bg-green-100 text-green-800 border-green-200 font-semibold text-sm">
-                Économisez 25 €
+                Économisez 10 €
               </Badge>
               <p className="text-xs text-gray-500 mt-1.5">Téléchargement immédiat</p>
             </div>
@@ -117,7 +117,7 @@ export function ServiceSelector({ selected, onSelect, onConfirm }: ServiceSelect
         size="lg"
         className="w-full bg-edl-700 hover:bg-edl-800 text-base font-semibold h-12"
       >
-        Télécharger mon ERP — 9,99 €
+        Télécharger mon ERP — 19,99 €
       </Button>
     </div>
   );

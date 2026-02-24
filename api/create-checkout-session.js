@@ -33,7 +33,7 @@ export default async function handler(req, res) {
               name: 'État des Risques et Pollutions (ERP)',
               description: `${adresse || 'Bien immobilier'} · Réf. ${erp_reference || ''}`,
             },
-            unit_amount: 999, // 9,99 € en centimes
+            unit_amount: 1999, // 19,99 € en centimes
           },
           quantity: 1,
         },
