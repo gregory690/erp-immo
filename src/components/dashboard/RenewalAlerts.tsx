@@ -36,7 +36,7 @@ export function RenewalAlerts({ history }: RenewalAlertsProps) {
                 <div className="flex items-center gap-2">
                   <AlertTriangle className={`h-4 w-4 ${expired ? 'text-red-500' : 'text-orange-500'}`} />
                   <div>
-                    <p className="text-xs font-medium text-gray-800 truncate max-w-[200px]">
+                    <p className="text-xs font-medium text-gray-800 truncate max-w-[140px] sm:max-w-[200px]">
                       {erp.bien.commune} — {formatERPReference(erp.metadata.reference)}
                     </p>
                     <Badge variant={expired ? 'danger' : 'warning'} className="text-xs mt-0.5">

@@ -43,12 +43,12 @@ export function ERPPreview({ document: erp, onNew }: ERPPreviewProps) {
   return (
     <div className="space-y-4">
       {/* Action bar */}
-      <div className="flex flex-wrap gap-3 items-center justify-between no-print">
+      <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between no-print">
         <div className="flex items-center gap-2 text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-2">
           <CheckCircle2 className="h-4 w-4" />
           <span className="text-sm font-medium">ERP généré avec succès</span>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" onClick={printERPDocument}>
             <Printer className="h-4 w-4 mr-1" />
             Imprimer
@@ -76,8 +76,8 @@ export function ERPPreview({ document: erp, onNew }: ERPPreviewProps) {
         className="erp-document bg-white border border-border rounded-lg overflow-hidden"
       >
         {/* Header */}
-        <div className="bg-navy-900 text-white px-8 py-6">
-          <div className="flex items-start justify-between">
+        <div className="bg-navy-900 text-white px-4 py-4 sm:px-8 sm:py-6">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
             <div>
               <p className="text-xs uppercase tracking-widest text-navy-200 mb-1">
                 Ministère de la Transition Écologique
@@ -89,7 +89,7 @@ export function ERPPreview({ document: erp, onNew }: ERPPreviewProps) {
                 Conformément à l'arrêté du 27 septembre 2022
               </p>
             </div>
-            <div className="text-right">
+            <div className="sm:text-right">
               <p className="text-xs text-navy-300">Référence</p>
               <p className="font-mono text-sm font-semibold">
                 {formatERPReference(erp.metadata.reference)}
@@ -109,7 +109,7 @@ export function ERPPreview({ document: erp, onNew }: ERPPreviewProps) {
           </div>
         </div>
 
-        <div className="p-8 space-y-8">
+        <div className="p-4 sm:p-8 space-y-6 sm:space-y-8">
           {/* Section I — Identification du bien */}
           <section>
             <h2 className="text-base font-bold text-navy-900 uppercase tracking-wide border-b-2 border-navy-900 pb-2 mb-4">
@@ -176,7 +176,7 @@ export function ERPPreview({ document: erp, onNew }: ERPPreviewProps) {
             </div>
 
             <Tabs defaultValue="tableau" className="no-print">
-              <TabsList className="mb-4">
+              <TabsList className="mb-4 h-auto flex-wrap w-full justify-start gap-1">
                 <TabsTrigger value="tableau">Tableau de synthèse</TabsTrigger>
                 <TabsTrigger value="catnat">
                   CatNat ({erp.catnat.length})

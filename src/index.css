@@ -73,3 +73,11 @@
 /* MapLibre GL */
 .maplibregl-map { font-family: inherit !important; }
 .maplibregl-ctrl-attrib { font-size: 10px !important; }
+
+/* Mobile — better touch behavior */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+html {
+  scroll-behavior: smooth;
+}

@@ -42,8 +42,8 @@ const categories = ['Risques naturels', 'Risques technologiques', 'Risques minie
 
 export function RiskSummaryTable({ items }: RiskSummaryTableProps) {
   return (
-    <div className="overflow-hidden rounded-lg border border-border">
-      <table className="w-full text-sm">
+    <div className="overflow-x-auto rounded-lg border border-border">
+      <table className="w-full min-w-[520px] text-sm">
         <thead>
           <tr className="bg-navy-900 text-white">
             <th className="text-left px-4 py-3 font-medium">Catégorie</th>

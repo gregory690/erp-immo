@@ -273,7 +273,7 @@ export default function Generate() {
             </CardHeader>
             <CardContent className="space-y-4">
               {loading && (
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {Object.entries(RISK_LABELS).map(([key, label]) => (
                     <div
                       key={key}

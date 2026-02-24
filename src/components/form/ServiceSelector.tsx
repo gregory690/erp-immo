@@ -69,10 +69,10 @@ export function ServiceSelector({ selected, onSelect, onConfirm }: ServiceSelect
           </div>
 
           {/* Price block */}
-          <div className="flex items-end gap-4 bg-slate-50 rounded-xl px-5 py-4 border border-slate-100">
+          <div className="flex flex-col sm:flex-row sm:items-end gap-4 bg-slate-50 rounded-xl px-5 py-4 border border-slate-100">
             <div>
-              <div className="flex items-center gap-2 mb-1">
-                <Tag className="h-3.5 w-3.5 text-gray-400" />
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-1">
+                <Tag className="h-3.5 w-3.5 text-gray-400 shrink-0" />
                 <span className="text-sm text-gray-500 line-through decoration-red-400 decoration-2 font-medium">
                   35,00 €
                 </span>
@@ -86,7 +86,7 @@ export function ServiceSelector({ selected, onSelect, onConfirm }: ServiceSelect
               </div>
               <p className="text-xs text-gray-400 mt-0.5">8,32 € HT</p>
             </div>
-            <div className="ml-auto text-right">
+            <div className="sm:ml-auto text-left sm:text-right">
               <Badge className="bg-green-100 text-green-800 border-green-200 font-semibold text-sm">
                 Économisez 25 €
               </Badge>

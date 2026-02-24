@@ -108,7 +108,7 @@ export default function Home() {
 
       {/* Hero — fond dégradé couleurs EDL */}
       <section
-        className="text-white py-20 px-4 relative overflow-hidden"
+        className="text-white py-12 sm:py-20 px-4 relative overflow-hidden"
         style={{ background: 'linear-gradient(135deg, #211f54 0%, #2a2472 50%, #b20f11 100%)' }}
       >
         {/* Motif décoratif */}
@@ -120,13 +120,13 @@ export default function Home() {
           <Badge className="bg-edl-700/80 text-white border-edl-600 mb-6 text-xs font-semibold tracking-wide uppercase">
             Conforme · Arrêté du 27 septembre 2022
           </Badge>
-          <h1 className="text-4xl md:text-5xl font-black leading-tight mb-6 text-white">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-5 sm:mb-6 text-white">
             Votre État des Risques et Pollutions{' '}
             <span className="text-yellow-300 underline decoration-wavy decoration-yellow-400/50">
               en moins de 2 minutes
             </span>
           </h1>
-          <p className="text-lg text-gray-200 mb-8 max-w-2xl mx-auto font-medium">
+          <p className="text-base sm:text-lg text-gray-200 mb-6 sm:mb-8 max-w-2xl mx-auto font-medium">
             Document légalement obligatoire pour toute vente ou location. Données officielles
             Géorisques — PPR, séisme, radon, argiles, CatNat, SIS.
           </p>
@@ -156,8 +156,8 @@ export default function Home() {
 
       {/* Bandeau légal */}
       <div className="bg-edl-50 border-b border-edl-200 px-4 py-3">
-        <div className="max-w-6xl mx-auto flex items-center gap-3">
-          <AlertTriangle className="h-4 w-4 text-edl-700 shrink-0" />
+        <div className="max-w-6xl mx-auto flex items-start gap-3">
+          <AlertTriangle className="h-4 w-4 text-edl-700 shrink-0 mt-0.5" />
           <p className="text-sm text-edl-800">
             <strong>Rappel légal :</strong> L'ERP est obligatoire pour toute vente ou location (loi Alur 2014).
             Validité 6 mois. L'absence de ce document expose le vendeur à une réduction de prix ou à la résolution de la vente.
