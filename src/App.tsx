@@ -4,6 +4,9 @@ import Generate from './pages/Generate';
 import Preview from './pages/Preview';
 import Dashboard from './pages/Dashboard';
 import Example from './pages/Example';
+import MentionsLegales from './pages/MentionsLegales';
+import CGU from './pages/CGU';
+import Confidentialite from './pages/Confidentialite';
 
 export default function App() {
   return (
@@ -14,6 +17,9 @@ export default function App() {
         <Route path="/apercu" element={<Preview />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/exemple" element={<Example />} />
+        <Route path="/mentions-legales" element={<MentionsLegales />} />
+        <Route path="/cgu" element={<CGU />} />
+        <Route path="/confidentialite" element={<Confidentialite />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

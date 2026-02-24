@@ -571,7 +571,12 @@ export default function Home() {
               <span>apicarto.ign.fr</span>
             </div>
           </div>
-          <div className="border-t border-white/10 pt-6 text-center">
+          <div className="border-t border-white/10 pt-6 text-center space-y-2">
+            <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-gray-400">
+              <button onClick={() => navigate('/mentions-legales')} className="hover:text-white underline transition-colors">Mentions légales</button>
+              <button onClick={() => navigate('/cgu')} className="hover:text-white underline transition-colors">CGU / CGV</button>
+              <button onClick={() => navigate('/confidentialite')} className="hover:text-white underline transition-colors">Politique de confidentialité</button>
+            </div>
             <p className="text-xs text-gray-500">
               © 2026 EDL&amp;DIAGNOSTIC · Ce service ne constitue pas un avis juridique. Les données proviennent des APIs
               officielles publiques françaises. L'utilisateur est responsable de la vérification des informations avant usage.
