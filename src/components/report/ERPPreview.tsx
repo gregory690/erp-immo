@@ -261,6 +261,14 @@ export function ERPPreview({ document: erp, onNew, demoMode = false, emailSent =
             {/* Print version — always visible */}
             <div className="print-only hidden">
               <RiskSummaryTable items={riskSummary} />
+              {erp.catnat.length > 0 && (
+                <div className="mt-6">
+                  <h3 className="text-sm font-bold text-navy-900 uppercase tracking-wide border-b border-navy-900 pb-1 mb-3">
+                    Historique des catastrophes naturelles ({erp.catnat.length} arrêté{erp.catnat.length > 1 ? 's' : ''})
+                  </h3>
+                  <CatNatHistory arretes={erp.catnat} />
+                </div>
+              )}
             </div>
           </section>
 
