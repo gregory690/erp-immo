@@ -427,7 +427,7 @@ export default function Home() {
       <section className="py-14 px-4 bg-white">
         <div className="max-w-xl mx-auto text-center">
           <h2 className="text-2xl font-black text-navy-900 mb-2">Votre ERP en 2 minutes, pour 9,99 €</h2>
-          <p className="text-gray-500 text-sm mb-8">Simple, rapide, moins cher qu'un café au diagnostiqueur</p>
+          <p className="text-gray-500 text-sm mb-8">Sans rendez-vous. Sans déplacement. Sans surprise.</p>
 
           <Card className="border-2 border-edl-700 shadow-xl">
             <CardContent className="pt-8 pb-8 space-y-5">
