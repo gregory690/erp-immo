@@ -485,7 +485,7 @@ export default function Home() {
                 Obtenir mon ERP — 19,99 €
                 <ArrowRight className="h-5 w-5" />
               </Button>
-              <p className="text-xs text-gray-400">Paiement sécurisé par Stripe · Satisfait ou remboursé 7 jours</p>
+              <p className="text-xs text-gray-400">Paiement sécurisé par Stripe · SSL 256 bits</p>
             </CardContent>
           </Card>
         </div>
