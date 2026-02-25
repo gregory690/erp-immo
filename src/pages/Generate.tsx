@@ -254,11 +254,21 @@ export default function Generate() {
                 </Button>
                 <Button
                   onClick={goToStep3}
-                  className="flex-1 bg-edl-700 hover:bg-edl-800"
+                  className="flex-1 bg-edl-700 hover:bg-edl-800 disabled:opacity-60"
                   size="lg"
+                  disabled={cadastreLoading}
                 >
-                  Calculer les risques
-                  <ChevronRight className="h-4 w-4" />
+                  {cadastreLoading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Chargement des références cadastrales…
+                    </>
+                  ) : (
+                    <>
+                      Calculer les risques
+                      <ChevronRight className="h-4 w-4" />
+                    </>
+                  )}
                 </Button>
               </div>
             </CardContent>
