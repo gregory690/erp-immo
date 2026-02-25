@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import {
   Shield,
   Clock,
@@ -12,6 +13,8 @@ import {
   BadgeCheck,
   XCircle,
   Lock,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
@@ -103,17 +106,129 @@ const FAQ = [
 
 const TESTIMONIALS = [
   {
-    text: "Mon agent réclamait l'ERP depuis une semaine. En 5 minutes c'était réglé, le notaire a signé sans la moindre remarque.",
+    text: "Mon notaire attendait l'ERP depuis des jours et j'avais pas réalisé que c'était à moi de le fournir. En 10 minutes c'était réglé, il a signé sans rien dire.",
     author: 'Marc D.',
     role: 'Vendeur particulier, Nantes',
+    initiales: 'MD',
   },
   {
-    text: "J'ai 3 appartements en location. Je renouvelle l'ERP à chaque locataire pour 19,99 € — c'est une économie énorme sur l'année.",
+    text: "J'ai 3 apparts en loc et je renouvelle l'ERP à chaque nouveau locataire. Avant je payais un diagnostiqueur, maintenant c'est 19,99 € et c'est fait en 2 minutes depuis mon canapé.",
     author: 'Isabelle T.',
     role: 'Propriétaire bailleuse, Marseille',
+    initiales: 'IT',
+  },
+  {
+    text: "On avait signé le compromis sans ERP parce qu'on savait pas. Le notaire nous a bloqués 3 semaines. Depuis j'en parle à tous mes proches qui vendent.",
+    author: 'Sophie & Romain L.',
+    role: 'Vendeurs, Lyon',
+    initiales: 'SR',
+  },
+  {
+    text: "Franchement je m'attendais à quelque chose de compliqué avec plein de cases à remplir. J'ai juste mis l'adresse et c'était bouclé. Le PDF était dans ma boîte mail avant même que j'aie fini mon café.",
+    author: 'Thomas B.',
+    role: 'Bailleur, Bordeaux',
+    initiales: 'TB',
+  },
+  {
+    text: "Mon agence m'avait proposé de le faire pour 80 € en plus de leur commission. J'ai cherché sur internet et je suis tombée ici. Même document, 19,99 €, en autonomie totale.",
+    author: 'Nathalie R.',
+    role: 'Vendeuse particulière, Toulouse',
+    initiales: 'NR',
+  },
+  {
+    text: "Je gère une petite SCI familiale, on a des mutations régulières. Ce service nous fait gagner un temps fou par rapport à ce qu'on faisait avant.",
+    author: 'Jean-Pierre M.',
+    role: 'Gestionnaire SCI, Paris',
+    initiales: 'JP',
+  },
+  {
+    text: "Le document est vraiment propre et professionnel. Mon notaire m'a même demandé quel outil j'avais utilisé parce qu'il trouvait ça bien présenté.",
+    author: 'Céline V.',
+    role: 'Vendeuse, Nice',
+    initiales: 'CV',
   },
 ];
 
+
+function TestimonialsSlider() {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent(c => (c + 1) % TESTIMONIALS.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const prev = () => setCurrent(c => (c - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
+  const next = () => setCurrent(c => (c + 1) % TESTIMONIALS.length);
+
+  const t = TESTIMONIALS[current];
+
+  return (
+    <section className="py-14 px-4 bg-slate-50">
+      <div className="max-w-2xl mx-auto">
+        <h2 className="text-2xl font-black text-navy-900 text-center mb-10">
+          Ils ont évité le blocage
+        </h2>
+
+        <div className="relative">
+          <Card className="border-gray-200 shadow-sm">
+            <CardContent className="pt-6 pb-6 px-6 sm:px-8 min-h-[180px] flex flex-col justify-between">
+              <div>
+                <div className="flex gap-0.5 mb-4">
+                  {[...Array(5)].map((_, si) => (
+                    <Star key={si} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+                <p className="text-base text-gray-700 leading-relaxed mb-6">
+                  "{t.text}"
+                </p>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 rounded-full bg-navy-900 text-white flex items-center justify-center text-xs font-black shrink-0">
+                  {t.initiales}
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-navy-900">{t.author}</p>
+                  <p className="text-xs text-gray-500">{t.role}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Flèches */}
+          <button
+            onClick={prev}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 sm:-translate-x-5 h-9 w-9 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center hover:bg-gray-50 transition-colors"
+            aria-label="Avis précédent"
+          >
+            <ChevronLeft className="h-4 w-4 text-gray-600" />
+          </button>
+          <button
+            onClick={next}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 sm:translate-x-5 h-9 w-9 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center hover:bg-gray-50 transition-colors"
+            aria-label="Avis suivant"
+          >
+            <ChevronRight className="h-4 w-4 text-gray-600" />
+          </button>
+        </div>
+
+        {/* Points de navigation */}
+        <div className="flex justify-center gap-2 mt-5">
+          {TESTIMONIALS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrent(i)}
+              className={`h-2 rounded-full transition-all duration-300 ${i === current ? 'w-6 bg-edl-700' : 'w-2 bg-gray-300'}`}
+              aria-label={`Avis ${i + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function Home() {
   const navigate = useNavigate();
@@ -491,32 +606,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Témoignages */}
-      <section className="py-14 px-4 bg-slate-50">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-black text-navy-900 text-center mb-10">
-            Ils ont évité le blocage
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            {TESTIMONIALS.map((t, i) => (
-              <Card key={i} className="border-gray-200 hover:border-edl-200 transition-colors">
-                <CardContent className="pt-5">
-                  <div className="flex gap-0.5 mb-3">
-                    {[...Array(5)].map((_, si) => (
-                      <Star key={si} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-gray-700 italic mb-4">"{t.text}"</p>
-                  <div>
-                    <p className="text-sm font-bold text-navy-900">{t.author}</p>
-                    <p className="text-xs text-gray-500">{t.role}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Témoignages — Slider */}
+      <TestimonialsSlider />
 
       {/* CTA final */}
       <section className="py-16 px-4 text-white text-center bg-edl-700">
