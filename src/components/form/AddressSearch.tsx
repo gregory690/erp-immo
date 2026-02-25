@@ -45,6 +45,11 @@ export function AddressSearch({
           onBlur={() => setTimeout(() => setOpen(false), 150)}
           placeholder={placeholder}
           className="pl-10 pr-10 h-12 text-base"
+          autoComplete="street-address"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck={false}
+          inputMode="text"
         />
         {loading && (
           <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
@@ -53,7 +58,7 @@ export function AddressSearch({
 
       {open && suggestions.length > 0 && (
         <div className="absolute z-50 mt-1 w-full rounded-md border bg-white shadow-lg">
-          <ul className="py-1 max-h-72 overflow-auto">
+          <ul className="py-1 max-h-48 sm:max-h-72 overflow-auto">
             {suggestions.map((feature, i) => (
               <li key={feature.properties.id ?? i}>
                 <button

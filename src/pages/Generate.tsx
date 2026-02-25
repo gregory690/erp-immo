@@ -147,7 +147,7 @@ export default function Generate() {
 
       <div className="max-w-4xl mx-auto px-4 py-4 sm:py-8">
         {/* Stepper */}
-        <div className="max-w-lg mx-auto mb-8">
+        <div className="max-w-lg mx-auto mb-5 sm:mb-8">
           <div className="flex items-start justify-center gap-0">
             {STEPS.map((s, i) => (
               <div key={s.id} className="flex items-start flex-1">
@@ -180,13 +180,13 @@ export default function Generate() {
         {/* Step 1 — Address Search */}
         {step === 1 && (
           <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Saisissez l'adresse du bien</CardTitle>
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="text-base sm:text-lg">Saisissez l'adresse du bien</CardTitle>
               <CardDescription>
                 Entrez l'adresse complète. La recherche se fait automatiquement via la Base Adresse Nationale.
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="px-4 pb-4 sm:px-6 sm:pb-6 space-y-4">
               <AddressSearch
                 onAddressSelected={handleAddressSelected}
                 placeholder="Ex: 12 rue de la Paix, 75001 Paris"
@@ -223,13 +223,13 @@ export default function Generate() {
         {/* Step 2 — Map Confirmation */}
         {step === 2 && addressState && (
           <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Confirmez la localisation</CardTitle>
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="text-base sm:text-lg">Confirmez la localisation</CardTitle>
               <CardDescription>
                 Vérifiez la position du marqueur sur la carte. Faites-le glisser pour affiner la localisation.
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="px-4 pb-4 sm:px-6 sm:pb-6 space-y-4">
               <AddressConfirmation
                 lat={addressState.lat}
                 lng={addressState.lng}
@@ -280,13 +280,13 @@ export default function Generate() {
         {/* Step 3 — Risk Calculation */}
         {step === 3 && (
           <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Calcul des risques en cours…</CardTitle>
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="text-base sm:text-lg">Calcul des risques en cours…</CardTitle>
               <CardDescription>
                 Interrogation des bases de données officielles Géorisques (BRGM)
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="px-4 pb-4 sm:px-6 sm:pb-6 space-y-4">
               {loading && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {Object.entries(RISK_LABELS).map(([key, label]) => (
@@ -380,13 +380,13 @@ export default function Generate() {
         {/* Step 4 — Service Selection */}
         {step === 4 && (
           <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Téléchargez votre ERP</CardTitle>
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="text-base sm:text-lg">Téléchargez votre ERP</CardTitle>
               <CardDescription>
                 Paiement sécurisé par Stripe — vous serez redirigé vers la page de paiement.
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="px-4 pb-4 sm:px-6 sm:pb-6 space-y-4">
               <ServiceSelector
                 selected={selectedMode}
                 onSelect={setSelectedMode}
