@@ -356,7 +356,7 @@ export default function Generate() {
                       Retour
                     </Button>
                     <Button
-                      onClick={() => setStep(4)}
+                      onClick={() => { setSelectedMode('edition'); setStep(4); }}
                       className="flex-1 bg-edl-700 hover:bg-edl-800"
                       size="lg"
                     >
