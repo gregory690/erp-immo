@@ -112,11 +112,12 @@ export function ServiceSelector({ selected, onSelect, onConfirm }: ServiceSelect
         <span>✓ Document légalement conforme</span>
       </div>
 
+      {/* Desktop only — on mobile the button is in the sticky bottom bar */}
       <Button
         onClick={onConfirm}
         disabled={!isSelected}
         size="lg"
-        className="w-full bg-edl-700 hover:bg-edl-800 text-base font-semibold h-12"
+        className="hidden sm:flex w-full bg-edl-700 hover:bg-edl-800 text-base font-semibold h-12"
       >
         Télécharger mon ERP — 19,99 €
       </Button>

@@ -145,7 +145,7 @@ export default function Generate() {
         </div>
       </header>
 
-      <div className="max-w-4xl mx-auto px-4 py-4 sm:py-8">
+      <div className="max-w-4xl mx-auto px-4 py-4 sm:py-8 pb-28 sm:pb-8">
         {/* Stepper */}
         <div className="max-w-lg mx-auto mb-5 sm:mb-8">
           <div className="flex items-start justify-center gap-0">
@@ -207,10 +207,11 @@ export default function Generate() {
                 </div>
               )}
 
+              {/* Desktop CTA */}
               <Button
                 onClick={goToStep2}
                 disabled={!addressState}
-                className="w-full bg-edl-700 hover:bg-edl-800"
+                className="w-full hidden sm:flex bg-edl-700 hover:bg-edl-800"
                 size="lg"
               >
                 Confirmer l'adresse
@@ -218,6 +219,21 @@ export default function Generate() {
               </Button>
             </CardContent>
           </Card>
+        )}
+
+        {/* Sticky mobile CTA — Step 1 */}
+        {step === 1 && (
+          <div className="sm:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-100 px-4 py-3 z-30 shadow-[0_-2px_16px_rgba(0,0,0,0.08)]">
+            <Button
+              onClick={goToStep2}
+              disabled={!addressState}
+              className="w-full bg-edl-700 hover:bg-edl-800"
+              size="lg"
+            >
+              Confirmer l'adresse
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
         )}
 
         {/* Step 2 — Map Confirmation */}
@@ -248,7 +264,8 @@ export default function Generate() {
                 onCoordsChange={handleCoordsChange}
               />
 
-              <div className="flex gap-3">
+              {/* Desktop CTA */}
+              <div className="hidden sm:flex gap-3">
                 <Button variant="outline" onClick={() => setStep(1)} className="flex-1">
                   <ChevronLeft className="h-4 w-4 mr-1" />
                   Retour
@@ -260,21 +277,38 @@ export default function Generate() {
                   disabled={cadastreLoading}
                 >
                   {cadastreLoading ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      <span className="hidden sm:inline">Chargement des références cadastrales…</span>
-                      <span className="sm:hidden">Chargement…</span>
-                    </>
+                    <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Chargement…</>
                   ) : (
-                    <>
-                      Calculer les risques
-                      <ChevronRight className="h-4 w-4" />
-                    </>
+                    <>Calculer les risques<ChevronRight className="h-4 w-4" /></>
                   )}
                 </Button>
               </div>
             </CardContent>
           </Card>
+        )}
+
+        {/* Sticky mobile CTA — Step 2 */}
+        {step === 2 && (
+          <div className="sm:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-100 px-4 py-3 z-30 shadow-[0_-2px_16px_rgba(0,0,0,0.08)]">
+            <div className="flex gap-3">
+              <Button variant="outline" onClick={() => setStep(1)} className="flex-1">
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Retour
+              </Button>
+              <Button
+                onClick={goToStep3}
+                className="flex-1 bg-edl-700 hover:bg-edl-800 disabled:opacity-60"
+                size="lg"
+                disabled={cadastreLoading}
+              >
+                {cadastreLoading ? (
+                  <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Chargement…</>
+                ) : (
+                  <>Calculer les risques<ChevronRight className="h-4 w-4" /></>
+                )}
+              </Button>
+            </div>
+          </div>
         )}
 
         {/* Step 3 — Risk Calculation */}
@@ -350,7 +384,8 @@ export default function Generate() {
 
                   <RiskSummaryTable items={riskSummary} />
 
-                  <div className="flex gap-3">
+                  {/* Desktop CTA */}
+                  <div className="hidden sm:flex gap-3">
                     <Button variant="outline" onClick={() => setStep(2)} className="flex-1">
                       <ChevronLeft className="h-4 w-4 mr-1" />
                       Retour
@@ -416,9 +451,10 @@ export default function Generate() {
                 </div>
               )}
 
+              {/* Desktop back */}
               <Button
                 variant="ghost"
-                className="w-full text-sm text-gray-500"
+                className="w-full hidden sm:flex text-sm text-gray-500"
                 onClick={() => setStep(3)}
                 disabled={paymentLoading}
               >
@@ -427,6 +463,53 @@ export default function Generate() {
               </Button>
             </CardContent>
           </Card>
+        )}
+
+        {/* Sticky mobile CTA — Step 3 (only when results loaded) */}
+        {step === 3 && erpDocument && !loading && (
+          <div className="sm:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-100 px-4 py-3 z-30 shadow-[0_-2px_16px_rgba(0,0,0,0.08)]">
+            <div className="flex gap-3">
+              <Button variant="outline" onClick={() => setStep(2)} className="flex-1">
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Retour
+              </Button>
+              <Button
+                onClick={() => { setSelectedMode('edition'); setStep(4); }}
+                className="flex-1 bg-edl-700 hover:bg-edl-800"
+                size="lg"
+              >
+                Finaliser mon ERP
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Sticky mobile CTA — Step 4 */}
+        {step === 4 && (
+          <div className="sm:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-100 px-4 py-3 z-30 shadow-[0_-2px_16px_rgba(0,0,0,0.08)]">
+            <Button
+              onClick={handleConfirm}
+              disabled={!selectedMode || paymentLoading}
+              size="lg"
+              className="w-full bg-edl-700 hover:bg-edl-800 font-semibold"
+            >
+              {paymentLoading ? (
+                <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Redirection…</>
+              ) : (
+                <>Télécharger mon ERP — 19,99 €</>
+              )}
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full text-xs text-gray-400 mt-1 h-8"
+              onClick={() => setStep(3)}
+              disabled={paymentLoading}
+            >
+              <ChevronLeft className="h-3 w-3 mr-1" />
+              Retour aux résultats
+            </Button>
+          </div>
         )}
       </div>
     </div>
