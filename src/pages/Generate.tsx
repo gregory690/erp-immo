@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Check, Loader2, AlertCircle, CreditCard } from 'lucide-react';
 import { Button } from '../components/ui/button';
@@ -148,30 +148,33 @@ export default function Generate() {
       <div className="max-w-4xl mx-auto px-4 py-4 sm:py-8 pb-28 sm:pb-8">
         {/* Stepper */}
         <div className="max-w-lg mx-auto mb-5 sm:mb-8">
-          <div className="flex items-start justify-center gap-0">
+          <div className="grid grid-cols-4">
             {STEPS.map((s, i) => (
-              <div key={s.id} className="flex items-start flex-1">
-                <div className="flex flex-col items-center flex-1">
-                  <div
-                    className={`h-9 w-9 rounded-full flex items-center justify-center text-sm font-bold transition-all shadow-sm ${
-                      step > s.id
-                        ? 'bg-green-600 text-white shadow-green-200'
-                        : step === s.id
-                        ? 'bg-navy-900 text-white shadow-navy-200 ring-4 ring-navy-900/10'
-                        : 'bg-gray-100 text-gray-400 border border-gray-200'
-                    }`}
-                  >
-                    {step > s.id ? <Check className="h-4 w-4" /> : s.id}
-                  </div>
-                  <div className="mt-1.5 text-center px-1">
-                    <p className={`text-[10px] sm:text-xs font-semibold leading-tight ${step === s.id ? 'text-navy-900' : step > s.id ? 'text-green-700' : 'text-gray-400'}`}>
-                      {s.label}
-                    </p>
-                  </div>
-                </div>
-                {i < STEPS.length - 1 && (
-                  <div className={`flex-1 h-0.5 mt-4 mx-1 transition-colors ${step > s.id ? 'bg-green-500' : 'bg-gray-200'}`} />
+              <div key={s.id} className="flex flex-col items-center relative">
+                {/* Left connector */}
+                {i > 0 && (
+                  <div className={`absolute left-0 right-1/2 top-[18px] h-0.5 transition-colors ${step > s.id ? 'bg-green-500' : 'bg-gray-200'}`} />
                 )}
+                {/* Right connector */}
+                {i < STEPS.length - 1 && (
+                  <div className={`absolute left-1/2 right-0 top-[18px] h-0.5 transition-colors ${step > s.id ? 'bg-green-500' : 'bg-gray-200'}`} />
+                )}
+                {/* Circle */}
+                <div
+                  className={`relative z-10 h-9 w-9 rounded-full flex items-center justify-center text-sm font-bold transition-all shadow-sm ${
+                    step > s.id
+                      ? 'bg-green-600 text-white shadow-green-200'
+                      : step === s.id
+                      ? 'bg-navy-900 text-white shadow-navy-200 ring-4 ring-navy-900/10'
+                      : 'bg-gray-100 text-gray-400 border border-gray-200'
+                  }`}
+                >
+                  {step > s.id ? <Check className="h-4 w-4" /> : s.id}
+                </div>
+                {/* Label */}
+                <p className={`mt-1.5 text-[10px] sm:text-xs font-semibold leading-tight text-center ${step === s.id ? 'text-navy-900' : step > s.id ? 'text-green-700' : 'text-gray-400'}`}>
+                  {s.label}
+                </p>
               </div>
             ))}
           </div>
