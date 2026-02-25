@@ -359,7 +359,7 @@ export default function Generate() {
                       className="flex-1 bg-edl-700 hover:bg-edl-800"
                       size="lg"
                     >
-                      Choisir ma formule
+                      Obtenir mon ERP — 19,99 €
                       <ChevronRight className="h-4 w-4" />
                     </Button>
                   </div>
