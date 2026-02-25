@@ -147,33 +147,34 @@ export default function Generate() {
 
       <div className="max-w-4xl mx-auto px-4 py-4 sm:py-8">
         {/* Stepper */}
-        <div className="flex items-center justify-between mb-8">
-          {STEPS.map((s, i) => (
-            <div key={s.id} className="flex items-center flex-1">
-              <div className="flex flex-col items-center">
-                <div
-                  className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors ${
-                    step > s.id
-                      ? 'bg-green-600 text-white'
-                      : step === s.id
-                      ? 'bg-navy-900 text-white'
-                      : 'bg-gray-200 text-gray-500'
-                  }`}
-                >
-                  {step > s.id ? <Check className="h-4 w-4" /> : s.id}
+        <div className="max-w-lg mx-auto mb-8">
+          <div className="flex items-start justify-center gap-0">
+            {STEPS.map((s, i) => (
+              <div key={s.id} className="flex items-start flex-1">
+                <div className="flex flex-col items-center flex-1">
+                  <div
+                    className={`h-9 w-9 rounded-full flex items-center justify-center text-sm font-bold transition-all shadow-sm ${
+                      step > s.id
+                        ? 'bg-green-600 text-white shadow-green-200'
+                        : step === s.id
+                        ? 'bg-navy-900 text-white shadow-navy-200 ring-4 ring-navy-900/10'
+                        : 'bg-gray-100 text-gray-400 border border-gray-200'
+                    }`}
+                  >
+                    {step > s.id ? <Check className="h-4 w-4" /> : s.id}
+                  </div>
+                  <div className="mt-1.5 text-center px-1">
+                    <p className={`text-[10px] sm:text-xs font-semibold leading-tight ${step === s.id ? 'text-navy-900' : step > s.id ? 'text-green-700' : 'text-gray-400'}`}>
+                      {s.label}
+                    </p>
+                  </div>
                 </div>
-                <div className="mt-1 text-center hidden sm:block">
-                  <p className="text-xs font-medium text-gray-700">{s.label}</p>
-                  <p className="text-xs text-gray-400">{s.description}</p>
-                </div>
+                {i < STEPS.length - 1 && (
+                  <div className={`flex-1 h-0.5 mt-4 mx-1 transition-colors ${step > s.id ? 'bg-green-500' : 'bg-gray-200'}`} />
+                )}
               </div>
-              {i < STEPS.length - 1 && (
-                <div
-                  className={`flex-1 h-0.5 mx-2 ${step > s.id ? 'bg-green-600' : 'bg-gray-200'}`}
-                />
-              )}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Step 1 — Address Search */}
@@ -359,7 +360,7 @@ export default function Generate() {
                       className="flex-1 bg-edl-700 hover:bg-edl-800"
                       size="lg"
                     >
-                      Obtenir mon ERP — 19,99 €
+                      Finaliser mon ERP
                       <ChevronRight className="h-4 w-4" />
                     </Button>
                   </div>
