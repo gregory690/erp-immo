@@ -57,7 +57,7 @@ export function AddressConfirmation({
       <div className="rounded-lg overflow-hidden border border-border shadow-sm">
         <div
           ref={mapContainerRef}
-          style={{ height: '380px', width: '100%' }}
+          className="h-[240px] sm:h-[380px] w-full"
         />
       </div>
 
