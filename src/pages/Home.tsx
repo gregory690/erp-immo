@@ -62,7 +62,7 @@ const FEATURES = [
   {
     icon: <FileText className="h-5 w-5 text-edl-700" />,
     title: '10 € économisés',
-    description: '19,99 € au lieu de 30 € chez un concurrent — même valeur légale, prix divisé par 2.',
+    description: 'Les services équivalents pratiquent généralement entre 25 et 35 €. Même document légal, même valeur, moins cher.',
   },
 ];
 
@@ -571,12 +571,9 @@ export default function Home() {
                 ✓ Téléchargement immédiat après paiement
               </Badge>
               <div>
-                <div className="flex items-center justify-center gap-2 mb-1">
-                  <span className="text-gray-400 line-through text-lg font-medium">30,00 €</span>
-                  <span className="text-xs text-gray-400 italic">(tarif concurrent)</span>
-                </div>
                 <p className="text-5xl font-black text-edl-700">19,99 €<span className="text-lg font-normal text-gray-500"> TTC</span></p>
                 <p className="text-xs text-gray-400 mt-1">16,66 € HT · Téléchargement immédiat après paiement</p>
+                <p className="text-xs text-gray-400 mt-2 italic">Les services équivalents pratiquent généralement entre 25 et 35 €.</p>
               </div>
               <ul className="text-sm text-left space-y-2">
                 {[
