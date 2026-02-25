@@ -39,11 +39,23 @@ export interface ReferenceCadastrale {
   identifiant: string;
 }
 
+function cacheKey(lon: number, lat: number) {
+  return `cadastre_${lon.toFixed(5)}_${lat.toFixed(5)}`;
+}
+
 export async function getParcellesFromCoords(
   lon: number,
   lat: number,
   limit = 1
 ): Promise<CadastreResponse> {
+  const key = cacheKey(lon, lat);
+
+  // Serve from sessionStorage cache if available
+  try {
+    const cached = sessionStorage.getItem(key);
+    if (cached) return JSON.parse(cached) as CadastreResponse;
+  } catch { /* ignore */ }
+
   const params = new URLSearchParams({
     lon: String(lon),
     lat: String(lat),
@@ -52,7 +64,14 @@ export async function getParcellesFromCoords(
 
   const res = await fetch(`${IGN_BASE_URL}/cadastre/parcelle?${params.toString()}`);
   if (!res.ok) throw new Error(`APICarto IGN error: ${res.status}`);
-  return res.json();
+  const data: CadastreResponse = await res.json();
+
+  // Store in sessionStorage for this session
+  try {
+    sessionStorage.setItem(key, JSON.stringify(data));
+  } catch { /* ignore if storage full */ }
+
+  return data;
 }
 
 export function extractReferenceCadastrale(
