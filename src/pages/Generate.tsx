@@ -265,6 +265,7 @@ export default function Generate() {
                 cadastreLoading={cadastreLoading}
                 cadastreError={cadastreError}
                 onCoordsChange={handleCoordsChange}
+                onRetryCadastre={() => fetchCadastre(addressState.lng, addressState.lat)}
               />
 
               {/* Desktop CTA */}

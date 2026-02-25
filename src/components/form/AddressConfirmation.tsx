@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
-import { MapPin, Building2, AlertCircle } from 'lucide-react';
+import { MapPin, Building2, AlertCircle, RefreshCw } from 'lucide-react';
 import { Card, CardContent } from '../ui/card';
 import { Badge } from '../ui/badge';
+import { Button } from '../ui/button';
 import { useMapInteraction } from '../../hooks/useMapInteraction';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -23,6 +24,7 @@ interface AddressConfirmationProps {
   cadastreLoading: boolean;
   cadastreError: string | null;
   onCoordsChange: (coords: { lat: number; lng: number }) => void;
+  onRetryCadastre?: () => void;
 }
 
 export function AddressConfirmation({
@@ -36,6 +38,7 @@ export function AddressConfirmation({
   cadastreLoading,
   cadastreError,
   onCoordsChange,
+  onRetryCadastre,
 }: AddressConfirmationProps) {
   const { mapContainerRef, flyToCoords } = useMapInteraction({
     initialCoords: { lng, lat },
@@ -123,11 +126,24 @@ export function AddressConfirmation({
             )}
 
             {cadastreError && !cadastreLoading && (
-              <div className="flex items-start gap-2 text-orange-600 text-sm">
-                <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-                <span className="text-xs text-orange-700 leading-relaxed">
-                  Service cadastral IGN temporairement indisponible — vous pouvez continuer, les références seront ajoutées manuellement si nécessaire.
-                </span>
+              <div className="flex items-start gap-2">
+                <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-orange-500" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-orange-700 leading-relaxed">
+                    Service cadastral IGN indisponible — les références ne figureront pas dans le PDF.
+                  </p>
+                  {onRetryCadastre && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="mt-2 h-7 text-xs gap-1.5 border-orange-300 text-orange-700 hover:bg-orange-50"
+                      onClick={onRetryCadastre}
+                    >
+                      <RefreshCw className="h-3 w-3" />
+                      Réessayer
+                    </Button>
+                  )}
+                </div>
               </div>
             )}
 
