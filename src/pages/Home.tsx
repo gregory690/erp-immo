@@ -571,9 +571,13 @@ export default function Home() {
                 ✓ Téléchargement immédiat après paiement
               </Badge>
               <div>
-                <p className="text-5xl font-black text-edl-700">19,99 €<span className="text-lg font-normal text-gray-500"> TTC</span></p>
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <span className="text-gray-400 line-through text-xl font-semibold">34,99 €</span>
+                  <span className="bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded-full border border-green-200">−43%</span>
+                </div>
+                <p className="text-6xl font-black text-edl-700">19,99 €<span className="text-lg font-normal text-gray-500"> TTC</span></p>
                 <p className="text-xs text-gray-400 mt-1">16,66 € HT · Téléchargement immédiat après paiement</p>
-                <p className="text-xs text-gray-400 mt-2 italic">Les services équivalents pratiquent généralement entre 25 et 35 €.</p>
+                <p className="text-xs text-gray-400 mt-2 italic">Prix généralement constaté chez les services équivalents : 30 à 35 €</p>
               </div>
               <ul className="text-sm text-left space-y-2">
                 {[
