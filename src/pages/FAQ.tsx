@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Shield, ArrowRight, ChevronDown, MessageCircle } from 'lucide-react';
+import { ArrowLeft, Shield, ArrowRight, MessageCircle } from 'lucide-react';
 import { Button } from '../components/ui/button';
+import { ChevronDown } from 'lucide-react';
 
 const FAQ_CATEGORIES = [
   {
@@ -9,19 +10,23 @@ const FAQ_CATEGORIES = [
     questions: [
       {
         q: "Qu'est-ce que l'ERP (État des Risques et Pollutions) ?",
-        r: "L'ERP est un document légal obligatoire en France pour toute transaction immobilière (vente ou location). Il informe l'acquéreur ou le locataire sur les risques naturels, miniers, technologiques, sismiques et de pollution des sols auxquels le bien est exposé. Il est encadré par l'arrêté du 27 septembre 2022.",
+        r: "L'ERP est un document légal obligatoire en France pour toute transaction immobilière (vente ou location). Il informe l'acquéreur ou le locataire sur les risques naturels, miniers, technologiques, sismiques, la pollution des sols et les nuisances sonores aériennes auxquels le bien est exposé. Il est encadré par l'article L125-5 du Code de l'environnement et l'arrêté du 27 septembre 2022.",
       },
       {
-        q: "Pour quelle transaction l'ERP est-il obligatoire ?",
-        r: "L'ERP est obligatoire pour toute vente ou mise en location d'un bien immobilier bâti ou non bâti. Il doit être annexé au compromis de vente, à la promesse de vente, ou au contrat de bail. Sans ERP, le notaire ne peut pas instrumenter.",
+        q: "Pour quels types de transactions l'ERP est-il obligatoire ?",
+        r: "L'ERP est obligatoire pour toute vente (compromis, promesse, acte authentique), location (habitation meublée ou non meublée, bail étudiant, location saisonnière, bail commercial), VEFA (remis au contrat de réservation) et échanges immobiliers. Il n'existe pas de cas d'exonération pour les propriétaires — seules les ventes judiciaires font exception.",
       },
       {
-        q: "Quelle est la différence entre ERP et diagnostic immobilier classique ?",
-        r: "Les diagnostics classiques (DPE, amiante, plomb, etc.) sont réalisés par des diagnostiqueurs certifiés après visite du bien. L'ERP, lui, ne nécessite pas de visite — il est basé sur des données géographiques officielles. Il peut donc être établi en ligne, par n'importe qui, sans certification professionnelle.",
+        q: "Quelle est la différence entre l'ERP et les autres diagnostics immobiliers ?",
+        r: "C'est le seul diagnostic immobilier que le propriétaire peut établir lui-même, sans recourir à un diagnostiqueur certifié. Il est basé exclusivement sur des données géographiques officielles (sans visite du bien), ce qui permet de le générer en ligne. Les autres diagnostics (DPE, amiante, plomb…) nécessitent l'intervention d'un professionnel accrédité.",
       },
       {
         q: "L'ERP couvre-t-il tout le territoire français ?",
-        r: "Oui. Même si tous les risques ne s'appliquent pas partout, le zonage sismique et le potentiel radon couvrent l'ensemble du territoire. Il n'existe donc aucun bien immobilier en France pour lequel l'ERP n'est pas nécessaire.",
+        r: "Oui. Le zonage sismique (zones 1 à 5) et le potentiel radon (catégories 1 à 3) couvrent l'ensemble du territoire. D'autres sections (PPR, SIS, CatNat) s'appliquent selon la situation géographique du bien. Il n'existe aucun bien immobilier en France pour lequel l'ERP n'est pas nécessaire.",
+      },
+      {
+        q: "Qu'est-ce que la nouveauté 2025 sur le débroussaillement ?",
+        r: "Depuis le 1er janvier 2025 (décret 2024-405 du 29 avril 2024), les Obligations Légales de Débroussaillement (OLD) doivent figurer dans l'ERP pour les biens situés en zone exposée aux feux de forêt et de végétation. Une fiche spécifique est disponible sur georisques.gouv.fr.",
       },
     ],
   },
@@ -34,19 +39,15 @@ const FAQ_CATEGORIES = [
       },
       {
         q: "L'ERP généré est-il accepté par les notaires ?",
-        r: "Oui. Notre document respecte scrupuleusement le format officiel imposé par l'arrêté du 27 septembre 2022. Il intègre toutes les rubriques obligatoires : PPRN, PPRM, PPRT, zonage sismique, SIS, radon, ENSA et déclaration de sinistres. Les données proviennent exclusivement de sources officielles.",
+        r: "Oui. Notre document respecte le format officiel imposé par l'arrêté du 27 septembre 2022. Il intègre toutes les rubriques obligatoires : PPRN, PPRM, PPRT, zonage sismique, SIS, radon, ENSA (nuisances sonores aériennes) et déclaration de sinistres. Les données proviennent exclusivement de sources officielles.",
       },
       {
         q: "D'où proviennent les données ?",
-        r: "Toutes les données proviennent de bases officielles françaises : Géorisques (georisques.gouv.fr) pour les risques, la Base Adresse Nationale pour le géocodage, l'API Carto de l'IGN pour les références cadastrales, et le BRGM pour les données géologiques. Aucune donnée privée ou estimée n'est utilisée.",
+        r: "Exclusivement de bases officielles françaises : Géorisques (georisques.gouv.fr) pour les risques naturels, technologiques et miniers, la Base Adresse Nationale (data.gouv.fr) pour le géocodage, l'API Carto de l'IGN (apicarto.ign.fr) pour les références cadastrales, et le BRGM pour les données géologiques (argiles, radon).",
       },
       {
         q: "Combien coûte un ERP via votre service ?",
-        r: "Un ERP complet coûte 19,99 €. Ce tarif inclut la génération du document, la livraison par email et la possibilité de retélécharger le document à tout moment pendant 6 mois via un lien sécurisé.",
-      },
-      {
-        q: "Peut-on générer un ERP pour n'importe quel bien ?",
-        r: "Oui, pour tout bien en France métropolitaine et dans les départements d'outre-mer. Il suffit de connaître l'adresse complète du bien. Les références cadastrales sont récupérées automatiquement.",
+        r: "Un ERP complet coûte 19,99 €. Ce tarif inclut la génération du document, la livraison par email et la possibilité de retélécharger le document à tout moment via un lien sécurisé.",
       },
     ],
   },
@@ -55,19 +56,23 @@ const FAQ_CATEGORIES = [
     questions: [
       {
         q: "Combien de temps est valable un ERP ?",
-        r: "Un ERP est valable 6 mois à compter de sa date de réalisation. Au-delà, il doit être renouvelé — même si les conditions du bien n'ont pas changé, car les données officielles sont susceptibles d'évoluer.",
+        r: "Un ERP est valable 6 mois à compter de sa date d'établissement, conformément à l'article L125-5 III du Code de l'environnement. Attention : la jurisprudence (Cour de cassation, 3e ch. civile, 19 sept. 2019) précise que la validité doit être appréciée à la date de l'acte authentique. Si le classement du bien évolue entre le compromis et la vente définitive, un ERP à jour est obligatoire.",
       },
       {
         q: "Quelles sont les sanctions si l'ERP est absent ou erroné ?",
-        r: "L'acquéreur ou le locataire peut demander la résolution du contrat ou une réduction du prix de vente. Le vendeur ou bailleur engage sa responsabilité civile. En pratique, les notaires refusent systématiquement de signer sans ERP valide.",
+        r: "Les sanctions sont exclusivement civiles — il n'existe pas de sanction pénale spécifique. Pour une vente : l'acquéreur peut demander la résolution du contrat ou une diminution du prix (art. L125-5 Code de l'environnement). Pour une location : le locataire peut demander la nullité du bail ou son maintien sans obligation de payer le loyer jusqu'à régularisation.",
       },
       {
         q: "Faut-il faire signer l'ERP ?",
-        r: "Oui. L'ERP doit être daté et signé par le vendeur (ou bailleur) ET par l'acquéreur (ou locataire). Cette double signature atteste que les deux parties ont bien pris connaissance des risques. Notre document inclut les cases de signature conformément au modèle officiel.",
+        r: "La loi impose que l'ERP soit annexé à l'acte, ce qui suppose que les parties en accusent réception. En pratique, la signature de l'acquéreur ou du locataire est indispensable pour prouver la remise du document. Sans cette preuve, le vendeur ou bailleur ne peut pas établir qu'il a rempli son obligation légale.",
+      },
+      {
+        q: "Faut-il mentionner les risques dès l'annonce immobilière ?",
+        r: "Oui. Depuis le 1er janvier 2023 (décret 2022-1289), le vendeur ou bailleur doit mentionner les risques dès la publication de l'annonce immobilière ou lors de la première visite du bien. Cette obligation s'ajoute à la remise formelle de l'ERP au moment du compromis ou du bail.",
       },
       {
         q: "L'ERP doit-il être refait si la vente prend du temps ?",
-        r: "Si la vente dure plus de 6 mois entre la date de l'ERP et la signature définitive, il faut en refaire un. C'est pour ça qu'il vaut mieux le générer proche de la date du compromis plutôt que trop tôt.",
+        r: "Oui, si l'ERP dépasse les 6 mois avant la signature de l'acte authentique. Et même dans ce délai, si le classement du bien évolue (nouveau PPR, nouvel arrêté CatNat), une mise à jour est obligatoire selon la jurisprudence de la Cour de cassation.",
       },
     ],
   },
@@ -80,11 +85,11 @@ const FAQ_CATEGORIES = [
       },
       {
         q: "Je n'ai pas reçu l'email — que faire ?",
-        r: "Vérifiez votre dossier spam ou courrier indésirable. Si l'email n'y est pas non plus, contactez-nous via le formulaire de contact avec votre référence de paiement Stripe, nous vous renverrons le document.",
+        r: "Vérifiez votre dossier spam ou courrier indésirable. Si l'email n'y est pas, contactez-nous à contact@edletdiagnostic.fr avec votre référence de paiement et nous vous renverrons le document.",
       },
       {
         q: "Peut-on modifier un ERP après génération ?",
-        r: "Non. Une fois généré, le document est figé à la date de réalisation. Si des informations ont changé ou si vous souhaitez corriger une erreur d'adresse, il faut générer un nouvel ERP.",
+        r: "Non. Une fois généré, le document est figé à sa date de réalisation. Si une information est incorrecte ou si l'adresse a changé, il faut générer un nouvel ERP.",
       },
     ],
   },
@@ -179,6 +184,12 @@ export default function FAQ() {
             </div>
           </section>
         ))}
+
+        {/* Sources */}
+        <div className="bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 text-xs text-gray-500">
+          <p className="font-semibold text-gray-700 mb-1">Sources réglementaires</p>
+          <p>Article L125-5 du Code de l'environnement · Arrêté du 27 septembre 2022 · Décret 2022-1289 · Décret 2024-405 du 29 avril 2024 · Cour de cassation, 3e ch. civ., 19 sept. 2019 · georisques.gouv.fr · legifrance.gouv.fr</p>
+        </div>
 
         {/* CTA contact */}
         <div className="bg-gray-50 border border-gray-200 rounded-2xl px-6 py-8 text-center">
