@@ -301,7 +301,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               size="xl"
-              className="bg-edl-700 hover:bg-edl-800 text-white font-bold shadow-lg"
+              className="w-full sm:w-auto bg-edl-700 hover:bg-edl-800 text-white font-bold shadow-lg"
               onClick={() => navigate('/generer')}
             >
               Établir mon état des risques
@@ -309,7 +309,7 @@ export default function Home() {
             </Button>
             <Button
               size="xl"
-              className="bg-white/10 border border-white/25 text-white hover:bg-white/20 font-semibold shadow-lg backdrop-blur-sm"
+              className="w-full sm:w-auto bg-white/10 border border-white/25 text-white hover:bg-white/20 font-semibold shadow-lg backdrop-blur-sm"
               onClick={() => navigate('/exemple')}
             >
               Voir un exemple
@@ -620,7 +620,7 @@ export default function Home() {
         </p>
         <Button
           size="xl"
-          className="bg-white text-edl-700 hover:bg-gray-100 font-bold shadow-lg"
+          className="w-full sm:w-auto bg-white text-edl-700 hover:bg-gray-100 font-bold shadow-lg"
           onClick={() => navigate('/generer')}
         >
           Obtenir mon ERP — 19,99 €
