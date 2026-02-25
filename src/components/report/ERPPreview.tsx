@@ -311,9 +311,9 @@ function ERPFormPage({ erp }: { erp: ERPDocument }) {
           Cet état est établi sur la base des informations mises à disposition par arrêté préfectoral
         </div>
         <div className="grid grid-cols-3 divide-x divide-gray-800 p-1">
-          <div className="px-2"><span className="text-gray-500">N°</span> <span className="font-mono">Arrêté du 27/09/2022</span></div>
-          <div className="px-2 text-center"><span className="text-gray-500">du</span></div>
-          <div className="px-2"><span className="text-gray-500">Mis à jour le</span></div>
+          <div className="px-2"><span className="text-gray-500">N°</span> <span className="font-mono">NOR : TREP2224286A</span></div>
+          <div className="px-2 text-center"><span className="text-gray-500">du</span> <span className="font-mono">27/09/2022</span></div>
+          <div className="px-2"><span className="text-gray-500">Mis à jour le</span> <span className="font-mono">01/01/2023</span></div>
         </div>
       </div>
 
@@ -524,9 +524,9 @@ function ENSAPage({ erp }: { erp: ERPDocument }) {
           Cet état est établi sur la base des informations mises à disposition par arrêté préfectoral
         </div>
         <div className="grid grid-cols-3 divide-x divide-gray-800 p-1">
-          <div className="px-2"><span className="text-gray-500">N°</span> <span className="font-mono">—</span></div>
-          <div className="px-2 text-center"><span className="text-gray-500">du</span></div>
-          <div className="px-2"><span className="text-gray-500">Mis à jour le</span></div>
+          <div className="px-2"><span className="text-gray-500">N°</span> <span className="font-mono">NOR : TREP2224286A</span></div>
+          <div className="px-2 text-center"><span className="text-gray-500">du</span> <span className="font-mono">27/09/2022</span></div>
+          <div className="px-2"><span className="text-gray-500">Mis à jour le</span> <span className="font-mono">01/01/2023</span></div>
         </div>
       </div>
 
