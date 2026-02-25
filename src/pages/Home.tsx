@@ -106,46 +106,46 @@ const FAQ = [
 
 const TESTIMONIALS = [
   {
-    text: "Mon notaire attendait l'ERP depuis des jours et j'avais pas réalisé que c'était à moi de le fournir. En 10 minutes c'était réglé, il a signé sans rien dire.",
+    text: "J'avais peur que le notaire refuse le document parce que c'était fait en ligne. Il n'a rien dit, il a juste vérifié la date et l'a annexé au compromis.",
     author: 'Marc D.',
-    role: 'Vendeur particulier, Nantes',
+    role: 'Vendeur, Nantes',
     initiales: 'MD',
   },
   {
-    text: "J'ai 3 apparts en loc et je renouvelle l'ERP à chaque nouveau locataire. Avant je payais un diagnostiqueur, maintenant c'est 19,99 € et c'est fait en 2 minutes depuis mon canapé.",
+    text: "Honnêtement je savais même pas que c'était à moi de le faire. Mon agent m'a expliqué, j'ai fait l'ERP le soir même. Ça m'a pris un quart d'heure, en comptant le temps de lire les instructions.",
+    author: 'Lucie M.',
+    role: 'Vendeuse, Rennes',
+    initiales: 'LM',
+  },
+  {
+    text: "Mon agence le facturait 75 €. Je me suis dit que j'allais chercher autre chose et je suis tombé ici. Le document rendu est identique, le notaire a rien remarqué.",
+    author: 'Karim B.',
+    role: 'Propriétaire bailleur, Lyon',
+    initiales: 'KB',
+  },
+  {
+    text: "J'étais pas sûre que les données soient vraiment officielles. Mais j'ai vérifié sur georisques.gouv.fr après coup, tout correspondait. Ça m'a rassurée.",
+    author: 'Nathalie R.',
+    role: 'Vendeuse, Toulouse',
+    initiales: 'NR',
+  },
+  {
+    text: "Le compromis était prévu le lendemain matin et on avait oublié l'ERP. Je l'ai fait à 22h, le PDF était là en 5 minutes. Le rendez-vous s'est passé sans problème.",
+    author: 'Thomas & Julie V.',
+    role: 'Vendeurs, Bordeaux',
+    initiales: 'TJ',
+  },
+  {
+    text: "Je loue deux appartements et je renouvelle l'ERP à chaque nouveau bail. 19,99 € à chaque fois, ça reste raisonnable pour rester en règle sans se prendre la tête.",
     author: 'Isabelle T.',
     role: 'Propriétaire bailleuse, Marseille',
     initiales: 'IT',
   },
   {
-    text: "On avait signé le compromis sans ERP parce qu'on savait pas. Le notaire nous a bloqués 3 semaines. Depuis j'en parle à tous mes proches qui vendent.",
-    author: 'Sophie & Romain L.',
-    role: 'Vendeurs, Lyon',
-    initiales: 'SR',
-  },
-  {
-    text: "Franchement je m'attendais à quelque chose de compliqué avec plein de cases à remplir. J'ai juste mis l'adresse et c'était bouclé. Le PDF était dans ma boîte mail avant même que j'aie fini mon café.",
-    author: 'Thomas B.',
-    role: 'Bailleur, Bordeaux',
-    initiales: 'TB',
-  },
-  {
-    text: "Mon agence m'avait proposé de le faire pour 80 € en plus de leur commission. J'ai cherché sur internet et je suis tombée ici. Même document, 19,99 €, en autonomie totale.",
-    author: 'Nathalie R.',
-    role: 'Vendeuse particulière, Toulouse',
-    initiales: 'NR',
-  },
-  {
-    text: "Je gère une petite SCI familiale, on a des mutations régulières. Ce service nous fait gagner un temps fou par rapport à ce qu'on faisait avant.",
-    author: 'Jean-Pierre M.',
-    role: 'Gestionnaire SCI, Paris',
-    initiales: 'JP',
-  },
-  {
-    text: "Le document est vraiment propre et professionnel. Mon notaire m'a même demandé quel outil j'avais utilisé parce qu'il trouvait ça bien présenté.",
-    author: 'Céline V.',
-    role: 'Vendeuse, Nice',
-    initiales: 'CV',
+    text: "Je suis pas à l'aise avec l'administratif en général. Là j'ai juste tapé l'adresse, j'ai suivi les étapes, et c'était fait. Pas grand chose à dire de plus.",
+    author: 'Patrick G.',
+    role: 'Vendeur, Strasbourg',
+    initiales: 'PG',
   },
 ];
 
