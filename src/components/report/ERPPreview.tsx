@@ -41,7 +41,7 @@ function SectionHeader({ children }: { children: React.ReactNode }) {
 
 function Block({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="border border-gray-800 mb-1">
+    <div className="erp-block border border-gray-800 mb-1">
       <SectionHeader>{title}</SectionHeader>
       <div className="px-2 py-0.5 space-y-0.5">{children}</div>
     </div>
@@ -261,7 +261,7 @@ function SummaryPage({ erp, demoMode }: { erp: ERPDocument; demoMode: boolean })
         </table>
       </div>
 
-      <div className="mt-6 text-[9px] text-gray-400 text-center pt-3 border-t border-gray-200">
+      <div className="erp-page-footer mt-6 text-[9px] text-gray-400 text-center pt-3 border-t border-gray-200">
         <p>Source officielle : georisques.gouv.fr · BAN · APICarto IGN</p>
         <p className="mt-3 font-semibold text-gray-500">1 / {totalPages}</p>
       </div>
@@ -493,7 +493,7 @@ function ERPFormPage({ erp }: { erp: ERPDocument }) {
         </div>
       </div>
 
-      <div className="mt-3 pt-2 text-[8px] text-gray-400 text-center border-t border-gray-200">
+      <div className="erp-page-footer mt-3 pt-2 text-[8px] text-gray-400 text-center border-t border-gray-200">
         <p>Modèle État des risques, pollutions et sols en application des articles L.125-5, L.125-6 et L.125-7 du Code de l'environnement — Arrêté du 27 septembre 2022</p>
         <p className="mt-1 font-semibold text-gray-500">2 / {totalPages}</p>
       </div>
@@ -627,7 +627,7 @@ function ENSAPage({ erp }: { erp: ERPDocument }) {
         </div>
       </div>
 
-      <div className="mt-6 pt-3 text-[8px] text-gray-400 text-center border-t border-gray-200">
+      <div className="erp-page-footer mt-6 pt-3 text-[8px] text-gray-400 text-center border-t border-gray-200">
         <p>Information sur les nuisances sonores aériennes : <strong>https://www.ecologie.gouv.fr/</strong></p>
         <p className="mt-2 font-semibold text-gray-500">3 / {totalPages}</p>
       </div>

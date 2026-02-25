@@ -18,7 +18,7 @@ export async function generatePDFFromElement(
   styleEl.textContent = `
     @media print {
       @page {
-        margin: 12mm;
+        margin: 8mm 10mm;
         size: A4 portrait;
       }
       /* Masquer tout sauf le document ERP */
@@ -48,6 +48,16 @@ export async function generatePDFFromElement(
       * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
+      }
+      /* Éviter qu'un footer de pagination se retrouve seul sur une page blanche */
+      .erp-page-footer {
+        break-before: avoid !important;
+        orphans: 4;
+        widows: 4;
+      }
+      /* Empêcher les blocs de section de se couper au milieu */
+      .erp-block {
+        break-inside: avoid;
       }
     }
   `;
