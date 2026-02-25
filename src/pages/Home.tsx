@@ -577,16 +577,16 @@ export default function Home() {
                 </div>
                 <p className="text-6xl font-black text-edl-700">19,99 €<span className="text-lg font-normal text-gray-500"> TTC</span></p>
                 <p className="text-xs text-gray-400 mt-1">16,66 € HT · Téléchargement immédiat après paiement</p>
-                <p className="text-xs text-gray-400 mt-2 italic">Prix généralement constaté chez les services équivalents : 30 à 35 €</p>
+                <p className="text-xs text-gray-400 mt-2 italic">Nos concurrents facturent généralement entre 30 et 35 €</p>
               </div>
               <ul className="text-sm text-left space-y-2">
                 {[
                   'ERP PDF conforme arrêté 27/09/2022',
-                  '10 risques analysés via Géorisques (BRGM)',
+                  'Tous les risques via Géorisques (BRGM)',
                   'Valide 6 mois — vente ET location',
                   'Références cadastrales incluses',
                   'Historique CatNat depuis 1982',
-                  'Accessible depuis votre espace client',
+                  'Lien de retéléchargement envoyé par email',
                 ].map(f => (
                   <li key={f} className="flex items-center gap-2 text-gray-700">
                     <span className="text-green-600 font-bold">✓</span> {f}
