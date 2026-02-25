@@ -519,22 +519,22 @@ export default function Home() {
       </section>
 
       {/* CTA final */}
-      <section className="py-16 px-4 text-white text-center bg-edl-700">
+      <section className="py-16 px-4 text-white text-center bg-navy-900">
         <h2 className="text-2xl sm:text-3xl font-black mb-3">
           Votre transaction ne peut pas attendre.
         </h2>
-        <p className="text-red-100 mb-6 text-sm sm:text-base font-medium max-w-xl mx-auto">
+        <p className="text-navy-200 mb-6 text-sm sm:text-base font-medium max-w-xl mx-auto">
           Générez votre ERP maintenant — 2 minutes suffisent pour ne pas retarder votre vente ou votre mise en location.
         </p>
         <Button
           size="xl"
-          className="bg-white text-edl-700 hover:bg-gray-100 font-bold shadow-lg"
+          className="bg-edl-700 hover:bg-edl-800 text-white font-bold shadow-lg"
           onClick={() => navigate('/generer')}
         >
           Obtenir mon ERP — 19,99 €
           <ArrowRight className="h-5 w-5" />
         </Button>
-        <p className="text-xs text-red-200 mt-4">Données officielles · PDF conforme · Téléchargement immédiat</p>
+        <p className="text-xs text-navy-400 mt-4">Données officielles · PDF conforme · Téléchargement immédiat</p>
       </section>
 
       {/* Footer */}
