@@ -497,7 +497,7 @@ export default function Generate() {
               {paymentLoading ? (
                 <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Redirection…</>
               ) : (
-                <>Télécharger mon ERP — 19,99 €</>
+                <>Mon ERP pour seulement 19,99 €</>
               )}
             </Button>
             <Button
