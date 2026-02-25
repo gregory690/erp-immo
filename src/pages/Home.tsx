@@ -158,7 +158,7 @@ export default function Home() {
       </header>
 
       {/* Hero */}
-      <section className="text-white py-12 sm:py-20 px-4 relative overflow-hidden bg-edl-700">
+      <section className="text-white py-12 sm:py-20 px-4 relative overflow-hidden bg-navy-900">
         <div className="absolute inset-0 opacity-5"
           style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '30px 30px' }}
         />
@@ -179,14 +179,14 @@ export default function Home() {
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-5 sm:mb-6 text-white uppercase tracking-tight">
             État des Risques et Pollutions en ligne
           </h1>
-          <p className="text-base sm:text-lg text-red-100 mb-6 sm:mb-8 max-w-2xl mx-auto font-medium">
+          <p className="text-base sm:text-lg text-navy-200 mb-6 sm:mb-8 max-w-2xl mx-auto font-medium">
             ERP obligatoire pour votre vente ou location — document conforme, accepté par
             les notaires et agences, disponible 7j/7 et 24h/24.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               size="xl"
-              className="bg-white text-edl-700 hover:bg-gray-100 font-bold shadow-lg"
+              className="bg-edl-700 hover:bg-edl-800 text-white font-bold shadow-lg"
               onClick={() => navigate('/generer')}
             >
               Établir mon état des risques
@@ -194,7 +194,7 @@ export default function Home() {
             </Button>
             <Button
               size="xl"
-              className="bg-navy-900 text-white hover:bg-navy-800 font-semibold shadow-lg"
+              className="bg-white/10 border border-white/25 text-white hover:bg-white/20 font-semibold shadow-lg backdrop-blur-sm"
               onClick={() => navigate('/exemple')}
             >
               Voir un exemple
