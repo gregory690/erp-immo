@@ -814,24 +814,24 @@ export function ERPPreview({ document: erp, onNew, demoMode = false, emailSent =
       {/* Document ERP — 4 pages */}
       <div
         id="erp-document-preview"
-        className="erp-document bg-white border border-border rounded-lg overflow-hidden divide-y divide-gray-200"
+        className="erp-document bg-white border border-border rounded-lg divide-y divide-gray-200"
       >
         {/* Page 1 — Résumé */}
         <SummaryPage erp={erp} demoMode={demoMode} />
 
         {/* Page 2 — Formulaire officiel ERP */}
-        <div style={{ pageBreakBefore: 'always' }}>
+        <div style={{ breakBefore: 'page' } as React.CSSProperties}>
           <ERPFormPage erp={erp} />
         </div>
 
         {/* Page 3 — ENSA */}
-        <div style={{ pageBreakBefore: 'always' }}>
+        <div style={{ breakBefore: 'page' } as React.CSSProperties}>
           <ENSAPage erp={erp} />
         </div>
 
         {/* Page 4 — CatNat (si applicable) */}
         {erp.catnat.length > 0 && (
-          <div style={{ pageBreakBefore: 'always' }}>
+          <div style={{ breakBefore: 'page' } as React.CSSProperties}>
             <CatNatPage erp={erp} />
           </div>
         )}

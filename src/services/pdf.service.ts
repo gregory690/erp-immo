@@ -30,8 +30,14 @@ export async function generatePDFFromElement(
         top: 0 !important;
         left: 0 !important;
         width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
         box-shadow: none !important;
         border: none !important;
+        border-radius: 0 !important;
+      }
+      #${elementId} > * {
+        overflow: visible !important;
       }
       /* Masquer les éléments no-print (boutons, onglets, etc.) */
       .no-print,
