@@ -123,9 +123,11 @@ export function AddressConfirmation({
             )}
 
             {cadastreError && !cadastreLoading && (
-              <div className="flex items-center gap-2 text-orange-600 text-sm">
-                <AlertCircle className="h-4 w-4" />
-                <span>Références cadastrales non disponibles — saisie manuelle possible</span>
+              <div className="flex items-start gap-2 text-orange-600 text-sm">
+                <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+                <span className="text-xs text-orange-700 leading-relaxed">
+                  Service cadastral IGN temporairement indisponible — vous pouvez continuer, les références seront ajoutées manuellement si nécessaire.
+                </span>
               </div>
             )}
 
