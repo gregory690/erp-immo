@@ -61,8 +61,8 @@ const FEATURES = [
   },
   {
     icon: <FileText className="h-5 w-5 text-edl-700" />,
-    title: '10 € économisés',
-    description: 'Les services équivalents pratiquent généralement entre 25 et 35 €. Même document légal, même valeur, moins cher.',
+    title: 'Le meilleur prix du marché',
+    description: 'Nos concurrents facturent généralement entre 30 et 35 €. Même document légal, même valeur, jusqu\'à 15 € de moins.',
   },
 ];
 
@@ -315,7 +315,7 @@ export default function Home() {
               Voir un exemple
             </Button>
           </div>
-          <p className="text-xs text-red-200 mt-5 font-medium">
+          <p className="text-xs text-navy-300 mt-5 font-medium">
             ✓ 19,99 € · ✓ Données officielles Géorisques · ✓ PDF prêt en 2 minutes
           </p>
         </div>
