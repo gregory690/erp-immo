@@ -4,6 +4,7 @@ import { Button } from '../ui/button';
 import { generatePDFFromElement, generateERPFilename, printERPDocument } from '../../services/pdf.service';
 import { formatERPReference } from '../../utils/erp-validator';
 import type { ERPDocument, ERPRisques } from '../../types/erp.types';
+import { RiskMapPage, RISK_MAP_CONFIGS } from './RiskMapPage';
 
 interface ERPPreviewProps {
   document: ERPDocument;
@@ -119,7 +120,7 @@ function SummaryPage({ erp, demoMode }: { erp: ERPDocument; demoMode: boolean })
   const hasPPRN = risques.ppr_naturels.some(p => p.exists);
   const hasPPRM = risques.ppr_miniers.some(p => p.exists);
   const hasPPRT = risques.ppr_technologiques.some(p => p.exists);
-  const totalPages = catnat.length > 0 ? 4 : 3;
+  const totalPages = catnat.length > 0 ? 8 : 7;
 
   return (
     <div className="p-6 sm:p-8 font-sans text-sm">
@@ -295,7 +296,7 @@ function ERPFormPage({ erp }: { erp: ERPDocument }) {
   const pprtEffets = detectPPRTEffects(risques);
 
   const sismNiv = risques.zonage_sismique.niveau;
-  const totalPages = catnat.length > 0 ? 4 : 3;
+  const totalPages = catnat.length > 0 ? 8 : 7;
 
   return (
     <div className="p-3 sm:p-4 font-sans text-gray-900">
@@ -506,7 +507,7 @@ function ERPFormPage({ erp }: { erp: ERPDocument }) {
 function ENSAPage({ erp }: { erp: ERPDocument }) {
   const { bien, risques, catnat } = erp;
   const ensa = risques.ensa ?? { en_zone_peb: false, prescriptions_insonorisation: false };
-  const totalPages = catnat.length > 0 ? 4 : 3;
+  const totalPages = catnat.length > 0 ? 8 : 7;
 
   return (
     <div className="p-4 sm:p-6 font-sans text-gray-900">
@@ -637,7 +638,7 @@ function ENSAPage({ erp }: { erp: ERPDocument }) {
 
 // ─── Page 4 : Déclaration CatNat ──────────────────────────────────────────────
 
-function CatNatPage({ erp }: { erp: ERPDocument }) {
+function CatNatPage({ erp, totalPages }: { erp: ERPDocument; totalPages: number }) {
   const { bien, catnat } = erp;
 
   return (
@@ -723,7 +724,7 @@ function CatNatPage({ erp }: { erp: ERPDocument }) {
 
       <div className="mt-6 pt-3 text-[8px] text-gray-400 text-center border-t border-gray-200">
         <p>Pour en savoir plus, chacun peut consulter en préfecture ou en mairie, le dossier départemental sur les risques majeurs, le document d'information communal sur les risques majeurs et, sur internet, le site portail dédié à la prévention des risques majeurs : <strong>www.georisques.gouv.fr</strong></p>
-        <p className="mt-2 font-semibold text-gray-500">4 / 4</p>
+        <p className="mt-2 font-semibold text-gray-500">{totalPages} / {totalPages}</p>
       </div>
     </div>
   );
@@ -811,7 +812,7 @@ export function ERPPreview({ document: erp, onNew, demoMode = false, emailSent =
         </div>
       )}
 
-      {/* Document ERP — 4 pages */}
+      {/* Document ERP — 7 ou 8 pages */}
       <div
         id="erp-document-preview"
         className="erp-document bg-white border border-border rounded-lg divide-y divide-gray-200"
@@ -829,10 +830,30 @@ export function ERPPreview({ document: erp, onNew, demoMode = false, emailSent =
           <ENSAPage erp={erp} />
         </div>
 
-        {/* Page 4 — CatNat (si applicable) */}
+        {/* Pages 4-7 — Cartes Géorisques */}
+        {RISK_MAP_CONFIGS.map((cfg, i) => {
+          const totalPages = erp.catnat.length > 0 ? 8 : 7;
+          return (
+            <div key={cfg.title} style={{ breakBefore: 'page' } as React.CSSProperties}>
+              <RiskMapPage
+                title={cfg.title}
+                description={cfg.description}
+                layers={cfg.layers}
+                zoom={cfg.zoom}
+                lat={erp.bien.coordonnees.lat}
+                lng={erp.bien.coordonnees.lng}
+                adresse={erp.bien.adresse_complete}
+                pageNum={4 + i}
+                totalPages={totalPages}
+              />
+            </div>
+          );
+        })}
+
+        {/* Page 8 — CatNat (si applicable) */}
         {erp.catnat.length > 0 && (
           <div style={{ breakBefore: 'page' } as React.CSSProperties}>
-            <CatNatPage erp={erp} />
+            <CatNatPage erp={erp} totalPages={8} />
           </div>
         )}
       </div>
