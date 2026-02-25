@@ -569,6 +569,9 @@ export default function Home() {
           </div>
           <div className="border-t border-white/10 pt-6 text-center space-y-2">
             <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-gray-400">
+              <button onClick={() => navigate('/ressources')} className="hover:text-white underline transition-colors">Guide ERP</button>
+              <button onClick={() => navigate('/faq')} className="hover:text-white underline transition-colors">FAQ</button>
+              <button onClick={() => navigate('/exemple')} className="hover:text-white underline transition-colors">Exemple de document</button>
               <button onClick={() => navigate('/mentions-legales')} className="hover:text-white underline transition-colors">Mentions légales</button>
               <button onClick={() => navigate('/cgu')} className="hover:text-white underline transition-colors">CGU / CGV</button>
               <button onClick={() => navigate('/confidentialite')} className="hover:text-white underline transition-colors">Politique de confidentialité</button>

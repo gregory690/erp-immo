@@ -7,6 +7,8 @@ import Example from './pages/Example';
 import MentionsLegales from './pages/MentionsLegales';
 import CGU from './pages/CGU';
 import Confidentialite from './pages/Confidentialite';
+import Ressources from './pages/Ressources';
+import FAQ from './pages/FAQ';
 
 export default function App() {
   return (
@@ -20,6 +22,8 @@ export default function App() {
         <Route path="/mentions-legales" element={<MentionsLegales />} />
         <Route path="/cgu" element={<CGU />} />
         <Route path="/confidentialite" element={<Confidentialite />} />
+        <Route path="/ressources" element={<Ressources />} />
+        <Route path="/faq" element={<FAQ />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
