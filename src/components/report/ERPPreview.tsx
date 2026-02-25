@@ -5,6 +5,7 @@ import { generatePDFFromElement, generateERPFilename, printERPDocument } from '.
 import { formatERPReference } from '../../utils/erp-validator';
 import type { ERPDocument, ERPRisques } from '../../types/erp.types';
 import { RiskMapPage, RISK_MAP_CONFIGS } from './RiskMapPage';
+import { PropertyAerialView } from './PropertyAerialView';
 
 interface ERPPreviewProps {
   document: ERPDocument;
@@ -140,10 +141,18 @@ function SummaryPage({ erp, demoMode }: { erp: ERPDocument; demoMode: boolean })
       </div>
 
       {/* Adresse + cadastre */}
-      <div className="text-center mb-5">
+      <div className="text-center mb-3">
         <p className="text-base font-bold text-gray-900">{bien.adresse_complete}</p>
         <p className={`text-sm text-gray-600 ${demoMode ? 'blur-sm select-none' : ''}`}>
           Section&nbsp;{bien.references_cadastrales.section || 'N/R'} &nbsp;—&nbsp; N°&nbsp;{bien.references_cadastrales.numero || 'N/R'}
+        </p>
+      </div>
+
+      {/* Vue aérienne IGN */}
+      <div className="mb-4">
+        <PropertyAerialView lat={bien.coordonnees.lat} lng={bien.coordonnees.lng} />
+        <p className="text-[8px] text-gray-400 text-center mt-1">
+          Vue aérienne © IGN Géoportail · data.geopf.fr — Le marqueur rouge indique le bien concerné
         </p>
       </div>
 
