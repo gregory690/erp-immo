@@ -62,7 +62,7 @@ export default function CGU() {
           <div>
             <h2 className="text-base font-bold text-navy-900 mb-3 pb-2 border-b border-gray-100">4. Livraison du document</h2>
             <p>Le document ERP est disponible <strong>immédiatement</strong> après confirmation du paiement, sous forme de fichier PDF téléchargeable depuis la page de confirmation.</p>
-            <p className="mt-2">L'utilisateur peut, de manière optionnelle, saisir son adresse email sur la page de confirmation afin de recevoir un lien de re-téléchargement. Ce lien reste actif pendant <strong>180 jours</strong> à compter de la date de génération du document.</p>
+            <p className="mt-2">Un email de confirmation contenant un lien de re-téléchargement est envoyé automatiquement à l'adresse email renseignée lors du paiement (via Stripe). Ce lien reste actif pendant <strong>6 mois</strong> à compter de la date de génération du document.</p>
             <p className="mt-2">Le document est également accessible via la fonction d'impression du navigateur ("Imprimer" ou "Télécharger en PDF"). En cas de problème technique lors du téléchargement, l'utilisateur est invité à contacter : <strong>notifications@edl-diagnostic-erp.fr</strong></p>
           </div>
 

@@ -37,7 +37,7 @@ export default function MentionsLegales() {
             <p>Le service ERP en ligne accessible à l'adresse <strong>erp-immo.vercel.app</strong> est édité par :</p>
             <ul className="mt-3 space-y-1 pl-4">
               <li><strong>Raison sociale :</strong> EDL &amp; DIAGNOSTIC SAS</li>
-              <li><strong>SIRET :</strong> 832 877 179</li>
+              <li><strong>SIREN :</strong> 832 877 179</li>
               <li><strong>RCS :</strong> Brest n° 832 877 179</li>
               <li><strong>N° TVA intracommunautaire :</strong> FR13832877179</li>
               <li><strong>Siège social :</strong> 60 Allée de Provence, 29280 Plouzané, France</li>
