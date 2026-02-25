@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { MapPin, Building2, AlertCircle } from 'lucide-react';
 import { Card, CardContent } from '../ui/card';
 import { Badge } from '../ui/badge';
-import { Skeleton } from '../ui/skeleton';
 import { useMapInteraction } from '../../hooks/useMapInteraction';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -84,9 +83,34 @@ export function AddressConfirmation({
             </div>
 
             {cadastreLoading && (
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-48" />
-                <Skeleton className="h-4 w-32" />
+              <div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
+                <div className="flex items-center gap-3 mb-2.5">
+                  <div className="relative shrink-0">
+                    <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
+                      <Building2 className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500" />
+                    </span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold text-blue-900">Interrogation des données cadastrales…</p>
+                    <p className="text-[10px] text-blue-600 mt-0.5">Source officielle : IGN · apicarto.ign.fr</p>
+                  </div>
+                  <div className="flex items-end gap-0.5 shrink-0 pb-0.5">
+                    {[0, 1, 2].map(i => (
+                      <div
+                        key={i}
+                        className="w-1 rounded-full bg-blue-400 animate-bounce"
+                        style={{ height: `${8 + i * 3}px`, animationDelay: `${i * 120}ms` }}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="h-1 w-full bg-blue-200 rounded-full overflow-hidden">
+                  <div className="h-full w-2/3 bg-blue-500 rounded-full animate-pulse" />
+                </div>
               </div>
             )}
 
