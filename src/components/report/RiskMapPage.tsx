@@ -3,13 +3,15 @@ import maplibregl from 'maplibre-gl';
 
 const BRGM_WMS = 'https://mapsref.brgm.fr/wxs/georisques/risques';
 
-/** Calcule le BBOX WGS84 centré sur (lat,lng) pour une image WxH px au zoom z */
-function bboxWGS84(lat: number, lng: number, zoom: number, w: number, h: number): string {
-  const dpx = 360 / (256 * Math.pow(2, zoom));
-  const dpy = dpx / Math.cos(lat * Math.PI / 180);
-  const hw = (w / 2) * dpx;
-  const hh = (h / 2) * dpy;
-  return `${lat - hh},${lng - hw},${lat + hh},${lng + hw}`;
+/** Calcule le BBOX EPSG:3857 (Web Mercator) centré sur (lat,lng) pour une image WxH px au zoom z */
+function bboxEPSG3857(lat: number, lng: number, zoom: number, w: number, h: number): string {
+  const R = 6378137; // rayon WGS84 en mètres
+  const mpp = (2 * Math.PI * R) / (256 * Math.pow(2, zoom)); // mètres/pixel en projection
+  const cx = lng * Math.PI * R / 180;
+  const cy = R * Math.log(Math.tan(Math.PI / 4 + lat * Math.PI / 360));
+  const halfW = (w / 2) * mpp;
+  const halfH = (h / 2) * mpp;
+  return `${cx - halfW},${cy - halfH},${cx + halfW},${cy + halfH}`;
 }
 
 const OSM_STYLE = {
@@ -107,9 +109,10 @@ export function RiskMapPage({
   }, [lat, lng, zoom, staticMode]);
 
   const mapBlock = staticMode ? (() => {
-    const W = 800; const H = 460;
-    const bbox = bboxWGS84(lat, lng, zoom, W, H);
-    const ignBgUrl = `https://data.geopf.fr/wms-r/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=PLAN.IGN&CRS=EPSG:4326&BBOX=${bbox}&WIDTH=${W}&HEIGHT=${H}&FORMAT=image/png&STYLES=`;
+    const DISPLAY_W = 800; const DISPLAY_H = 460;
+    const REQUEST_W = DISPLAY_W * 2; const REQUEST_H = DISPLAY_H * 2; // 2× pour qualité Retina
+    const bbox = bboxEPSG3857(lat, lng, zoom, DISPLAY_W, DISPLAY_H);
+    const ignBgUrl = `https://data.geopf.fr/wms-r/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=PLAN.IGN&CRS=EPSG:3857&BBOX=${bbox}&WIDTH=${REQUEST_W}&HEIGHT=${REQUEST_H}&FORMAT=image/png&STYLES=`;
     return (
       <div style={{ height: '460px', overflow: 'hidden', border: '1px solid #d1d5db', position: 'relative', background: '#e5e7eb' }}>
         {/* Fond IGN Plan */}
@@ -117,7 +120,7 @@ export function RiskMapPage({
         {/* Couches WMS risques (transparentes) */}
         {layers.map((l) => {
           const wmsBase = l.wmsUrl ?? BRGM_WMS;
-          const url = `${wmsBase}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=true&LAYERS=${l.wmsLayer}&CRS=EPSG:4326&WIDTH=${W}&HEIGHT=${H}&BBOX=${bbox}&STYLES=`;
+          const url = `${wmsBase}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=true&LAYERS=${l.wmsLayer}&CRS=EPSG:3857&WIDTH=${REQUEST_W}&HEIGHT=${REQUEST_H}&BBOX=${bbox}&STYLES=`;
           return (
             <img key={l.id} src={url} alt={l.name} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill', display: 'block', opacity: l.opacity ?? 0.6 }} />
           );
