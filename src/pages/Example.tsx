@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useRef, useEffect, useState } from 'react';
 import { ChevronLeft, Eye, ArrowRight } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { ERPPreview } from '../components/report/ERPPreview';
@@ -130,6 +131,19 @@ const DEMO_ERP: ERPDocument = {
 
 export default function Example() {
   const navigate = useNavigate();
+  const erpWrapperRef = useRef<HTMLDivElement>(null);
+  const [erpZoom, setErpZoom] = useState(1);
+
+  useEffect(() => {
+    const update = () => {
+      if (!erpWrapperRef.current) return;
+      const w = erpWrapperRef.current.offsetWidth;
+      setErpZoom(w < 640 ? w / 640 : 1);
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-50 overflow-x-hidden">
@@ -177,8 +191,12 @@ export default function Example() {
           </Button>
         </div>
 
-        {/* ERP document en mode démo */}
-        <ERPPreview document={DEMO_ERP} demoMode={true} />
+        {/* ERP document en mode démo — zoom adaptatif sur mobile */}
+        <div ref={erpWrapperRef}>
+          <div style={{ zoom: erpZoom }}>
+            <ERPPreview document={DEMO_ERP} demoMode={true} />
+          </div>
+        </div>
 
         {/* CTA bas de page */}
         <div className="bg-edl-700 text-white rounded-xl px-5 py-6 text-center">
