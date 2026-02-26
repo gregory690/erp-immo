@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Check, Loader2, AlertCircle, CreditCard } from 'lucide-react';
 import { Button } from '../components/ui/button';
@@ -52,6 +52,7 @@ export default function Generate() {
   const [selectedMode, setSelectedMode] = useState<ERPMode | null>(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [preloadedCheckoutUrl, setPreloadedCheckoutUrl] = useState<string | null>(null);
 
   const { loading, progress, document: erpDocument, error, calculate } = useRiskCalculation();
 
@@ -104,19 +105,33 @@ export default function Generate() {
     });
   }
 
+  // Pré-créer la session Stripe dès que l'ERP est calculé (pendant que l'utilisateur lit les résultats)
+  // → quand il clique "Payer", l'URL est déjà prête, redirection quasi-instantanée
+  useEffect(() => {
+    if (!erpDocument || loading || !addressState) return;
+    createCheckoutSession({
+      erp_reference: erpDocument.metadata.reference,
+      adresse: addressState.feature.properties.label,
+      commune: addressState.feature.properties.city,
+      erpDocument,
+    })
+      .then(url => setPreloadedCheckoutUrl(url))
+      .catch(() => {}); // Silencieux — handleConfirm recrée si nécessaire
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [erpDocument?.metadata?.reference]);
+
   async function handleConfirm() {
     if (!addressState || !selectedMode || !erpDocument) return;
     setPaymentError(null);
     setPaymentLoading(true);
     try {
-      const checkoutUrl = await createCheckoutSession({
-        erp_reference: erpDocument.metadata.reference, // UUID complet — clé KV et URL de retour
+      const checkoutUrl = preloadedCheckoutUrl ?? await createCheckoutSession({
+        erp_reference: erpDocument.metadata.reference,
         adresse: addressState.feature.properties.label,
         commune: addressState.feature.properties.city,
         erpDocument,
       });
       (window as any).plausible?.('Paiement initié');
-      // Redirection vers la page de paiement Stripe
       window.location.href = checkoutUrl;
     } catch (err) {
       setPaymentError(

@@ -59,21 +59,15 @@ export default async function handler(req, res) {
     });
 
     // ─── 2. Sauvegarder le document ERP dans KV avec l'ID de session ──────────
-    // On inclut stripe_session_id pour que get-erp-document puisse vérifier
-    // le paiement auprès de Stripe si le webhook n'a pas encore marqué paid:true.
-    // Indispensable sur mobile (Safari vide le localStorage lors de la navigation externe).
+    // Fire-and-forget : on ne bloque pas la réponse sur la sauvegarde KV.
+    // Le webhook stripe sauvegarde aussi le document après paiement.
     if (erpDocument?.metadata?.reference && safeRef) {
-      try {
-        await kv.set(safeRef, JSON.stringify({
-          ...erpDocument,
-          stripe_session_id: session.id,
-        }), {
-          ex: 60 * 60 * 24 * 180, // 180 jours
-        });
-      } catch (kvErr) {
-        // Non bloquant — le paiement continue même si KV est indisponible
-        console.error('KV pre-save error:', kvErr.message);
-      }
+      kv.set(safeRef, JSON.stringify({
+        ...erpDocument,
+        stripe_session_id: session.id,
+      }), {
+        ex: 60 * 60 * 24 * 180, // 180 jours
+      }).catch(kvErr => console.error('KV pre-save error:', kvErr.message));
     }
 
     return res.status(200).json({ url: session.url });
