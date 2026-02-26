@@ -5,6 +5,7 @@
 //
 // Variables d'environnement requises :
 //   STRIPE_SECRET_KEY               → clé secrète Stripe (sk_live_...)
+//   STRIPE_WEBHOOK_SECRET           → dashboard Stripe → Developers → Webhooks → Signing secret
 //   RESEND_API_KEY                  → dashboard.resend.com → API Keys
 //   RESEND_FROM_EMAIL               → domaine vérifié dans Resend
 //   KV_REST_API_URL + KV_REST_API_TOKEN → Upstash KV
@@ -14,9 +15,16 @@
 //   Dashboard → Developers → Webhooks → Add endpoint
 //   URL : https://<votre-domaine>/api/stripe-webhook
 //   Event : checkout.session.completed
+
 import Stripe from 'stripe';
 import { kv } from '@vercel/kv';
 import { Resend } from 'resend';
+
+// Désactiver le body parser Vercel pour pouvoir vérifier la signature Stripe
+// sur le payload brut (obligatoire pour stripe.webhooks.constructEvent)
+export const config = {
+  api: { bodyParser: false },
+};
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -24,17 +32,42 @@ export default async function handler(req, res) {
   }
 
   const secretKey = process.env.STRIPE_SECRET_KEY;
-  if (!secretKey) {
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+  if (!secretKey || !webhookSecret) {
+    console.error('STRIPE_SECRET_KEY ou STRIPE_WEBHOOK_SECRET manquante');
     return res.status(500).json({ error: 'Configuration serveur incomplète' });
+  }
+
+  // ─── Lire le body brut (nécessaire pour la vérification de signature) ────────
+  let rawBody;
+  try {
+    rawBody = await new Promise((resolve, reject) => {
+      let data = '';
+      req.on('data', chunk => { data += chunk; });
+      req.on('end', () => resolve(data));
+      req.on('error', reject);
+    });
+  } catch (err) {
+    console.error('Webhook: erreur lecture body:', err.message);
+    return res.status(400).json({ error: 'Impossible de lire le payload' });
+  }
+
+  // ─── Vérifier la signature Stripe ────────────────────────────────────────────
+  const signature = req.headers['stripe-signature'];
+  if (!signature) {
+    console.error('Webhook: en-tête stripe-signature absent');
+    return res.status(400).json({ error: 'Signature manquante' });
   }
 
   const stripe = new Stripe(secretKey, { apiVersion: '2024-06-20' });
 
-  // Vercel parse automatiquement le body JSON — req.body contient l'événement Stripe
-  const event = req.body;
-
-  if (!event?.type || !event?.data?.object?.id) {
-    return res.status(400).json({ error: 'Payload Stripe invalide' });
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
+  } catch (err) {
+    console.error('Webhook: signature invalide:', err.message);
+    return res.status(400).json({ error: 'Signature webhook invalide' });
   }
 
   // On ne traite que les paiements complétés
@@ -44,8 +77,7 @@ export default async function handler(req, res) {
 
   const sessionId = event.data.object.id;
 
-  // Vérification : on récupère la session directement depuis l'API Stripe
-  // pour ne pas se fier au payload non signé.
+  // Vérification supplémentaire : récupérer la session depuis l'API Stripe
   let session;
   try {
     session = await stripe.checkout.sessions.retrieve(sessionId);
@@ -54,7 +86,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ received: true });
   }
 
-  // S'assurer que le paiement est bien confirmé
   if (session.payment_status !== 'paid') {
     return res.status(200).json({ received: true });
   }
@@ -75,11 +106,21 @@ export default async function handler(req, res) {
       console.error('Webhook: document ERP introuvable dans KV, ref:', erpRef);
       return res.status(200).json({ received: true, warning: 'document_not_found' });
     }
-    // @vercel/kv désérialise automatiquement le JSON
     erpDocument = typeof raw === 'string' ? JSON.parse(raw) : raw;
   } catch (err) {
     console.error('Webhook: KV get error:', err.message);
     return res.status(200).json({ received: true, warning: 'kv_error' });
+  }
+
+  // ─── Marquer le document comme payé dans KV ──────────────────────────────────
+  // Cela permet à get-erp-document de le délivrer sans vérification Stripe supplémentaire
+  try {
+    await kv.set(erpRef, JSON.stringify({ ...erpDocument, paid: true }), {
+      ex: 60 * 60 * 24 * 180, // 180 jours
+    });
+  } catch (err) {
+    console.error('Webhook: impossible de marquer le doc comme payé:', err.message);
+    // Non bloquant — on continue
   }
 
   // ─── Envoyer l'email via Resend ─────────────────────────────────────────────
@@ -87,6 +128,12 @@ export default async function handler(req, res) {
   if (!resendKey) {
     console.warn('Webhook: RESEND_API_KEY non configurée — email non envoyé');
     return res.status(200).json({ received: true, warning: 'no_resend_key' });
+  }
+
+  // Vérifier si l'email n'a pas déjà été envoyé (évite les doublons)
+  if (erpDocument.email_sent) {
+    console.log(`Webhook: email déjà envoyé pour ref ${erpRef} — skip`);
+    return res.status(200).json({ received: true });
   }
 
   const resend = new Resend(resendKey);
@@ -113,16 +160,25 @@ export default async function handler(req, res) {
       subject: `Votre ERP est prêt — ${bien.adresse_complete}`,
       html: buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount, dateRealisation, dateExpiration }),
     });
-    console.log(`Webhook: email ERP envoyé automatiquement à ${email} (ref: ${erpRef})`);
+    console.log(`Webhook: email ERP envoyé à ${email} (ref: ${erpRef})`);
+
+    // Marquer l'email comme envoyé pour éviter les doublons
+    try {
+      await kv.set(erpRef, JSON.stringify({ ...erpDocument, paid: true, email_sent: true }), {
+        ex: 60 * 60 * 24 * 180,
+      });
+    } catch (err) {
+      // Non bloquant
+    }
   } catch (err) {
     console.error('Webhook: Resend error:', err.message);
-    // On retourne 200 quand même pour éviter les retentatives Stripe en boucle
+    // On retourne 200 pour éviter les retentatives Stripe en boucle
   }
 
   return res.status(200).json({ received: true });
 }
 
-// ─── Template email HTML (identique à send-erp-email.js) ─────────────────────
+// ─── Template email HTML ──────────────────────────────────────────────────────
 function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount, dateRealisation, dateExpiration }) {
   const catnatMsg = catnatCount > 0
     ? `⚠️ <strong>${catnatCount} arrêté(s) de catastrophe naturelle</strong> recensé(s) sur cette commune.`

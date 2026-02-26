@@ -1,7 +1,7 @@
 // Vercel Function — send-erp-email
-// Reçoit { email, erpDocument } depuis le client après paiement réussi.
+// Appelé par le client après retour de paiement Stripe.
 // 1. Sauvegarde le document ERP dans Vercel KV (pour re-téléchargement)
-// 2. Envoie un email récapitulatif via Resend
+// 2. Envoie un email récapitulatif via Resend — sauf si le webhook l'a déjà fait
 //
 // Variables d'environnement requises :
 //   RESEND_API_KEY                  → dashboard.resend.com → API Keys
@@ -40,9 +40,29 @@ export default async function handler(req, res) {
     : process.env.URL || 'http://localhost:3000';
   const redownloadUrl = `${baseUrl}/apercu?ref=${encodeURIComponent(reference)}`;
 
-  // ─── 1. Sauvegarde dans Vercel KV ───────────────────────────────────────────
+  // ─── 1. Vérifier si le webhook a déjà géré l'email ───────────────────────────
+  // Le webhook stripe-webhook.js envoie l'email en premier et marque email_sent:true.
+  // Si c'est déjà fait, on ne renvoie pas un second email.
+  let existingDoc = null;
   try {
-    await kv.set(reference, JSON.stringify(erpDocument), {
+    const raw = await kv.get(reference);
+    existingDoc = raw ? (typeof raw === 'string' ? JSON.parse(raw) : raw) : null;
+  } catch (err) {
+    // Non bloquant — on continue
+  }
+
+  if (existingDoc?.email_sent) {
+    console.log(`send-erp-email: email déjà envoyé par le webhook pour ref ${reference} — skip`);
+    return res.status(200).json({ success: true, info: 'email_already_sent_by_webhook' });
+  }
+
+  // ─── 2. Sauvegarde dans Vercel KV ───────────────────────────────────────────
+  // On préserve les champs internes déjà présents (paid, stripe_session_id, etc.)
+  try {
+    await kv.set(reference, JSON.stringify({
+      ...(existingDoc || {}),
+      ...erpDocument,
+    }), {
       ex: 60 * 60 * 24 * 180, // expire après 180 jours
     });
   } catch (err) {
@@ -50,7 +70,7 @@ export default async function handler(req, res) {
     console.error('Vercel KV save error:', err.message);
   }
 
-  // ─── 2. Envoi email via Resend ───────────────────────────────────────────────
+  // ─── 3. Envoi email via Resend ───────────────────────────────────────────────
   const resendKey = process.env.RESEND_API_KEY;
 
   if (!resendKey) {
@@ -79,6 +99,19 @@ export default async function handler(req, res) {
       subject: `Votre ERP est prêt — ${bien.adresse_complete}`,
       html: buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount, dateRealisation, dateExpiration }),
     });
+
+    // Marquer l'email comme envoyé pour éviter les doublons (ex: si webhook arrive ensuite)
+    try {
+      await kv.set(reference, JSON.stringify({
+        ...(existingDoc || {}),
+        ...erpDocument,
+        email_sent: true,
+      }), {
+        ex: 60 * 60 * 24 * 180,
+      });
+    } catch (err) {
+      // Non bloquant
+    }
 
     return res.status(200).json({ success: true });
   } catch (err) {

@@ -24,23 +24,14 @@ export default async function handler(req, res) {
     const safeAdresse = String(adresse || '').slice(0, 200).replace(/[<>"'&]/g, '');
     const safeCommune = String(commune || '').slice(0, 100).replace(/[<>"'&]/g, '');
 
-    // Sauvegarde préventive du document ERP dans KV avant la redirection Stripe.
-    // Indispensable sur mobile (Safari vide le localStorage lors de la navigation externe).
-    if (erpDocument?.metadata?.reference && safeRef) {
-      try {
-        await kv.set(safeRef, JSON.stringify(erpDocument), {
-          ex: 60 * 60 * 24 * 180, // 180 jours
-        });
-      } catch (kvErr) {
-        // Non bloquant — le paiement continue même si KV est indisponible
-        console.error('KV pre-save error:', kvErr.message);
-      }
-    }
-
     const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
       : process.env.URL || 'http://localhost:3000';
 
+    // ─── 1. Créer la session Stripe en premier ────────────────────────────────
+    // On crée la session avant de stocker dans KV pour pouvoir inclure
+    // le stripe_session_id dans le document — nécessaire pour vérifier
+    // le paiement dans get-erp-document.js
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       locale: 'fr',
@@ -66,6 +57,24 @@ export default async function handler(req, res) {
         commune: safeCommune,
       },
     });
+
+    // ─── 2. Sauvegarder le document ERP dans KV avec l'ID de session ──────────
+    // On inclut stripe_session_id pour que get-erp-document puisse vérifier
+    // le paiement auprès de Stripe si le webhook n'a pas encore marqué paid:true.
+    // Indispensable sur mobile (Safari vide le localStorage lors de la navigation externe).
+    if (erpDocument?.metadata?.reference && safeRef) {
+      try {
+        await kv.set(safeRef, JSON.stringify({
+          ...erpDocument,
+          stripe_session_id: session.id,
+        }), {
+          ex: 60 * 60 * 24 * 180, // 180 jours
+        });
+      } catch (kvErr) {
+        // Non bloquant — le paiement continue même si KV est indisponible
+        console.error('KV pre-save error:', kvErr.message);
+      }
+    }
 
     return res.status(200).json({ url: session.url });
   } catch (err) {
