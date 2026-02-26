@@ -271,38 +271,38 @@ export default function Home() {
     <div className="min-h-screen bg-white font-sans">
       {/* Top bar */}
       <div className="bg-navy-900 text-white text-xs py-2 px-4 hidden sm:block">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <span>Un service proposé par EDL&amp;DIAGNOSTIC · Diagnostiqueurs immobiliers certifiés</span>
-          <span>contact@edl-diagnostic-erp.fr</span>
+        <div className="max-w-6xl mx-auto flex items-center justify-center gap-8">
+          <span className="flex items-center gap-1.5"><span>⚡</span>Livraison en 2 minutes</span>
+          <span className="text-white/30">|</span>
+          <span className="flex items-center gap-1.5"><span>✓</span>Accepté par les notaires</span>
+          <span className="text-white/30">|</span>
+          <span className="flex items-center gap-1.5"><span>🔒</span>Données officielles Géorisques</span>
         </div>
       </div>
 
       {/* Navigation */}
       <header className="border-b border-gray-200 bg-white sticky top-0 z-40 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5">
-              <div className="bg-edl-700 rounded p-1.5">
-                <Shield className="h-5 w-5 text-white" />
-              </div>
-              <div className="leading-tight">
-                <span className="font-black text-navy-900 text-lg tracking-tight">EDL</span>
-                <span className="font-bold text-edl-700 text-lg">&amp;</span>
-                <span className="font-black text-navy-900 text-lg tracking-tight">DIAGNOSTIC</span>
-              </div>
+        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+          {/* Logo */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <div className="bg-edl-700 rounded p-1.5">
+              <Shield className="h-5 w-5 text-white" />
             </div>
-            <div className="hidden sm:block h-6 w-px bg-gray-300" />
-            <span className="hidden sm:block text-xs text-gray-500 font-medium">ERP en ligne · Vente &amp; Location</span>
+            <div className="leading-tight">
+              <span className="font-black text-navy-900 text-lg tracking-tight">EDL</span>
+              <span className="font-bold text-edl-700 text-lg">&amp;</span>
+              <span className="font-black text-navy-900 text-lg tracking-tight">DIAGNOSTIC</span>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button
-              size="sm"
-              className="bg-edl-700 hover:bg-edl-800 text-white font-semibold"
-              onClick={() => navigate('/generer')}
-            >
-              Générer mon ERP
-            </Button>
-          </div>
+
+          {/* CTA */}
+          <Button
+            className="bg-edl-700 hover:bg-edl-800 text-white font-bold shrink-0 gap-2"
+            onClick={() => navigate('/generer')}
+          >
+            Générer mon ERP
+            <span className="hidden sm:inline bg-white/20 rounded px-1.5 py-0.5 text-xs font-semibold">19,99 €</span>
+          </Button>
         </div>
       </header>
 
@@ -709,10 +709,10 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-white/10 pt-6 text-center space-y-2">
-            <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-gray-400">
+            <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-white/70">
               <button onClick={() => navigate('/ressources')} className="hover:text-white underline transition-colors">Guide ERP</button>
               <button onClick={() => navigate('/faq')} className="hover:text-white underline transition-colors">FAQ</button>
-              <button onClick={() => navigate('/exemple')} className="hover:text-white underline transition-colors font-semibold text-white/80">Exemple de document ERP</button>
+              <button onClick={() => navigate('/exemple')} className="hover:text-white underline transition-colors">Exemple de document ERP</button>
               <button onClick={() => navigate('/mentions-legales')} className="hover:text-white underline transition-colors">Mentions légales</button>
               <button onClick={() => navigate('/cgu')} className="hover:text-white underline transition-colors">CGU / CGV</button>
               <button onClick={() => navigate('/confidentialite')} className="hover:text-white underline transition-colors">Politique de confidentialité</button>
