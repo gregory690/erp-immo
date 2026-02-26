@@ -112,7 +112,7 @@ export function RiskMapPage({
     const DISPLAY_W = 800; const DISPLAY_H = 460;
     const REQUEST_W = DISPLAY_W * 2; const REQUEST_H = DISPLAY_H * 2; // 2× pour qualité Retina
     const bbox = bboxEPSG3857(lat, lng, zoom, DISPLAY_W, DISPLAY_H);
-    const ignBgUrl = `https://data.geopf.fr/wms-r/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=PLAN.IGN&CRS=EPSG:3857&BBOX=${bbox}&WIDTH=${REQUEST_W}&HEIGHT=${REQUEST_H}&FORMAT=image/png&STYLES=`;
+    const ignBgUrl = `https://data.geopf.fr/wms-r/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&CRS=EPSG:3857&BBOX=${bbox}&WIDTH=${REQUEST_W}&HEIGHT=${REQUEST_H}&FORMAT=image/png&STYLES=`;
     return (
       <div style={{ height: '460px', overflow: 'hidden', border: '1px solid #d1d5db', position: 'relative', background: '#e5e7eb' }}>
         {/* Fond IGN Plan */}
