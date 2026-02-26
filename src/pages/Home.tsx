@@ -617,7 +617,7 @@ export default function Home() {
           <Card className="border-2 border-edl-700 shadow-xl">
             <CardContent className="pt-8 pb-8 space-y-5">
               <Badge className="bg-green-100 text-green-800 border border-green-200 text-xs px-3 font-semibold">
-                ✓ Téléchargement immédiat après paiement
+                ✓ PDF envoyé par email immédiatement après paiement
               </Badge>
               <div>
                 <div className="flex items-center justify-center gap-2 mb-2">
@@ -625,19 +625,18 @@ export default function Home() {
                   <span className="bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded-full border border-green-200">−43%</span>
                 </div>
                 <p className="text-6xl font-black text-edl-700">19,99 €<span className="text-lg font-normal text-gray-500"> TTC</span></p>
-                <p className="text-xs text-gray-400 mt-1">16,66 € HT · Téléchargement immédiat après paiement</p>
-                <p className="text-xs text-gray-400 mt-2 italic">Nos concurrents facturent généralement entre 30 et 35 €</p>
+                <p className="text-xs text-gray-400 mt-1">16,66 € HT · Nos concurrents facturent généralement entre 30 et 35 €</p>
               </div>
               <ul className="text-sm text-left space-y-2">
                 {[
                   'ERP PDF conforme arrêté 27/09/2022',
-                  'Tous les risques via Géorisques (BRGM)',
                   'Valide 6 mois · vente ET location',
-                  'Références cadastrales incluses',
+                  'Accepté par les notaires et agences',
+                  'Tous les risques via Géorisques (BRGM)',
+                  '4 cartes de risques géographiques incluses',
                   'Vue aérienne satellite IGN du bien',
-                  '4 cartes de risques Géorisques incluses',
-                  'Historique CatNat depuis 1982',
-                  'PDF reçu par email · lien de retéléchargement inclus',
+                  'Références cadastrales + historique CatNat',
+                  'PDF reçu par email · retéléchargement illimité',
                 ].map(f => (
                   <li key={f} className="flex items-center gap-2 text-gray-700">
                     <span className="text-green-600 font-bold">✓</span> {f}
