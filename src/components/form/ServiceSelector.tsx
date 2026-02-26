@@ -73,7 +73,7 @@ export function ServiceSelector({ selected, onSelect, onConfirm }: ServiceSelect
               <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-1">
                 <Tag className="h-3.5 w-3.5 text-gray-400 shrink-0" />
                 <span className="text-sm text-gray-500 line-through decoration-red-400 decoration-2 font-medium">
-                  30,00 €
+                  34,99 €
                 </span>
                 <span className="text-xs text-gray-400 italic hidden sm:inline">
                   (prix moyen facturé par votre diagnostiqueur)
@@ -83,11 +83,10 @@ export function ServiceSelector({ selected, onSelect, onConfirm }: ServiceSelect
                 <span className="text-4xl font-extrabold text-navy-900">19,99 €</span>
                 <span className="text-sm text-gray-500 font-medium">TTC</span>
               </div>
-              <p className="text-xs text-gray-400 mt-0.5">16,66 € HT</p>
             </div>
             <div className="sm:ml-auto flex sm:flex-col items-center sm:items-end gap-2">
               <Badge className="bg-green-100 text-green-800 border-green-200 font-semibold text-sm shrink-0">
-                Économisez 10 €
+                Économisez 15 €
               </Badge>
               <p className="text-xs text-gray-500">Téléchargement immédiat</p>
             </div>
