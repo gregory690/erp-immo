@@ -20,6 +20,7 @@ import Stripe from 'stripe';
 import { kv } from '@vercel/kv';
 import { Resend } from 'resend';
 import { buildEmailHTML } from './_email-template.js';
+import { generatePDFAttachment, buildPDFFilename } from './_generate-pdf.js';
 
 // Désactiver le body parser Vercel pour pouvoir vérifier la signature Stripe
 // sur le payload brut (obligatoire pour stripe.webhooks.constructEvent)
@@ -143,6 +144,7 @@ export default async function handler(req, res) {
     : process.env.URL || 'http://localhost:3000';
 
   const redownloadUrl = `${baseUrl}/apercu?ref=${encodeURIComponent(erpRef)}&autoprint=true`;
+  const printUrl = `${baseUrl}/print?ref=${encodeURIComponent(erpRef)}`;
   const bien = erpDocument.bien;
   const metadata = erpDocument.metadata;
   const catnatCount = erpDocument.catnat?.length ?? 0;
@@ -154,14 +156,26 @@ export default async function handler(req, res) {
     day: '2-digit', month: 'long', year: 'numeric',
   });
 
+  // ─── Génération PDF via PDFShift (non bloquant en cas d'erreur/timeout) ──────
+  let pdfAttachment = null;
+  try {
+    pdfAttachment = await Promise.race([
+      generatePDFAttachment(printUrl, buildPDFFilename(erpDocument)),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('PDF timeout')), 25000)),
+    ]);
+  } catch (err) {
+    console.warn('Webhook: PDF non généré (envoi email sans pièce jointe):', err.message);
+  }
+
   try {
     await resend.emails.send({
       from: `EDL&DIAGNOSTIC <${process.env.RESEND_FROM_EMAIL || 'erp@edletdiagnostic.fr'}>`,
       to: email,
       subject: `Votre ERP est prêt — ${bien.adresse_complete}`,
       html: buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount, dateRealisation, dateExpiration }),
+      ...(pdfAttachment ? { attachments: [pdfAttachment] } : {}),
     });
-    console.log(`Webhook: email ERP envoyé à ${email} (ref: ${erpRef})`);
+    console.log(`Webhook: email ERP envoyé à ${email} (ref: ${erpRef}, pdf: ${!!pdfAttachment})`);
 
     // Marquer l'email comme envoyé pour éviter les doublons
     try {

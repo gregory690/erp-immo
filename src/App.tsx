@@ -9,6 +9,7 @@ import CGU from './pages/CGU';
 import Confidentialite from './pages/Confidentialite';
 import Ressources from './pages/Ressources';
 import FAQ from './pages/FAQ';
+import Print from './pages/Print';
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/confidentialite" element={<Confidentialite />} />
         <Route path="/ressources" element={<Ressources />} />
         <Route path="/faq" element={<FAQ />} />
+        <Route path="/print" element={<Print />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

@@ -11,6 +11,7 @@
 import { kv } from '@vercel/kv';
 import { Resend } from 'resend';
 import { buildEmailHTML } from './_email-template.js';
+import { generatePDFAttachment, buildPDFFilename } from './_generate-pdf.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -93,12 +94,25 @@ export default async function handler(req, res) {
     day: '2-digit', month: 'long', year: 'numeric',
   });
 
+  // ─── Génération PDF via PDFShift (non bloquant) ────────────────────────────
+  const printUrl = `${baseUrl}/print?ref=${encodeURIComponent(reference)}`;
+  let pdfAttachment = null;
+  try {
+    pdfAttachment = await Promise.race([
+      generatePDFAttachment(printUrl, buildPDFFilename(erpDocument)),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('PDF timeout')), 25000)),
+    ]);
+  } catch (err) {
+    console.warn('send-erp-email: PDF non généré:', err.message);
+  }
+
   try {
     await resend.emails.send({
       from: `EDL&DIAGNOSTIC <${fromEmail}>`,
       to: email,
       subject: `Votre ERP est prêt — ${bien.adresse_complete}`,
       html: buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount, dateRealisation, dateExpiration }),
+      ...(pdfAttachment ? { attachments: [pdfAttachment] } : {}),
     });
 
     // Marquer l'email comme envoyé pour éviter les doublons (ex: si webhook arrive ensuite)

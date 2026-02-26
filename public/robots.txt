@@ -5,5 +5,6 @@ Allow: /
 Disallow: /apercu
 Disallow: /generer
 Disallow: /dashboard
+Disallow: /print
 
 Sitemap: https://edl-diagnostic-erp.fr/sitemap.xml
