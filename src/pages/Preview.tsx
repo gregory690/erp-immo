@@ -150,13 +150,16 @@ export default function Preview() {
     <div className="min-h-screen bg-slate-50 overflow-x-hidden">
       <header className="bg-white border-b border-border sticky top-0 z-40 no-print">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
-          <button
-            onClick={() => navigate('/generer')}
-            className="flex items-center gap-2 text-sm text-gray-600 hover:text-navy-900 transition-colors"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            Retour
-          </button>
+          {!paymentSuccess && (
+            <button
+              onClick={() => navigate('/generer')}
+              className="flex items-center gap-2 text-sm text-gray-600 hover:text-navy-900 transition-colors"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Retour
+            </button>
+          )}
+          {paymentSuccess && <div className="w-16" />}
           <span className="font-bold text-navy-900">EDL&amp;DIAGNOSTIC · Aperçu ERP</span>
           <div className="w-16" />
         </div>

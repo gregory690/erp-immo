@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Download, Printer, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { Download, Printer, AlertTriangle } from 'lucide-react';
 import { Button } from '../ui/button';
 import { generatePDFFromElement, generateERPFilename, printERPDocument } from '../../services/pdf.service';
 import { formatERPReference } from '../../utils/erp-validator';
@@ -794,10 +794,6 @@ export function ERPPreview({ document: erp, onNew, demoMode = false, emailSent =
       {/* Barre d'actions */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between no-print">
         <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-2 text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-2">
-            <CheckCircle2 className="h-4 w-4" />
-            <span className="text-sm font-medium">ERP généré avec succès</span>
-          </div>
           <div className="flex items-start gap-2 text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2">
             <span className="text-sm">⚠️ <strong>Ce document doit être daté, signé et paraphé par le vendeur ou bailleur</strong> avant annexion au contrat (art. L125-5 C. Env.).</span>
           </div>
