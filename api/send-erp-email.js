@@ -100,7 +100,7 @@ export default async function handler(req, res) {
   try {
     pdfAttachment = await Promise.race([
       generatePDFAttachment(printUrl, buildPDFFilename(erpDocument)),
-      new Promise((_, reject) => setTimeout(() => reject(new Error('PDF timeout')), 25000)),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('PDF timeout')), 40000)),
     ]);
   } catch (err) {
     console.warn('send-erp-email: PDF non généré:', err.message);
