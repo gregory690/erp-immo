@@ -118,7 +118,7 @@ function detectPPRTEffects(risques: ERPRisques) {
 
 // ─── Page 1 : Résumé ─────────────────────────────────────────────────────────
 
-function SummaryPage({ erp, demoMode }: { erp: ERPDocument; demoMode: boolean }) {
+function SummaryPage({ erp, demoMode, staticMode = false }: { erp: ERPDocument; demoMode: boolean; staticMode?: boolean }) {
   const { bien, risques, catnat } = erp;
   const hasPPRN = risques.ppr_naturels.some(p => p.exists);
   const hasPPRM = risques.ppr_miniers.some(p => p.exists);
@@ -852,7 +852,7 @@ export function ERPPreview({ document: erp, onNew, demoMode = false, emailSent =
         className="erp-document bg-white border border-border rounded-lg divide-y divide-gray-200"
       >
         {/* Page 1 — Résumé */}
-        <SummaryPage erp={erp} demoMode={demoMode} />
+        <SummaryPage erp={erp} demoMode={demoMode} staticMode={staticMode} />
 
         {/* Page 2 — Formulaire officiel ERP */}
         <div style={{ breakBefore: 'page' } as React.CSSProperties}>
