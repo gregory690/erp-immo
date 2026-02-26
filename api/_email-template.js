@@ -2,14 +2,7 @@
 // Préfixe _ : Vercel ne l'expose pas comme endpoint
 // Design : corporate plat — sans border-radius, typographie claire, palette sobre
 
-export function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount, dateRealisation, dateExpiration }) {
-  const catnatBorder = catnatCount > 0 ? '#b45309' : '#15803d';
-  const catnatBg     = catnatCount > 0 ? '#fffbeb' : '#f0fdf4';
-  const catnatColor  = catnatCount > 0 ? '#92400e' : '#14532d';
-  const catnatLabel  = catnatCount > 0 ? `⚠ ${catnatCount} arrêté(s) CatNat` : '✓ Aucun arrêté CatNat';
-  const catnatText   = catnatCount > 0
-    ? `<strong>${catnatCount} arrêté(s) de catastrophe naturelle</strong> recensé(s) sur cette commune — à mentionner dans la section III de l'ERP.`
-    : 'Aucun arrêté de catastrophe naturelle recensé sur cette commune.';
+export function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount: _catnatCount, dateRealisation, dateExpiration }) {
 
   return `<!DOCTYPE html>
 <html lang="fr" xmlns="http://www.w3.org/1999/xhtml">
@@ -95,15 +88,14 @@ export function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount, dat
                 </tr>
               </table>
 
-              <!-- CatNat -->
+              <!-- PDF joint -->
               <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td style="padding:0 36px 20px;">
                     <table width="100%" cellpadding="0" cellspacing="0" border="0">
                       <tr>
-                        <td style="background-color:${catnatBg};border-left:3px solid ${catnatBorder};padding:12px 16px;">
-                          <p style="margin:0 0 2px;font-size:11px;font-weight:700;color:${catnatColor};text-transform:uppercase;letter-spacing:1px;">${catnatLabel}</p>
-                          <p style="margin:0;font-size:12px;color:${catnatColor};opacity:0.85;">${catnatText}</p>
+                        <td style="background-color:#f0fdf4;border-left:3px solid #15803d;padding:12px 16px;">
+                          <p style="margin:0;font-size:13px;font-weight:700;color:#14532d;">Votre ERP est joint en PDF à cet email.</p>
                         </td>
                       </tr>
                     </table>
@@ -121,9 +113,9 @@ export function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount, dat
                 <tr>
                   <td style="padding:28px 36px;">
                     <a href="${redownloadUrl}" style="display:inline-block;background-color:#1a3a5c;color:#ffffff;text-decoration:none;font-size:14px;font-weight:700;padding:14px 28px;letter-spacing:0.3px;">
-                      Télécharger mon ERP (PDF) &rarr;
+                      Voir / télécharger mon ERP &rarr;
                     </a>
-                    <p style="margin:12px 0 0;font-size:12px;color:#9ca3af;">Ce lien est permanent — vous pouvez le consulter à tout moment.</p>
+                    <p style="margin:12px 0 0;font-size:11px;color:#9ca3af;">Si le PDF n'apparaît pas en pièce jointe, utilisez ce lien pour le télécharger. Lien permanent — consultable à tout moment.</p>
                   </td>
                 </tr>
               </table>
