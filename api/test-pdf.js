@@ -47,7 +47,7 @@ export default async function handler(req, res) {
         source: printUrl,
         use_print: true,
         wait_for: '#erp-document-preview',
-        wait_delay: 4000,
+        delay: 4000,
       }),
     });
   } catch (err) {
