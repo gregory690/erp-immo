@@ -24,7 +24,7 @@ export async function generatePDFAttachment(printUrl, filename) {
       source: printUrl,
       use_print: true,
       wait_for: '#erp-document-preview',
-      wait_delay: 4000,
+      delay: 4000,
     }),
   });
 
