@@ -174,7 +174,13 @@ export default async function handler(req, res) {
       new Promise((_, reject) => setTimeout(() => reject(new Error('PDF timeout')), 40000)),
     ]);
   } catch (err) {
-    console.warn('Webhook: PDF non généré (envoi email sans pièce jointe):', err.message);
+    console.error('Webhook: PDF non généré — email non envoyé:', err.message);
+    return; // Sécurité : on n'envoie jamais l'email sans le PDF
+  }
+
+  if (!pdfAttachment) {
+    console.error('Webhook: pdfAttachment vide — email non envoyé (ref:', erpRef, ')');
+    return;
   }
 
   try {
@@ -183,7 +189,7 @@ export default async function handler(req, res) {
       to: email,
       subject: `Votre ERP est prêt — ${bien.adresse_complete}`,
       html: buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount, dateRealisation, dateExpiration }),
-      ...(pdfAttachment ? { attachments: [pdfAttachment] } : {}),
+      attachments: [pdfAttachment],
     });
     console.log(`Webhook: email ERP envoyé à ${email} (ref: ${erpRef}, pdf: ${!!pdfAttachment})`);
 
