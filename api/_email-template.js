@@ -2,7 +2,7 @@
 // Préfixe _ : Vercel ne l'expose pas comme endpoint
 // Design : corporate plat — sans border-radius, typographie claire, palette sobre
 
-export function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount: _catnatCount, dateRealisation, dateExpiration }) {
+export function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount: _catnatCount, dateRealisation, dateExpiration, hasPdf = true }) {
 
   return `<!DOCTYPE html>
 <html lang="fr" xmlns="http://www.w3.org/1999/xhtml">
@@ -94,9 +94,15 @@ export function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount: _ca
                   <td style="padding:0 36px 20px;">
                     <table width="100%" cellpadding="0" cellspacing="0" border="0">
                       <tr>
-                        <td style="background-color:#f0fdf4;border-left:3px solid #15803d;padding:12px 16px;">
+                        ${hasPdf
+                          ? `<td style="background-color:#f0fdf4;border-left:3px solid #15803d;padding:12px 16px;">
                           <p style="margin:0;font-size:13px;font-weight:700;color:#14532d;">Votre ERP est joint en PDF à cet email.</p>
-                        </td>
+                        </td>`
+                          : `<td style="background-color:#fffbeb;border-left:3px solid #d97706;padding:12px 16px;">
+                          <p style="margin:0;font-size:13px;font-weight:700;color:#92400e;">Votre ERP est disponible via le bouton ci-dessous.</p>
+                          <p style="margin:4px 0 0;font-size:12px;color:#78350f;">La pièce jointe PDF sera disponible lors de votre prochain accès via le lien.</p>
+                        </td>`
+                        }
                       </tr>
                     </table>
                   </td>
