@@ -13,6 +13,7 @@ interface ERPPreviewProps {
   demoMode?: boolean;
   emailSent?: boolean;
   autoprint?: boolean;
+  staticMode?: boolean;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -151,7 +152,7 @@ function SummaryPage({ erp, demoMode }: { erp: ERPDocument; demoMode: boolean })
 
       {/* Vue aérienne IGN */}
       <div className="mb-4">
-        <PropertyAerialView lat={bien.coordonnees.lat} lng={bien.coordonnees.lng} />
+        <PropertyAerialView lat={bien.coordonnees.lat} lng={bien.coordonnees.lng} staticMode={staticMode} />
         <p className="text-[8px] text-gray-400 text-center mt-1">
           Vue aérienne © IGN Géoportail · data.geopf.fr — Le marqueur rouge indique le bien concerné
         </p>
@@ -742,7 +743,7 @@ function CatNatPage({ erp, totalPages }: { erp: ERPDocument; totalPages: number 
 
 // ─── Composant principal ──────────────────────────────────────────────────────
 
-export function ERPPreview({ document: erp, onNew, demoMode = false, emailSent = false, autoprint = false }: ERPPreviewProps) {
+export function ERPPreview({ document: erp, onNew, demoMode = false, emailSent = false, autoprint = false, staticMode = false }: ERPPreviewProps) {
   const [downloading, setDownloading] = useState(false);
   const [hasDownloaded, setHasDownloaded] = useState(false);
   const [showNewERPWarning, setShowNewERPWarning] = useState(false);
@@ -878,6 +879,7 @@ export function ERPPreview({ document: erp, onNew, demoMode = false, emailSent =
                 adresse={erp.bien.adresse_complete}
                 pageNum={4 + i}
                 totalPages={totalPages}
+                staticMode={staticMode}
               />
             </div>
           );

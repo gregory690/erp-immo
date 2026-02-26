@@ -56,7 +56,7 @@ export default function Print() {
       <style dangerouslySetInnerHTML={{ __html: PRINT_CSS }} />
       {error && <p style={{ padding: 32, color: '#666' }}>Document introuvable.</p>}
       {erp && (
-        <ERPPreview document={erp} demoMode={false} />
+        <ERPPreview document={erp} demoMode={false} staticMode={true} />
       )}
     </>
   );
