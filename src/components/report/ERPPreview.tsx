@@ -146,7 +146,7 @@ function SummaryPage({ erp, demoMode, staticMode = false }: { erp: ERPDocument; 
       <div className="text-center mb-3">
         <p className="text-base font-bold text-gray-900">{bien.adresse_complete}</p>
         <p className={`text-sm text-gray-600 ${demoMode ? 'blur-sm select-none' : ''}`}>
-          Section&nbsp;{bien.references_cadastrales.section || 'N/R'} &nbsp;—&nbsp; N°&nbsp;{bien.references_cadastrales.numero || 'N/R'}
+          Section&nbsp;{bien.references_cadastrales.section || 'N/R'} &nbsp;·&nbsp; N°&nbsp;{bien.references_cadastrales.numero || 'N/R'}
         </p>
       </div>
 
@@ -154,7 +154,7 @@ function SummaryPage({ erp, demoMode, staticMode = false }: { erp: ERPDocument; 
       <div className="mb-4">
         <PropertyAerialView lat={bien.coordonnees.lat} lng={bien.coordonnees.lng} staticMode={staticMode} />
         <p className="text-[8px] text-gray-400 text-center mt-1">
-          Vue aérienne © IGN Géoportail · data.geopf.fr — Le marqueur rouge indique le bien concerné
+          Vue aérienne © IGN Géoportail · data.geopf.fr · Le marqueur rouge indique le bien concerné
         </p>
       </div>
 
@@ -432,13 +432,13 @@ function ERPFormPage({ erp }: { erp: ERPDocument }) {
         <Row label="Extraits des documents de référence → Cf: cartographies (www.georisques.gouv.fr)" />
         <Row label="&gt; L'immeuble est situé en secteur d'expropriation ou de délaissement" value={false} />
         <Row label="L'immeuble est situé en zone de prescription" value={hasPPRT} />
-        <div className="text-[9px] text-gray-600 pl-3 leading-relaxed">Si logement — travaux prescrits réalisés&nbsp;
+        <div className="text-[9px] text-gray-600 pl-3 leading-relaxed">Si logement · travaux prescrits réalisés&nbsp;
           <span className="inline-flex items-center gap-2 text-[9px]">
             <span className="flex items-center gap-0.5"><Check checked={false} />&nbsp;Oui</span>
             <span className="flex items-center gap-0.5"><Check checked={false} />&nbsp;Non</span>
           </span>
         </div>
-        <div className="text-[9px] text-gray-600 pl-3 leading-relaxed">Si hors logement — information sur les risques (gravité, probabilité, cinétique) jointe à l'acte&nbsp;
+        <div className="text-[9px] text-gray-600 pl-3 leading-relaxed">Si hors logement · information sur les risques (gravité, probabilité, cinétique) jointe à l'acte&nbsp;
           <span className="inline-flex items-center gap-2 text-[9px]">
             <span className="flex items-center gap-0.5"><Check checked={false} />&nbsp;Oui</span>
             <span className="flex items-center gap-0.5"><Check checked={false} />&nbsp;Non</span>
@@ -506,7 +506,7 @@ function ERPFormPage({ erp }: { erp: ERPDocument }) {
       </div>
 
       <div className="erp-page-footer mt-3 pt-2 text-[8px] text-gray-400 text-center border-t border-gray-200">
-        <p>Modèle État des risques, pollutions et sols en application des articles L.125-5, L.125-6 et L.125-7 du Code de l'environnement — Arrêté du 27 septembre 2022</p>
+        <p>Modèle État des risques, pollutions et sols en application des articles L.125-5, L.125-6 et L.125-7 du Code de l'environnement · Arrêté du 27 septembre 2022</p>
         <p className="mt-1 font-semibold text-gray-500">2 / {totalPages}</p>
       </div>
     </div>
@@ -787,7 +787,7 @@ export function ERPPreview({ document: erp, onNew, demoMode = false, emailSent =
         <div className="flex items-start gap-3 bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 no-print">
           <span className="text-lg shrink-0">📱</span>
           <p className="text-sm text-blue-900">
-            Une fenêtre va s'ouvrir — appuyez sur <strong>« Enregistrer en PDF »</strong> (ou le bouton de partage) pour télécharger votre document.
+            Une fenêtre va s'ouvrir · appuyez sur <strong>« Enregistrer en PDF »</strong> (ou le bouton de partage) pour télécharger votre document.
           </p>
         </div>
       )}

@@ -73,14 +73,14 @@ function buildPrescriptions(risques: ERPRisques): Prescription[] {
   if (risques.zonage_sismique.niveau >= 3) {
     prescriptions.push({
       type: 'Risque sismique',
-      description: `Zone de sismicité ${risques.zonage_sismique.niveau} — Les travaux de construction et de rénovation doivent respecter les règles parasismiques (Eurocode 8, norme PS92).`,
+      description: `Zone de sismicité ${risques.zonage_sismique.niveau} · Les travaux de construction et de rénovation doivent respecter les règles parasismiques (Eurocode 8, norme PS92).`,
     });
   }
 
   if (risques.argiles.niveau === 'fort') {
     prescriptions.push({
       type: 'Retrait-gonflement des argiles',
-      description: `Zone d'aléa fort (${risques.argiles.code}) — Des études géotechniques sont recommandées avant tout projet de construction ou d'extension.`,
+      description: `Zone d'aléa fort (${risques.argiles.code}) · Des études géotechniques sont recommandées avant tout projet de construction ou d'extension.`,
     });
   }
 
@@ -150,7 +150,7 @@ export function buildERPDocument(input: ERPCalculationInput): ERPDocument {
     },
     radon: {
       zone: radonZone,
-      libelle: radon?.libelle ?? `Potentiel radon — catégorie ${radonZone}`,
+      libelle: radon?.libelle ?? `Potentiel radon · catégorie ${radonZone}`,
     },
     sis: {
       expose: sisData.exists,

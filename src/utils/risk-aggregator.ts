@@ -8,11 +8,11 @@ const RADON_LIBELLES: Record<number, string> = {
 };
 
 const SISMIQUE_LIBELLES: Record<number, string> = {
-  1: 'Zone 1 — Très faible',
-  2: 'Zone 2 — Faible',
-  3: 'Zone 3 — Modéré',
-  4: 'Zone 4 — Moyen',
-  5: 'Zone 5 — Fort',
+  1: 'Zone 1 · Très faible',
+  2: 'Zone 2 · Faible',
+  3: 'Zone 3 · Modéré',
+  4: 'Zone 4 · Moyen',
+  5: 'Zone 5 · Fort',
 };
 
 export function buildRiskSummary(
@@ -133,8 +133,8 @@ export function buildRiskSummary(
     detail: !rtc.applicable
       ? 'Commune non concernée (non littorale)'
       : rtc.expose
-        ? `Zone exposée — horizon ${rtc.horizon ?? '2100'}${rtc.libelle ? ` · ${rtc.libelle}` : ''}`
-        : 'Commune littorale — bien non exposé',
+        ? `Zone exposée · horizon ${rtc.horizon ?? '2100'}${rtc.libelle ? ` · ${rtc.libelle}` : ''}`
+        : 'Commune littorale · bien non exposé',
   });
 
   // CatNat

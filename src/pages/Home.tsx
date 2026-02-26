@@ -37,7 +37,7 @@ const GOV_SOURCES = [
     desc: 'Géocodage adresses officielles',
   },
   {
-    name: 'IGN — Géoportail',
+    name: 'IGN · Géoportail',
     domain: 'apicarto.ign.fr',
     desc: 'Données cadastrales',
   },
@@ -47,12 +47,12 @@ const FEATURES = [
   {
     icon: <BadgeCheck className="h-5 w-5 text-edl-700" />,
     title: 'Accepté par votre notaire',
-    description: "Conforme à l'arrêté du 27/09/2022 — valide pour tout compromis de vente ou contrat de bail.",
+    description: "Conforme à l'arrêté du 27/09/2022 · valide pour tout compromis de vente ou contrat de bail.",
   },
   {
     icon: <Shield className="h-5 w-5 text-edl-700" />,
     title: 'Tous les risques couverts',
-    description: 'PPR, séisme, radon, argiles, CatNat, SIS, BASIAS, BASOL — aucun oubli possible.',
+    description: 'PPR, séisme, radon, argiles, CatNat, SIS, BASIAS, BASOL · aucun oubli possible.',
   },
   {
     icon: <Clock className="h-5 w-5 text-edl-700" />,
@@ -80,7 +80,7 @@ const STEPS = [
   {
     num: 3,
     title: 'Les bases officielles sont interrogées',
-    desc: 'Géorisques, cadastre, CatNat — tout se fait automatiquement, sans action de votre part.',
+    desc: 'Géorisques, cadastre, CatNat · tout se fait automatiquement, sans action de votre part.',
   },
   {
     num: 4,
@@ -96,7 +96,7 @@ const FAQ = [
   },
   {
     q: "Mon notaire l'acceptera-t-il ?",
-    a: "Oui. Il mentionne la source officielle, la date de réalisation et les références cadastrales — tout ce que votre notaire ou agence exige.",
+    a: "Oui. Il mentionne la source officielle, la date de réalisation et les références cadastrales · tout ce que votre notaire ou agence exige.",
   },
   {
     q: "Que risque-t-on sans ERP ?",
@@ -258,7 +258,7 @@ export default function Home() {
               </div>
             </div>
             <div className="hidden sm:block h-6 w-px bg-gray-300" />
-            <span className="hidden sm:block text-xs text-gray-500 font-medium">ERP en ligne — Vente &amp; Location</span>
+            <span className="hidden sm:block text-xs text-gray-500 font-medium">ERP en ligne · Vente &amp; Location</span>
           </div>
           <div className="flex items-center gap-2">
             <Button
@@ -295,7 +295,7 @@ export default function Home() {
             État des Risques et Pollutions en ligne
           </h1>
           <p className="text-base sm:text-lg text-navy-200 mb-6 sm:mb-8 max-w-2xl mx-auto font-medium">
-            ERP obligatoire pour votre vente ou location — document conforme, accepté par
+            ERP obligatoire pour votre vente ou location · document conforme, accepté par
             les notaires et agences, disponible 7j/7 et 24h/24.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -583,7 +583,7 @@ export default function Home() {
                 {[
                   'ERP PDF conforme arrêté 27/09/2022',
                   'Tous les risques via Géorisques (BRGM)',
-                  'Valide 6 mois — vente ET location',
+                  'Valide 6 mois · vente ET location',
                   'Références cadastrales incluses',
                   'Historique CatNat depuis 1982',
                   'Lien de retéléchargement envoyé par email',
@@ -598,7 +598,7 @@ export default function Home() {
                 className="w-full bg-edl-700 hover:bg-edl-800 text-white font-bold"
                 onClick={() => navigate('/generer')}
               >
-                Obtenir mon ERP — 19,99 €
+                Obtenir mon ERP · 19,99 €
                 <ArrowRight className="h-5 w-5" />
               </Button>
               <p className="text-xs text-gray-400">Paiement sécurisé par Stripe · SSL 256 bits</p>
@@ -616,14 +616,14 @@ export default function Home() {
           Votre transaction ne peut pas attendre.
         </h2>
         <p className="text-red-100 mb-6 text-sm sm:text-base font-medium max-w-xl mx-auto">
-          Générez votre ERP maintenant — 2 minutes suffisent pour ne pas retarder votre vente ou votre mise en location.
+          Générez votre ERP maintenant · 2 minutes suffisent pour ne pas retarder votre vente ou votre mise en location.
         </p>
         <Button
           size="xl"
           className="w-full sm:w-auto bg-white text-edl-700 hover:bg-gray-100 font-bold shadow-lg"
           onClick={() => navigate('/generer')}
         >
-          Obtenir mon ERP — 19,99 €
+          Obtenir mon ERP · 19,99 €
           <ArrowRight className="h-5 w-5" />
         </Button>
         <p className="text-xs text-red-200 mt-4">Données officielles · PDF conforme · Téléchargement immédiat</p>

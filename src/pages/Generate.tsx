@@ -32,7 +32,7 @@ const STEPS = [
 ];
 
 const RISK_LABELS: Record<string, string> = {
-  ppr: 'PPR — Plans de prévention',
+  ppr: 'PPR · Plans de prévention',
   catnat: 'Catastrophes naturelles',
   sis: 'Secteurs d\'information des sols',
   sismique: 'Zonage sismique',
@@ -440,7 +440,7 @@ export default function Generate() {
             <CardHeader className="p-4 sm:p-6">
               <CardTitle className="text-base sm:text-lg">Téléchargez votre ERP</CardTitle>
               <CardDescription>
-                Paiement sécurisé par Stripe — vous serez redirigé vers la page de paiement.
+                Paiement sécurisé par Stripe · vous serez redirigé vers la page de paiement.
               </CardDescription>
             </CardHeader>
             <CardContent className="px-4 pb-4 sm:px-6 sm:pb-6 space-y-4">

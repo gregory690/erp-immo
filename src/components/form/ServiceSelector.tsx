@@ -8,7 +8,7 @@ const FEATURES = [
   'Calcul automatique des risques (API Géorisques officielle)',
   'Document PDF téléchargeable immédiatement',
   'Conforme à l\'arrêté du 27/09/2022',
-  'Validité 6 mois — prêt à annexer au compromis',
+  'Validité 6 mois · prêt à annexer au compromis',
   'Références cadastrales incluses',
   'Historique des arrêtés CatNat depuis 1982',
 ];
@@ -49,7 +49,7 @@ export function ServiceSelector({ selected, onSelect, onConfirm }: ServiceSelect
               </div>
               <div className="min-w-0">
                 <h3 className="font-bold text-navy-900 text-sm sm:text-base leading-snug">
-                  ERP en ligne — Téléchargement immédiat
+                  ERP en ligne · Téléchargement immédiat
                 </h3>
                 <p className="text-xs sm:text-sm text-gray-600 mt-0.5">
                   Générez et téléchargez votre État des Risques et Pollutions en moins de 2 minutes.
@@ -119,7 +119,7 @@ export function ServiceSelector({ selected, onSelect, onConfirm }: ServiceSelect
         size="lg"
         className="hidden sm:flex w-full bg-edl-700 hover:bg-edl-800 text-base font-semibold h-12"
       >
-        Télécharger mon ERP — 19,99 €
+        Télécharger mon ERP · 19,99 €
       </Button>
     </div>
   );

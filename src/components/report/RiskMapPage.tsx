@@ -144,7 +144,7 @@ export function RiskMapPage({
       <div className="flex items-start justify-between pb-3 mb-4 border-b-2 border-gray-900">
         <div>
           <p className="text-[9px] uppercase tracking-widest text-gray-400 mb-0.5">
-            EDL &amp; DIAGNOSTIC — Annexe cartographique
+            EDL &amp; DIAGNOSTIC · Annexe cartographique
           </p>
           <h2 className="text-base font-black text-gray-900 uppercase leading-tight">{title}</h2>
           <p className="text-[11px] text-gray-600 mt-0.5">{description}</p>
@@ -198,7 +198,7 @@ export const RISK_MAP_CONFIGS: {
 }[] = [
   {
     title: "Inondation & Submersion marine",
-    description: "Plans de prévention des risques naturels — inondation, crues et submersion marine",
+    description: "Plans de prévention des risques naturels · inondation, crues et submersion marine",
     layers: [
       {
         id: 'inond',
@@ -219,7 +219,7 @@ export const RISK_MAP_CONFIGS: {
   },
   {
     title: "Séisme & Mouvements de terrain",
-    description: "Plans de prévention des risques naturels — séisme, glissements et effondrements",
+    description: "Plans de prévention des risques naturels · séisme, glissements et effondrements",
     layers: [
       {
         id: 'seisme',
@@ -261,7 +261,7 @@ export const RISK_MAP_CONFIGS: {
   },
   {
     title: "Cavités souterraines & Feux de forêt",
-    description: "Plans de prévention des risques naturels — cavités, effondrements et incendies",
+    description: "Plans de prévention des risques naturels · cavités, effondrements et incendies",
     layers: [
       {
         id: 'cav',

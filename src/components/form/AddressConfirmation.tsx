@@ -64,7 +64,7 @@ export function AddressConfirmation({
       </div>
 
       <p className="text-xs text-muted-foreground text-center">
-        Déplacez le marqueur pour affiner la localisation — le calcul des risques sera mis à jour automatiquement
+        Déplacez le marqueur pour affiner la localisation · le calcul des risques sera mis à jour automatiquement
       </p>
 
       {/* Address details */}
@@ -130,7 +130,7 @@ export function AddressConfirmation({
                 <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-orange-500" />
                 <div className="flex-1 min-w-0">
                   <p className="text-xs text-orange-700 leading-relaxed">
-                    Service cadastral IGN indisponible — les références ne figureront pas dans le PDF.
+                    Service cadastral IGN indisponible · les références ne figureront pas dans le PDF.
                   </p>
                   {onRetryCadastre && (
                     <Button

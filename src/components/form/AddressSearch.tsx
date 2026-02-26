@@ -73,7 +73,7 @@ export function AddressSearch({
                     </span>
                     <span className="text-xs text-gray-500">
                       {feature.properties.postcode} {feature.properties.city}
-                      {feature.properties.context ? ` — ${feature.properties.context}` : ''}
+                      {feature.properties.context ? ` · ${feature.properties.context}` : ''}
                     </span>
                   </span>
                 </button>

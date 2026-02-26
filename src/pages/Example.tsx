@@ -37,7 +37,7 @@ const DEMO_ERP: ERPDocument = {
         nom: 'PPR Inondation Vallée du Var',
         type_risque: 'Inondation',
         etat: 'APPROUVE',
-        zone: 'Ri2 — Zone de risque inondation modérée',
+        zone: 'Ri2 · Zone de risque inondation modérée',
         prescriptions: true,
       },
     ],
@@ -75,7 +75,7 @@ const DEMO_ERP: ERPDocument = {
       },
     ],
     basol: [],
-    recul_trait_cote: { applicable: true, expose: false, libelle: "Commune littorale — bien non situé en zone de recul" },
+    recul_trait_cote: { applicable: true, expose: false, libelle: "Commune littorale · bien non situé en zone de recul" },
     ensa: { en_zone_peb: false, prescriptions_insonorisation: false },
   },
   catnat: [
@@ -162,7 +162,7 @@ export default function Example() {
         {/* Bandeau exemple */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-navy-900 text-white rounded-xl px-5 py-4">
           <div className="flex-1">
-            <p className="font-bold text-sm">Document d'exemple — à titre illustratif</p>
+            <p className="font-bold text-sm">Document d'exemple · à titre illustratif</p>
             <p className="text-xs text-navy-200 mt-0.5">
               Certains champs sont masqués. Votre ERP contiendra toutes les informations complètes
               relatives à votre bien. Données représentatives d'un bien à Nice (06000).
@@ -172,7 +172,7 @@ export default function Example() {
             className="bg-edl-700 hover:bg-edl-800 shrink-0 font-semibold"
             onClick={() => navigate('/generer')}
           >
-            Établir mon ERP — 19,99 €
+            Établir mon ERP · 19,99 €
             <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
@@ -184,14 +184,14 @@ export default function Example() {
         <div className="bg-edl-700 text-white rounded-xl px-5 py-6 text-center">
           <p className="font-bold text-base mb-1">Votre bien est-il exposé à ces risques ?</p>
           <p className="text-red-100 text-sm mb-4">
-            Générez votre ERP en 2 minutes — données officielles, accepté par les notaires et agences.
+            Générez votre ERP en 2 minutes · données officielles, accepté par les notaires et agences.
           </p>
           <Button
             size="lg"
             className="bg-white text-edl-700 hover:bg-gray-100 font-bold"
             onClick={() => navigate('/generer')}
           >
-            Établir mon état des risques — 19,99 €
+            Établir mon état des risques · 19,99 €
             <ArrowRight className="h-5 w-5" />
           </Button>
         </div>

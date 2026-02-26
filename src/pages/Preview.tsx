@@ -130,7 +130,7 @@ export default function Preview() {
               </div>
               <div className="flex-1">
                 <p className="font-bold text-green-900 text-base">
-                  Paiement confirmé — votre ERP est prêt !
+                  Paiement confirmé · votre ERP est prêt !
                 </p>
                 {erpRef && (
                   <span className="text-xs text-green-600 font-mono">
@@ -147,7 +147,7 @@ export default function Preview() {
                 <Mail className="h-4 w-4 text-green-700" />
               </div>
               <div className="text-sm text-green-900 space-y-0.5">
-                <p><span className="font-semibold">Email envoyé automatiquement</span> à l'adresse renseignée lors du paiement — conservez-le pour retrouver votre ERP à tout moment.</p>
+                <p><span className="font-semibold">Email envoyé automatiquement</span> à l'adresse renseignée lors du paiement · conservez-le pour retrouver votre ERP à tout moment.</p>
                 <p className="text-xs text-green-700">Si vous ne le recevez pas dans les prochaines minutes, pensez à vérifier vos <span className="font-semibold">spams ou courriers indésirables</span>.</p>
               </div>
             </div>

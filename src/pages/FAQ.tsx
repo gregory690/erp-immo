@@ -14,7 +14,7 @@ const FAQ_CATEGORIES = [
       },
       {
         q: "Pour quels types de transactions l'ERP est-il obligatoire ?",
-        r: "L'ERP est obligatoire pour toute vente (compromis, promesse, acte authentique), location (habitation meublée ou non meublée, bail étudiant, location saisonnière, bail commercial), VEFA (remis au contrat de réservation) et échanges immobiliers. Il n'existe pas de cas d'exonération pour les propriétaires — seules les ventes judiciaires font exception.",
+        r: "L'ERP est obligatoire pour toute vente (compromis, promesse, acte authentique), location (habitation meublée ou non meublée, bail étudiant, location saisonnière, bail commercial), VEFA (remis au contrat de réservation) et échanges immobiliers. Il n'existe pas de cas d'exonération pour les propriétaires · seules les ventes judiciaires font exception.",
       },
       {
         q: "Quelle est la différence entre l'ERP et les autres diagnostics immobiliers ?",
@@ -60,7 +60,7 @@ const FAQ_CATEGORIES = [
       },
       {
         q: "Quelles sont les sanctions si l'ERP est absent ou erroné ?",
-        r: "Les sanctions sont exclusivement civiles — il n'existe pas de sanction pénale spécifique. Pour une vente : l'acquéreur peut demander la résolution du contrat ou une diminution du prix (art. L125-5 Code de l'environnement). Pour une location : le locataire peut demander la nullité du bail ou son maintien sans obligation de payer le loyer jusqu'à régularisation.",
+        r: "Les sanctions sont exclusivement civiles · il n'existe pas de sanction pénale spécifique. Pour une vente : l'acquéreur peut demander la résolution du contrat ou une diminution du prix (art. L125-5 Code de l'environnement). Pour une location : le locataire peut demander la nullité du bail ou son maintien sans obligation de payer le loyer jusqu'à régularisation.",
       },
       {
         q: "Faut-il faire signer l'ERP ?",
@@ -84,7 +84,7 @@ const FAQ_CATEGORIES = [
         r: "Un email vous est envoyé automatiquement dès la confirmation du paiement. Il contient un lien pour télécharger votre ERP en PDF. Ce lien reste valide et vous pouvez retélécharger le document à tout moment.",
       },
       {
-        q: "Je n'ai pas reçu l'email — que faire ?",
+        q: "Je n'ai pas reçu l'email · que faire ?",
         r: "Vérifiez votre dossier spam ou courrier indésirable. Si l'email n'y est pas, contactez-nous à contact@edletdiagnostic.fr avec votre référence de paiement et nous vous renverrons le document.",
       },
       {
@@ -217,7 +217,7 @@ export default function FAQ() {
             className="bg-white text-edl-700 hover:bg-gray-100 font-bold"
             onClick={() => navigate('/generer')}
           >
-            Établir mon ERP — 19,99 €
+            Établir mon ERP · 19,99 €
             <ArrowRight className="h-5 w-5 ml-1" />
           </Button>
         </div>

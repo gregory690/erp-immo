@@ -23,7 +23,7 @@ const ARTICLES = [
       },
       {
         titre: "Et si on ne le fournit pas ?",
-        texte: "Les sanctions sont exclusivement civiles — il n'existe aucune sanction pénale spécifique à l'absence d'ERP. Pour une vente, l'acquéreur peut demander la résolution du contrat ou une diminution du prix (article L125-5 du Code de l'environnement). Pour une location, le locataire peut demander la nullité du bail ou son maintien sans obligation de payer de loyer jusqu'à régularisation.",
+        texte: "Les sanctions sont exclusivement civiles · il n'existe aucune sanction pénale spécifique à l'absence d'ERP. Pour une vente, l'acquéreur peut demander la résolution du contrat ou une diminution du prix (article L125-5 du Code de l'environnement). Pour une location, le locataire peut demander la nullité du bail ou son maintien sans obligation de payer de loyer jusqu'à régularisation.",
       },
     ],
   },
@@ -74,7 +74,7 @@ const ARTICLES = [
   {
     slug: 'erp-expire',
     tag: "À savoir",
-    titre: "Mon ERP est expiré — que faire ?",
+    titre: "Mon ERP est expiré · que faire ?",
     intro: "Si votre ERP a plus de 6 mois, il n'est plus valide légalement. La solution est simple : en générer un nouveau. Les données officielles sont actualisées automatiquement lors de chaque nouvelle génération.",
     contenu: [
       {
@@ -83,11 +83,11 @@ const ARTICLES = [
       },
       {
         titre: "Est-ce que les risques changent souvent ?",
-        texte: "Pas systématiquement, mais ça arrive. Un nouveau PPR peut être prescrit ou approuvé, un arrêté de catastrophe naturelle peut être publié, ou les données de la commune peuvent évoluer. L'ERP reflète la situation à sa date de réalisation — c'est pourquoi la loi impose ce délai de 6 mois.",
+        texte: "Pas systématiquement, mais ça arrive. Un nouveau PPR peut être prescrit ou approuvé, un arrêté de catastrophe naturelle peut être publié, ou les données de la commune peuvent évoluer. L'ERP reflète la situation à sa date de réalisation · c'est pourquoi la loi impose ce délai de 6 mois.",
       },
       {
         titre: "Comment renouveler rapidement ?",
-        texte: "Via notre service, un nouvel ERP est généré en moins de 2 minutes pour le même bien. Il suffit de saisir à nouveau l'adresse — toutes les données sont récupérées en temps réel depuis les bases officielles (Géorisques, IGN, Base Adresse Nationale).",
+        texte: "Via notre service, un nouvel ERP est généré en moins de 2 minutes pour le même bien. Il suffit de saisir à nouveau l'adresse · toutes les données sont récupérées en temps réel depuis les bases officielles (Géorisques, IGN, Base Adresse Nationale).",
       },
     ],
   },
@@ -103,7 +103,7 @@ const ARTICLES = [
       },
       {
         titre: "Zonage sismique et radon",
-        texte: "Le zonage sismique va de 1 (très faible, exempté des règles parasismiques) à 5 (forte). En zone 2 et au-delà, des règles de construction parasismiques s'appliquent selon la catégorie du bâtiment. Le potentiel radon va de 1 à 3 — en zone 3, des mesures de prévention sont recommandées dans les logements.",
+        texte: "Le zonage sismique va de 1 (très faible, exempté des règles parasismiques) à 5 (forte). En zone 2 et au-delà, des règles de construction parasismiques s'appliquent selon la catégorie du bâtiment. Le potentiel radon va de 1 à 3 · en zone 3, des mesures de prévention sont recommandées dans les logements.",
       },
       {
         titre: "CatNat : les arrêtés de catastrophe naturelle",
@@ -164,7 +164,7 @@ export default function Ressources() {
           </div>
           <h1 className="text-3xl font-black mb-3">Guide de l'ERP</h1>
           <p className="text-navy-200 text-base max-w-xl mx-auto">
-            Tout ce qu'il faut savoir sur l'état des risques et pollutions — obligations légales, durée de validité, lecture du document.
+            Tout ce qu'il faut savoir sur l'état des risques et pollutions · obligations légales, durée de validité, lecture du document.
           </p>
           <p className="text-navy-300 text-xs mt-3">
             Sources : article L125-5 Code de l'environnement · arrêté du 27/09/2022 · décret 2024-405 · georisques.gouv.fr
@@ -209,14 +209,14 @@ export default function Ressources() {
         <div className="bg-navy-900 text-white rounded-2xl px-6 py-8 text-center">
           <h3 className="text-xl font-black mb-2">Prêt à générer votre ERP ?</h3>
           <p className="text-navy-200 text-sm mb-5">
-            Conforme à l'arrêté du 27/09/2022 — données officielles — accepté par les notaires.
+            Conforme à l'arrêté du 27/09/2022 · données officielles · accepté par les notaires.
           </p>
           <Button
             size="lg"
             className="bg-edl-700 hover:bg-edl-800 font-bold"
             onClick={() => navigate('/generer')}
           >
-            Établir mon ERP — 19,99 €
+            Établir mon ERP · 19,99 €
             <ArrowRight className="h-5 w-5 ml-1" />
           </Button>
         </div>
