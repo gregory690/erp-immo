@@ -616,16 +616,16 @@ export default function Home() {
 
           <Card className="border-2 border-edl-700 shadow-xl">
             <CardContent className="pt-8 pb-8 space-y-5">
-              <Badge className="bg-green-100 text-green-800 border border-green-200 text-xs px-3 font-semibold">
-                ✓ PDF envoyé par email immédiatement après paiement
-              </Badge>
               <div>
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <span className="text-gray-400 line-through text-xl font-semibold">34,99 €</span>
-                  <span className="bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded-full border border-green-200">−43%</span>
+                  <span className="bg-edl-700 text-white text-xs font-black px-2.5 py-1 rounded-full shadow-md animate-bounce">🔥 −15 € de réduction</span>
                 </div>
-                <p className="text-6xl font-black text-edl-700">19,99 €<span className="text-lg font-normal text-gray-500"> TTC</span></p>
-                <p className="text-xs text-gray-400 mt-1">16,66 € HT · Nos concurrents facturent généralement entre 30 et 35 €</p>
+                <div className="flex items-center justify-center gap-2">
+                  <span className="text-sm font-bold text-edl-700 uppercase tracking-widest">Seulement</span>
+                  <p className="text-6xl font-black text-gray-900">19,99 €<span className="text-lg font-normal text-gray-500"> TTC</span></p>
+                </div>
+                <p className="text-xs text-gray-400 mt-1">Nos concurrents facturent généralement entre 30 et 35 €</p>
               </div>
               <ul className="text-sm text-left space-y-2">
                 {[
@@ -636,7 +636,7 @@ export default function Home() {
                   '4 cartes de risques géographiques incluses',
                   'Vue aérienne satellite IGN du bien',
                   'Références cadastrales + historique CatNat',
-                  'PDF reçu par email · retéléchargement illimité',
+                  'PDF envoyé par email immédiatement après paiement',
                 ].map(f => (
                   <li key={f} className="flex items-center gap-2 text-gray-700">
                     <span className="text-green-600 font-bold">✓</span> {f}
