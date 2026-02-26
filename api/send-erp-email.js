@@ -5,7 +5,7 @@
 //
 // Variables d'environnement requises :
 //   RESEND_API_KEY                  → dashboard.resend.com → API Keys
-//   RESEND_FROM_EMAIL               → ex: contact@edl-diagnostic-erp.fr (domaine vérifié dans Resend)
+//   RESEND_FROM_EMAIL               → ex: erp@edletdiagnostic.fr (domaine vérifié dans Resend)
 //   KV_REST_API_URL + KV_REST_API_TOKEN → configurés automatiquement par Vercel KV
 //   VERCEL_PROJECT_PRODUCTION_URL   → injecté automatiquement par Vercel en production
 import { kv } from '@vercel/kv';
@@ -82,7 +82,7 @@ export default async function handler(req, res) {
 
   const resend = new Resend(resendKey);
 
-  const fromEmail = process.env.RESEND_FROM_EMAIL || 'contact@edl-diagnostic-erp.fr';
+  const fromEmail = process.env.RESEND_FROM_EMAIL || 'erp@edletdiagnostic.fr';
   const catnatCount = erpDocument.catnat?.length ?? 0;
   const bien = erpDocument.bien;
   const metadata = erpDocument.metadata;
