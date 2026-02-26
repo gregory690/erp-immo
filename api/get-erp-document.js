@@ -59,16 +59,19 @@ export default async function handler(req, res) {
       return res.status(403).json({ error: 'Paiement non confirmé' });
     }
 
-    // Paiement confirmé → mettre à jour KV pour les prochaines requêtes
+    // Paiement confirmé → mettre à jour KV avec paid:true et customer_email
+    // customer_email est nécessaire pour que la page /apercu déclenche l'envoi d'email
+    const customerEmail = session.customer_details?.email || null;
+    const updatedDoc = { ...doc, paid: true, customer_email: customerEmail };
     try {
-      await kv.set(ref, JSON.stringify({ ...doc, paid: true }), {
+      await kv.set(ref, JSON.stringify(updatedDoc), {
         ex: 60 * 60 * 24 * 180,
       });
     } catch (err) {
       // Non bloquant
     }
 
-    return res.status(200).json(sanitizeDoc(doc));
+    return res.status(200).json(sanitizeDoc(updatedDoc));
   } catch (err) {
     console.error('Stripe verification error:', err.message);
     return res.status(500).json({ error: 'Erreur lors de la vérification du paiement' });

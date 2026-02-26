@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ChevronLeft, AlertCircle, CheckCircle2, PartyPopper, Mail, Loader2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
@@ -13,6 +13,11 @@ export default function Preview() {
   const [searchParams] = useSearchParams();
   const [erp, setErp] = useState<ERPDocument | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Auto-email déclenché depuis la page succès (via send-erp-email.js synchrone)
+  const [autoEmailStatus, setAutoEmailStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [autoEmailAddress, setAutoEmailAddress] = useState<string | null>(null);
+  const autoEmailTriggered = useRef(false);
 
   // État formulaire email (envoi à une autre adresse)
   const [showAltEmailForm, setShowAltEmailForm] = useState(false);
@@ -60,6 +65,45 @@ export default function Preview() {
 
     loadERP();
   }, [erpRef]);
+
+  // ─── Auto-envoi email après paiement ──────────────────────────────────────
+  // Attend que l'ERP soit chargé, récupère customer_email depuis KV (stocké par
+  // stripe-webhook.js ou get-erp-document.js Case 3), puis déclenche l'envoi.
+  useEffect(() => {
+    if (!paymentSuccess || !erpRef || !erp || autoEmailTriggered.current) return;
+    autoEmailTriggered.current = true;
+    setAutoEmailStatus('sending');
+
+    const erpSnapshot = erp; // capture non-null value before async closure
+    let cancelled = false;
+
+    async function doAutoEmail() {
+      try {
+        // Récupère le doc depuis KV pour obtenir customer_email
+        const response = await fetch(`/api/get-erp-document?ref=${encodeURIComponent(erpRef)}`);
+        if (!response.ok) throw new Error('fetch failed');
+        const kvDoc = await response.json() as Record<string, unknown>;
+
+        if (cancelled) return;
+
+        const customerEmail = kvDoc.customer_email as string | undefined;
+        if (!customerEmail) throw new Error('customer_email introuvable dans KV');
+
+        setAutoEmailAddress(customerEmail);
+        await sendERPByEmail(customerEmail, erpSnapshot);
+
+        if (!cancelled) setAutoEmailStatus('sent');
+      } catch {
+        if (!cancelled) {
+          setAutoEmailStatus('error');
+          setShowAltEmailForm(true); // Ouvre le formulaire manuel en fallback
+        }
+      }
+    }
+
+    doAutoEmail();
+    return () => { cancelled = true; };
+  }, [paymentSuccess, erpRef, erp]);
 
   async function handleSendEmail(e: React.FormEvent) {
     e.preventDefault();
@@ -141,16 +185,39 @@ export default function Preview() {
               <CheckCircle2 className="h-5 w-5 text-green-600 shrink-0 mt-0.5" />
             </div>
 
-            {/* Notification envoi automatique */}
-            <div className="flex items-center gap-3 bg-white border border-green-200 rounded-lg px-4 py-3">
-              <div className="bg-green-100 rounded-full p-1.5 shrink-0">
-                <Mail className="h-4 w-4 text-green-700" />
+            {/* Notification envoi automatique — état dynamique */}
+            {autoEmailStatus === 'sending' && (
+              <div className="flex items-center gap-3 bg-white border border-green-200 rounded-lg px-4 py-3">
+                <Loader2 className="h-4 w-4 animate-spin text-green-600 shrink-0" />
+                <p className="text-sm text-green-900">
+                  <span className="font-semibold">Génération du PDF et envoi de l'email en cours…</span> cela prend généralement 10 à 20 secondes.
+                </p>
               </div>
-              <div className="text-sm text-green-900 space-y-0.5">
-                <p><span className="font-semibold">Email envoyé automatiquement</span> à l'adresse renseignée lors du paiement · conservez-le pour retrouver votre ERP à tout moment.</p>
-                <p className="text-xs text-green-700">Si vous ne le recevez pas dans les prochaines minutes, pensez à vérifier vos <span className="font-semibold">spams ou courriers indésirables</span>.</p>
+            )}
+            {autoEmailStatus === 'sent' && (
+              <div className="flex items-center gap-3 bg-white border border-green-200 rounded-lg px-4 py-3">
+                <div className="bg-green-100 rounded-full p-1.5 shrink-0">
+                  <Mail className="h-4 w-4 text-green-700" />
+                </div>
+                <div className="text-sm text-green-900 space-y-0.5">
+                  <p>
+                    <span className="font-semibold">Email envoyé</span>
+                    {autoEmailAddress ? ` à ${autoEmailAddress}` : ' automatiquement'} · conservez-le pour retrouver votre ERP à tout moment.
+                  </p>
+                  <p className="text-xs text-green-700">Si vous ne le recevez pas dans les prochaines minutes, vérifiez vos <span className="font-semibold">spams ou courriers indésirables</span>.</p>
+                </div>
               </div>
-            </div>
+            )}
+            {autoEmailStatus === 'error' && (
+              <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
+                <div className="bg-amber-100 rounded-full p-1.5 shrink-0">
+                  <Mail className="h-4 w-4 text-amber-700" />
+                </div>
+                <p className="text-sm text-amber-900">
+                  L'envoi automatique a échoué · utilisez le formulaire ci-dessous pour recevoir votre ERP par email.
+                </p>
+              </div>
+            )}
 
             {/* Option secondaire : envoyer à une autre adresse */}
             <div className="border-t border-green-200 pt-3">
