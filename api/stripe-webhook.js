@@ -100,42 +100,51 @@ export default async function handler(req, res) {
     return res.status(200).json({ received: true });
   }
 
+  // ─── Répondre à Stripe IMMÉDIATEMENT ─────────────────────────────────────────
+  // La génération PDF peut prendre 20-30s. Stripe a un timeout de 30s.
+  // On répond 200 maintenant et on continue le traitement en arrière-plan.
+  // Node.js/Vercel continue d'exécuter le code après res.json() jusqu'au retour
+  // naturel de la fonction ou maxDuration (60s dans vercel.json).
+  res.status(200).json({ received: true });
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Tout ce qui suit s'exécute APRÈS la réponse 200 envoyée à Stripe
+  // ─────────────────────────────────────────────────────────────────────────────
+
   // ─── Récupérer le document ERP depuis KV ────────────────────────────────────
   let erpDocument;
   try {
     const raw = await kv.get(erpRef);
     if (!raw) {
       console.error('Webhook: document ERP introuvable dans KV, ref:', erpRef);
-      return res.status(200).json({ received: true, warning: 'document_not_found' });
+      return;
     }
     erpDocument = typeof raw === 'string' ? JSON.parse(raw) : raw;
   } catch (err) {
     console.error('Webhook: KV get error:', err.message);
-    return res.status(200).json({ received: true, warning: 'kv_error' });
+    return;
+  }
+
+  // Éviter les doublons si le webhook est rejoué par Stripe
+  if (erpDocument.email_sent) {
+    console.log(`Webhook: email déjà envoyé pour ref ${erpRef} — skip`);
+    return;
   }
 
   // ─── Marquer le document comme payé dans KV ──────────────────────────────────
-  // Cela permet à get-erp-document de le délivrer sans vérification Stripe supplémentaire
   try {
     await kv.set(erpRef, JSON.stringify({ ...erpDocument, paid: true }), {
       ex: 60 * 60 * 24 * 180, // 180 jours
     });
   } catch (err) {
     console.error('Webhook: impossible de marquer le doc comme payé:', err.message);
-    // Non bloquant — on continue
   }
 
   // ─── Envoyer l'email via Resend ─────────────────────────────────────────────
   const resendKey = process.env.RESEND_API_KEY;
   if (!resendKey) {
     console.warn('Webhook: RESEND_API_KEY non configurée — email non envoyé');
-    return res.status(200).json({ received: true, warning: 'no_resend_key' });
-  }
-
-  // Vérifier si l'email n'a pas déjà été envoyé (évite les doublons)
-  if (erpDocument.email_sent) {
-    console.log(`Webhook: email déjà envoyé pour ref ${erpRef} — skip`);
-    return res.status(200).json({ received: true });
+    return;
   }
 
   const resend = new Resend(resendKey);
@@ -156,7 +165,8 @@ export default async function handler(req, res) {
     day: '2-digit', month: 'long', year: 'numeric',
   });
 
-  // ─── Génération PDF via PDFShift (non bloquant en cas d'erreur/timeout) ──────
+  // ─── Génération PDF via PDFShift ─────────────────────────────────────────────
+  // S'exécute après la réponse 200 — pas de risque de timeout Stripe
   let pdfAttachment = null;
   try {
     pdfAttachment = await Promise.race([
@@ -187,8 +197,5 @@ export default async function handler(req, res) {
     }
   } catch (err) {
     console.error('Webhook: Resend error:', err.message);
-    // On retourne 200 pour éviter les retentatives Stripe en boucle
   }
-
-  return res.status(200).json({ received: true });
 }
