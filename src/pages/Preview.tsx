@@ -139,9 +139,10 @@ export default function Preview() {
               <div className="bg-green-100 rounded-full p-1.5 shrink-0">
                 <Mail className="h-4 w-4 text-green-700" />
               </div>
-              <p className="text-sm text-green-900">
-                <span className="font-semibold">Email envoyé automatiquement</span> à l'adresse renseignée lors du paiement — conservez-le pour retrouver votre ERP à tout moment.
-              </p>
+              <div className="text-sm text-green-900 space-y-0.5">
+                <p><span className="font-semibold">Email envoyé automatiquement</span> à l'adresse renseignée lors du paiement — conservez-le pour retrouver votre ERP à tout moment.</p>
+                <p className="text-xs text-green-700">Si vous ne le recevez pas dans les prochaines minutes, pensez à vérifier vos <span className="font-semibold">spams ou courriers indésirables</span>.</p>
+              </div>
             </div>
 
             {/* Option secondaire : envoyer à une autre adresse */}
