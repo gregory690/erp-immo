@@ -634,8 +634,10 @@ export default function Home() {
                   'Tous les risques via Géorisques (BRGM)',
                   'Valide 6 mois · vente ET location',
                   'Références cadastrales incluses',
+                  'Vue aérienne satellite IGN du bien',
+                  '4 cartes de risques Géorisques incluses',
                   'Historique CatNat depuis 1982',
-                  'Lien de retéléchargement envoyé par email',
+                  'PDF reçu par email · lien de retéléchargement inclus',
                 ].map(f => (
                   <li key={f} className="flex items-center gap-2 text-gray-700">
                     <span className="text-green-600 font-bold">✓</span> {f}
