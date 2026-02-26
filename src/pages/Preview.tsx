@@ -25,6 +25,12 @@ export default function Preview() {
   const erpRef = searchParams.get('ref');
 
   useEffect(() => {
+    if (paymentSuccess) {
+      (window as any).plausible?.('Paiement confirmé', { revenue: { currency: 'EUR', amount: 19.99 } });
+    }
+  }, [paymentSuccess]);
+
+  useEffect(() => {
     async function loadERP() {
       // 1. Essayer d'abord depuis localStorage
       const history = getERPHistory();

@@ -78,6 +78,7 @@ export default function Generate() {
   async function goToStep2() {
     if (!addressState) return;
     setStep(2);
+    (window as any).plausible?.('Étape 2 — Adresse saisie');
     await fetchCadastre(addressState.lng, addressState.lat);
   }
 
@@ -90,6 +91,7 @@ export default function Generate() {
   async function goToStep3() {
     if (!addressState) return;
     setStep(3);
+    (window as any).plausible?.('Étape 3 — Position confirmée');
     await calculate({
       adresse_complete: addressState.feature.properties.label,
       code_insee: addressState.feature.properties.citycode,
@@ -113,6 +115,7 @@ export default function Generate() {
         commune: addressState.feature.properties.city,
         erpDocument,
       });
+      (window as any).plausible?.('Paiement initié');
       // Redirection vers la page de paiement Stripe
       window.location.href = checkoutUrl;
     } catch (err) {
