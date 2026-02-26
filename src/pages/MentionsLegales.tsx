@@ -42,7 +42,7 @@ export default function MentionsLegales() {
               <li><strong>N° TVA intracommunautaire :</strong> FR13832877179</li>
               <li><strong>Siège social :</strong> 60 Allée de Provence, 29280 Plouzané, France</li>
 
-              <li><strong>Email :</strong> notifications@edl-diagnostic-erp.fr</li>
+              <li><strong>Email :</strong> contact@edl-diagnostic-erp.fr</li>
             </ul>
           </div>
 

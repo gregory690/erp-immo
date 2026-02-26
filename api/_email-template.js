@@ -183,7 +183,7 @@ export function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount: _ca
                   <td>
                     <p style="margin:0;font-size:11px;color:#9ca3af;line-height:1.8;">
                       Réf. <span style="font-family:monospace;color:#6b7280;">${metadata.reference}</span><br>
-                      Question ? <a href="mailto:contact@edletdiagnostic.fr" style="color:#1a3a5c;text-decoration:none;">contact@edletdiagnostic.fr</a><br>
+                      Question ? <a href="mailto:contact@edl-diagnostic-erp.fr" style="color:#1a3a5c;text-decoration:none;">contact@edl-diagnostic-erp.fr</a><br>
                       &copy; ${new Date().getFullYear()} EDL&amp;DIAGNOSTIC &middot; <a href="https://edletdiagnostic.fr" style="color:#9ca3af;text-decoration:none;">edletdiagnostic.fr</a>
                     </p>
                   </td>

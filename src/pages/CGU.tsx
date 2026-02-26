@@ -63,14 +63,14 @@ export default function CGU() {
             <h2 className="text-base font-bold text-navy-900 mb-3 pb-2 border-b border-gray-100">4. Livraison du document</h2>
             <p>Le document ERP est disponible <strong>immédiatement</strong> après confirmation du paiement, sous forme de fichier PDF téléchargeable depuis la page de confirmation.</p>
             <p className="mt-2">Un email de confirmation contenant un lien de re-téléchargement est envoyé automatiquement à l'adresse email renseignée lors du paiement (via Stripe). Ce lien reste actif pendant <strong>6 mois</strong> à compter de la date de génération du document.</p>
-            <p className="mt-2">Le document est également accessible via la fonction d'impression du navigateur ("Imprimer" ou "Télécharger en PDF"). En cas de problème technique lors du téléchargement, l'utilisateur est invité à contacter : <strong>notifications@edl-diagnostic-erp.fr</strong></p>
+            <p className="mt-2">Le document est également accessible via la fonction d'impression du navigateur ("Imprimer" ou "Télécharger en PDF"). En cas de problème technique lors du téléchargement, l'utilisateur est invité à contacter : <strong>contact@edl-diagnostic-erp.fr</strong></p>
           </div>
 
           <div>
             <h2 className="text-base font-bold text-navy-900 mb-3 pb-2 border-b border-gray-100">5. Droit de rétractation</h2>
             <p>Conformément à l'article L221-28 du Code de la consommation, le droit de rétractation de 14 jours <strong>ne s'applique pas</strong> aux contenus numériques fournis sur support immatériel dont l'exécution a commencé, avec l'accord préalable exprès du consommateur et sa renonciation à son droit de rétractation.</p>
             <p className="mt-2">En procédant au paiement, l'utilisateur reconnaît expressément accepter que le service soit fourni immédiatement après la confirmation de paiement, et renoncer en conséquence à son droit de rétractation.</p>
-            <p className="mt-2">Toutefois, en cas de <strong>défaut avéré du service</strong> (document non généré, données manifestement erronées imputables au service), EDL &amp; DIAGNOSTIC SAS s'engage à examiner toute réclamation sous 48 heures ouvrées et à proposer, selon les cas, une correction ou un remboursement. Réclamations : <strong>notifications@edl-diagnostic-erp.fr</strong></p>
+            <p className="mt-2">Toutefois, en cas de <strong>défaut avéré du service</strong> (document non généré, données manifestement erronées imputables au service), EDL &amp; DIAGNOSTIC SAS s'engage à examiner toute réclamation sous 48 heures ouvrées et à proposer, selon les cas, une correction ou un remboursement. Réclamations : <strong>contact@edl-diagnostic-erp.fr</strong></p>
           </div>
 
           <div>
@@ -105,7 +105,7 @@ export default function CGU() {
 
           <div>
             <h2 className="text-base font-bold text-navy-900 mb-3 pb-2 border-b border-gray-100">9. Médiation des litiges</h2>
-            <p>En cas de litige non résolu amiablement, l'utilisateur peut recourir gratuitement à un médiateur de la consommation. Réclamation préalable obligatoire : <strong>notifications@edl-diagnostic-erp.fr</strong></p>
+            <p>En cas de litige non résolu amiablement, l'utilisateur peut recourir gratuitement à un médiateur de la consommation. Réclamation préalable obligatoire : <strong>contact@edl-diagnostic-erp.fr</strong></p>
             <p className="mt-2">Plateforme européenne de règlement en ligne des litiges (RLL) : <strong>https://ec.europa.eu/consumers/odr</strong></p>
           </div>
 

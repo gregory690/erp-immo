@@ -85,7 +85,7 @@ const FAQ_CATEGORIES = [
       },
       {
         q: "Je n'ai pas reçu l'email · que faire ?",
-        r: "Vérifiez votre dossier spam ou courrier indésirable. Si l'email n'y est pas, contactez-nous à contact@edletdiagnostic.fr avec votre référence de paiement et nous vous renverrons le document.",
+        r: "Vérifiez votre dossier spam ou courrier indésirable. Si l'email n'y est pas, contactez-nous à contact@edl-diagnostic-erp.fr avec votre référence de paiement et nous vous renverrons le document.",
       },
       {
         q: "Peut-on modifier un ERP après génération ?",
@@ -198,7 +198,7 @@ export default function FAQ() {
             Notre équipe répond rapidement par email à toute question sur l'ERP ou notre service.
           </p>
           <a
-            href="mailto:contact@edletdiagnostic.fr"
+            href="mailto:contact@edl-diagnostic-erp.fr"
             className="inline-flex items-center gap-2 bg-navy-900 text-white px-5 py-2.5 rounded-lg font-semibold text-sm hover:bg-navy-800 transition-colors"
           >
             <MessageCircle className="h-4 w-4" />
