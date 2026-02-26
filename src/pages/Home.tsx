@@ -328,7 +328,7 @@ export default function Home() {
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-5 sm:mb-6 text-white uppercase tracking-tight">
             État des Risques et Pollutions en ligne
           </h1>
-          <p className="text-base sm:text-lg text-navy-200 mb-6 sm:mb-8 max-w-2xl mx-auto font-medium">
+          <p className="text-base sm:text-lg text-white mb-6 sm:mb-8 max-w-2xl mx-auto font-medium">
             ERP obligatoire pour votre vente ou location · document conforme, accepté par
             les notaires et agences, disponible 7j/7 et 24h/24.
           </p>
@@ -345,7 +345,7 @@ export default function Home() {
           {/* Trustindex — badge avis clients */}
           <div id="ti-hero-mount" className="flex justify-center mt-5 mb-1 no-print" />
 
-          <p className="text-xs text-navy-300 mt-3 font-medium">
+          <p className="text-xs text-white/95 mt-3 font-medium">
             ✓ 19,99 € · ✓ Données officielles Géorisques · ✓ PDF prêt en 2 minutes
           </p>
         </div>
