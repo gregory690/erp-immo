@@ -23,6 +23,7 @@ export default function Preview() {
 
   const paymentSuccess = searchParams.get('payment') === 'success';
   const erpRef = searchParams.get('ref');
+  const autoPrint = searchParams.get('autoprint') === 'true';
 
   useEffect(() => {
     if (paymentSuccess) {
@@ -207,7 +208,7 @@ export default function Preview() {
           </div>
         )}
 
-        <ERPPreview document={erp} onNew={() => navigate('/generer')} emailSent={emailSent} />
+        <ERPPreview document={erp} onNew={() => navigate('/generer')} emailSent={emailSent} autoprint={autoPrint} />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Download, Printer, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { generatePDFFromElement, generateERPFilename, printERPDocument } from '../../services/pdf.service';
@@ -12,6 +12,7 @@ interface ERPPreviewProps {
   onNew?: () => void;
   demoMode?: boolean;
   emailSent?: boolean;
+  autoprint?: boolean;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -741,12 +742,20 @@ function CatNatPage({ erp, totalPages }: { erp: ERPDocument; totalPages: number 
 
 // ─── Composant principal ──────────────────────────────────────────────────────
 
-export function ERPPreview({ document: erp, onNew, demoMode = false, emailSent = false }: ERPPreviewProps) {
+export function ERPPreview({ document: erp, onNew, demoMode = false, emailSent = false, autoprint = false }: ERPPreviewProps) {
   const [downloading, setDownloading] = useState(false);
   const [hasDownloaded, setHasDownloaded] = useState(false);
   const [showNewERPWarning, setShowNewERPWarning] = useState(false);
+  const [showMobilePrintHint, setShowMobilePrintHint] = useState(false);
+
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
   async function handleDownload() {
+    if (isMobile) {
+      setShowMobilePrintHint(true);
+      await new Promise(r => setTimeout(r, 2500));
+      setShowMobilePrintHint(false);
+    }
     setDownloading(true);
     try {
       await generatePDFFromElement('erp-document-preview', generateERPFilename(erp));
@@ -755,6 +764,12 @@ export function ERPPreview({ document: erp, onNew, demoMode = false, emailSent =
       setDownloading(false);
     }
   }
+
+  useEffect(() => {
+    if (!autoprint) return;
+    const timer = setTimeout(() => { handleDownload(); }, 1000);
+    return () => clearTimeout(timer);
+  }, [autoprint]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleNewERP() {
     if (!hasDownloaded && !emailSent) {
@@ -766,6 +781,15 @@ export function ERPPreview({ document: erp, onNew, demoMode = false, emailSent =
 
   return (
     <div className="space-y-4">
+      {/* Instruction mobile impression */}
+      {showMobilePrintHint && (
+        <div className="flex items-start gap-3 bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 no-print">
+          <span className="text-lg shrink-0">📱</span>
+          <p className="text-sm text-blue-900">
+            Une fenêtre va s'ouvrir — appuyez sur <strong>« Enregistrer en PDF »</strong> (ou le bouton de partage) pour télécharger votre document.
+          </p>
+        </div>
+      )}
       {/* Barre d'actions */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between no-print">
         <div className="flex flex-col gap-2">

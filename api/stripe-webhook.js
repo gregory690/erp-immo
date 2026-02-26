@@ -142,7 +142,7 @@ export default async function handler(req, res) {
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : process.env.URL || 'http://localhost:3000';
 
-  const redownloadUrl = `${baseUrl}/apercu?ref=${encodeURIComponent(erpRef)}`;
+  const redownloadUrl = `${baseUrl}/apercu?ref=${encodeURIComponent(erpRef)}&autoprint=true`;
   const bien = erpDocument.bien;
   const metadata = erpDocument.metadata;
   const catnatCount = erpDocument.catnat?.length ?? 0;
