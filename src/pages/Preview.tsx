@@ -74,13 +74,14 @@ export default function Preview() {
     autoEmailTriggered.current = true;
     setAutoEmailStatus('sending');
 
-    const erpSnapshot = erp; // capture non-null value before async closure
+    const erpSnapshot = erp; // capture non-null values before async closure
+    const erpRefSnapshot = erpRef;
     let cancelled = false;
 
     async function doAutoEmail() {
       try {
         // Récupère le doc depuis KV pour obtenir customer_email
-        const response = await fetch(`/api/get-erp-document?ref=${encodeURIComponent(erpRef)}`);
+        const response = await fetch(`/api/get-erp-document?ref=${encodeURIComponent(erpRefSnapshot)}`);
         if (!response.ok) throw new Error('fetch failed');
         const kvDoc = await response.json() as Record<string, unknown>;
 
