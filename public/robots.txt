@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Pages privées / transactionnelles — ne pas indexer
+Disallow: /apercu
+Disallow: /generer
+Disallow: /dashboard
+
+Sitemap: https://edl-diagnostic-erp.fr/sitemap.xml

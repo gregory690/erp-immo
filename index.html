@@ -4,14 +4,16 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Générez votre État des Risques et Pollutions (ERP) conforme à l'arrêté du 27/09/2022 en moins de 2 minutes. Données officielles Géorisques — accepté par les notaires." />
-    <title>ERP.immo — État des Risques et Pollutions en ligne | EDL&DIAGNOSTIC</title>
+    <meta name="description" content="Générez votre État des Risques et Pollutions (ERP) conforme à l'arrêté du 27/09/2022 en moins de 2 minutes. Données officielles Géorisques — accepté par les notaires. 19,99 €." />
+    <title>ERP en ligne — État des Risques et Pollutions | EDL&DIAGNOSTIC</title>
 
     <!-- Open Graph / réseaux sociaux -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://erp-immo.vercel.app/" />
+    <meta property="og:site_name" content="EDL&DIAGNOSTIC — ERP en ligne" />
+    <meta property="og:url" content="https://edl-diagnostic-erp.fr/" />
     <meta property="og:title" content="ERP en ligne — État des Risques et Pollutions | EDL&DIAGNOSTIC" />
     <meta property="og:description" content="Générez votre ERP en 2 minutes chrono. Données officielles Géorisques, BAN, IGN. Conforme arrêté 27/09/2022. 19,99 € TTC — accepté par les notaires." />
     <meta property="og:locale" content="fr_FR" />
@@ -23,7 +25,110 @@
 
     <!-- SEO technique -->
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://erp-immo.vercel.app/" />
+    <link rel="canonical" href="https://edl-diagnostic-erp.fr/" />
+
+    <!-- Données structurées JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://edl-diagnostic-erp.fr/#website",
+          "url": "https://edl-diagnostic-erp.fr/",
+          "name": "ERP en ligne — État des Risques et Pollutions",
+          "description": "Génération automatique d'ERP conforme à l'arrêté du 27/09/2022, basée sur les données officielles Géorisques, BAN et IGN.",
+          "inLanguage": "fr-FR",
+          "publisher": {
+            "@id": "https://edl-diagnostic-erp.fr/#organization"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://edl-diagnostic-erp.fr/#organization",
+          "name": "EDL&DIAGNOSTIC",
+          "url": "https://edletdiagnostic.fr",
+          "email": "contact@edletdiagnostic.fr"
+        },
+        {
+          "@type": "Service",
+          "@id": "https://edl-diagnostic-erp.fr/#service",
+          "name": "Génération d'État des Risques et Pollutions (ERP) en ligne",
+          "description": "Service de génération automatique d'ERP conforme à l'arrêté du 27 septembre 2022. Données officielles Géorisques, BAN et IGN. Livraison par email en moins de 2 minutes.",
+          "provider": {
+            "@id": "https://edl-diagnostic-erp.fr/#organization"
+          },
+          "areaServed": {
+            "@type": "Country",
+            "name": "France"
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": "19.99",
+            "priceCurrency": "EUR",
+            "availability": "https://schema.org/InStock",
+            "url": "https://edl-diagnostic-erp.fr/generer"
+          },
+          "serviceType": "Diagnostic immobilier",
+          "category": "Immobilier"
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://edl-diagnostic-erp.fr/faq#faqpage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Qu'est-ce que l'ERP (État des Risques et Pollutions) ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "L'ERP est un document légal obligatoire en France pour toute transaction immobilière (vente ou location). Il informe l'acquéreur ou le locataire sur les risques naturels, miniers, technologiques, sismiques, la pollution des sols et les nuisances sonores aériennes. Il est encadré par l'article L125-5 du Code de l'environnement et l'arrêté du 27 septembre 2022."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Combien coûte un ERP via votre service ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Un ERP complet coûte 19,99 €. Ce tarif inclut la génération du document, la livraison par email et la possibilité de retélécharger le document à tout moment via un lien sécurisé."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Combien de temps est valable un ERP ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Un ERP est valable 6 mois à compter de sa date d'établissement, conformément à l'article L125-5 III du Code de l'environnement."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "L'ERP généré est-il accepté par les notaires ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Oui. Notre document respecte le format officiel imposé par l'arrêté du 27 septembre 2022. Il intègre toutes les rubriques obligatoires : PPRN, PPRM, PPRT, zonage sismique, SIS, radon, ENSA et déclaration de sinistres. Les données proviennent exclusivement de sources officielles."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Pour quels types de transactions l'ERP est-il obligatoire ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "L'ERP est obligatoire pour toute vente, location (habitation meublée ou non meublée, bail étudiant, location saisonnière, bail commercial), VEFA et échanges immobiliers sur l'ensemble du territoire français."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "D'où proviennent les données de l'ERP ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Exclusivement de bases officielles françaises : Géorisques (georisques.gouv.fr) pour les risques naturels, technologiques et miniers, la Base Adresse Nationale (data.gouv.fr) pour le géocodage, et l'API Carto de l'IGN (apicarto.ign.fr) pour les références cadastrales."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
 
     <link rel="preconnect" href="https://api-adresse.data.gouv.fr" />
     <link rel="preconnect" href="https://georisques.gouv.fr" />
