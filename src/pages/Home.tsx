@@ -332,7 +332,7 @@ export default function Home() {
             ERP obligatoire pour votre vente ou location · document conforme, accepté par
             les notaires et agences, disponible 7j/7 et 24h/24.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="flex justify-center">
             <Button
               size="xl"
               className="w-full sm:w-auto bg-edl-700 hover:bg-edl-800 text-white font-bold shadow-lg"
@@ -340,13 +340,6 @@ export default function Home() {
             >
               Établir mon état des risques
               <ArrowRight className="h-5 w-5" />
-            </Button>
-            <Button
-              size="xl"
-              className="w-full sm:w-auto bg-white/10 border border-white/25 text-white hover:bg-white/20 font-semibold shadow-lg backdrop-blur-sm"
-              onClick={() => navigate('/exemple')}
-            >
-              Voir un exemple
             </Button>
           </div>
           {/* Trustindex — badge avis clients */}
@@ -577,6 +570,25 @@ export default function Home() {
               </Card>
             ))}
 
+            {/* Lien exemple */}
+            <Card className="border-gray-200">
+              <CardContent className="pt-5 pb-5">
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-edl-700 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-bold text-navy-900 mb-1">À quoi ressemble un ERP ?</p>
+                    <p className="text-sm text-gray-600 mb-2">Consultez un exemple de document complet généré par notre service — format PDF officiel, toutes rubriques incluses.</p>
+                    <button
+                      onClick={() => navigate('/exemple')}
+                      className="text-sm text-edl-700 font-semibold underline underline-offset-2 hover:text-edl-800 transition-colors"
+                    >
+                      Voir un exemple de document ERP →
+                    </button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Without ERP warning card */}
             <Card className="border-red-200 bg-red-50">
               <CardContent className="pt-5 pb-5">
@@ -700,7 +712,7 @@ export default function Home() {
             <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-gray-400">
               <button onClick={() => navigate('/ressources')} className="hover:text-white underline transition-colors">Guide ERP</button>
               <button onClick={() => navigate('/faq')} className="hover:text-white underline transition-colors">FAQ</button>
-              <button onClick={() => navigate('/exemple')} className="hover:text-white underline transition-colors">Exemple de document</button>
+              <button onClick={() => navigate('/exemple')} className="hover:text-white underline transition-colors font-semibold text-white/80">Exemple de document ERP</button>
               <button onClick={() => navigate('/mentions-legales')} className="hover:text-white underline transition-colors">Mentions légales</button>
               <button onClick={() => navigate('/cgu')} className="hover:text-white underline transition-colors">CGU / CGV</button>
               <button onClick={() => navigate('/confidentialite')} className="hover:text-white underline transition-colors">Politique de confidentialité</button>

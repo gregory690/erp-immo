@@ -169,7 +169,7 @@ export default function Example() {
             </p>
           </div>
           <Button
-            className="bg-edl-700 hover:bg-edl-800 shrink-0 font-semibold"
+            className="bg-edl-700 hover:bg-edl-800 w-full sm:w-auto shrink-0 font-semibold"
             onClick={() => navigate('/generer')}
           >
             Établir mon ERP · 19,99 €
@@ -188,7 +188,7 @@ export default function Example() {
           </p>
           <Button
             size="lg"
-            className="bg-white text-edl-700 hover:bg-gray-100 font-bold"
+            className="bg-white text-edl-700 hover:bg-gray-100 font-bold w-full sm:w-auto"
             onClick={() => navigate('/generer')}
           >
             Établir mon état des risques · 19,99 €
