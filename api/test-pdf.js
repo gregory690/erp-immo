@@ -46,8 +46,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         source: printUrl,
         use_print: true,
-        wait_for: '#erp-document-preview',
-        delay: 4000,
+        delay: 6000,
       }),
     });
   } catch (err) {
