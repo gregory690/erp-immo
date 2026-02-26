@@ -31,6 +31,8 @@ const PRINT_CSS = `
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     .erp-page-footer { break-before: avoid !important; orphans: 4; widows: 4; }
     .erp-block { break-inside: avoid; }
+    /* Empêche la page blanche en fin de document */
+    #erp-document-preview > *:last-child { break-after: avoid !important; page-break-after: avoid !important; }
   }
   /* Écran : masquer tous les éléments chrome */
   body { background: white !important; margin: 0 !important; padding: 0 !important; }
