@@ -29,19 +29,6 @@ export default function Preview() {
   const paymentSuccess = searchParams.get('payment') === 'success';
   const erpRef = searchParams.get('ref');
 
-  const erpWrapperRef = useRef<HTMLDivElement>(null);
-  const [erpZoom, setErpZoom] = useState(1);
-
-  useEffect(() => {
-    const update = () => {
-      if (!erpWrapperRef.current) return;
-      const w = erpWrapperRef.current.offsetWidth;
-      setErpZoom(w < 640 ? w / 640 : 1);
-    };
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, []);
   const autoPrint = searchParams.get('autoprint') === 'true';
 
   useEffect(() => {
