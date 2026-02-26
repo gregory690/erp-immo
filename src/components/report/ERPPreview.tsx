@@ -682,35 +682,37 @@ function CatNatPage({ erp, totalPages }: { erp: ERPDocument; totalPages: number 
             <p className="mt-0.5">Cochez les cases OUI ou NON si, à votre connaissance, l'immeuble a fait l'objet d'une indemnisation suite à des dommages consécutifs à chacun des événements</p>
           </div>
         </div>
-        <table className="w-full text-[9px] border-collapse">
-          <thead>
-            <tr className="bg-gray-100 border-b border-gray-800">
-              <th className="text-left p-1.5 border-r border-gray-400 font-semibold w-2/5">Catastrophe naturelle</th>
-              <th className="text-center p-1.5 border-r border-gray-400 font-semibold">Début</th>
-              <th className="text-center p-1.5 border-r border-gray-400 font-semibold">Fin</th>
-              <th className="text-center p-1.5 border-r border-gray-400 font-semibold">Arrêté</th>
-              <th className="text-center p-1.5 border-r border-gray-400 font-semibold">Jo du</th>
-              <th className="text-center p-1.5 font-semibold">Indemnisation</th>
-            </tr>
-          </thead>
-          <tbody>
-            {catnat.map((a, i) => (
-              <tr key={i} className="border-b border-gray-300">
-                <td className="p-1.5 border-r border-gray-300">{a.libelle_risque_jo}</td>
-                <td className="p-1.5 border-r border-gray-300 text-center font-mono">{formatCatNatDate(a.date_debut_evt)}</td>
-                <td className="p-1.5 border-r border-gray-300 text-center font-mono">{formatCatNatDate(a.date_fin_evt)}</td>
-                <td className="p-1.5 border-r border-gray-300 text-center font-mono">{formatCatNatDate(a.date_publication_arrete)}</td>
-                <td className="p-1.5 border-r border-gray-300 text-center font-mono">{a.date_publication_jo ? formatCatNatDate(a.date_publication_jo) : '—'}</td>
-                <td className="p-1.5 text-center">
-                  <span className="inline-flex items-center gap-2">
-                    <span className="flex items-center gap-0.5"><Check checked={false} />&nbsp;OUI</span>
-                    <span className="flex items-center gap-0.5"><Check checked={false} />&nbsp;NON</span>
-                  </span>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-[9px] border-collapse">
+            <thead>
+              <tr className="bg-gray-100 border-b border-gray-800">
+                <th className="text-left p-1.5 border-r border-gray-400 font-semibold w-2/5">Catastrophe naturelle</th>
+                <th className="text-center p-1.5 border-r border-gray-400 font-semibold">Début</th>
+                <th className="text-center p-1.5 border-r border-gray-400 font-semibold">Fin</th>
+                <th className="text-center p-1.5 border-r border-gray-400 font-semibold">Arrêté</th>
+                <th className="text-center p-1.5 border-r border-gray-400 font-semibold">Jo du</th>
+                <th className="text-center p-1.5 font-semibold">Indemnisation</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {catnat.map((a, i) => (
+                <tr key={i} className="border-b border-gray-300">
+                  <td className="p-1.5 border-r border-gray-300">{a.libelle_risque_jo}</td>
+                  <td className="p-1.5 border-r border-gray-300 text-center font-mono">{formatCatNatDate(a.date_debut_evt)}</td>
+                  <td className="p-1.5 border-r border-gray-300 text-center font-mono">{formatCatNatDate(a.date_fin_evt)}</td>
+                  <td className="p-1.5 border-r border-gray-300 text-center font-mono">{formatCatNatDate(a.date_publication_arrete)}</td>
+                  <td className="p-1.5 border-r border-gray-300 text-center font-mono">{a.date_publication_jo ? formatCatNatDate(a.date_publication_jo) : '—'}</td>
+                  <td className="p-1.5 text-center">
+                    <span className="inline-flex items-center gap-2">
+                      <span className="flex items-center gap-0.5"><Check checked={false} />&nbsp;OUI</span>
+                      <span className="flex items-center gap-0.5"><Check checked={false} />&nbsp;NON</span>
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Signature */}
