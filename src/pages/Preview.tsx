@@ -14,7 +14,8 @@ export default function Preview() {
   const [erp, setErp] = useState<ERPDocument | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // État formulaire email
+  // État formulaire email (envoi à une autre adresse)
+  const [showAltEmailForm, setShowAltEmailForm] = useState(false);
   const [email, setEmail] = useState('');
   const [emailSending, setEmailSending] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
@@ -113,68 +114,89 @@ export default function Preview() {
 
         {/* Bannière succès paiement */}
         {paymentSuccess && (
-          <div className="flex items-start gap-4 bg-green-50 border border-green-200 rounded-xl p-5 no-print">
-            <div className="bg-green-100 rounded-full p-2 shrink-0">
-              <PartyPopper className="h-6 w-6 text-green-700" />
-            </div>
-            <div className="flex-1">
-              <p className="font-bold text-green-900 text-base">
-                Paiement confirmé — votre ERP est prêt !
-              </p>
-              <p className="text-sm text-green-800 mt-1">
-                Téléchargez votre document ci-dessous ou recevez-le par email.
+          <div className="bg-green-50 border border-green-200 rounded-xl p-5 no-print space-y-4">
+
+            {/* En-tête */}
+            <div className="flex items-start gap-4">
+              <div className="bg-green-100 rounded-full p-2 shrink-0">
+                <PartyPopper className="h-6 w-6 text-green-700" />
+              </div>
+              <div className="flex-1">
+                <p className="font-bold text-green-900 text-base">
+                  Paiement confirmé — votre ERP est prêt !
+                </p>
                 {erpRef && (
-                  <span className="block text-xs text-green-600 mt-0.5 font-mono">
+                  <span className="text-xs text-green-600 font-mono">
                     Réf. : {formatERPReference(erpRef)}
                   </span>
                 )}
-              </p>
-
-              {/* Formulaire email */}
-              <div className="mt-4 border-t border-green-200 pt-4">
-                {emailSent ? (
-                  <div className="flex items-center gap-2 text-green-700">
-                    <CheckCircle2 className="h-4 w-4 shrink-0" />
-                    <p className="text-sm font-medium">
-                      Email envoyé à <strong>{email}</strong> — conservez-le pour re-télécharger votre ERP.
-                    </p>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSendEmail} className="flex flex-col sm:flex-row gap-2">
-                    <div className="flex-1 flex items-center gap-2 bg-white border border-green-200 rounded-lg px-3 py-2">
-                      <Mail className="h-4 w-4 text-green-600 shrink-0" />
-                      <input
-                        type="email"
-                        required
-                        placeholder="Entrez votre email pour recevoir le document"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        className="flex-1 text-sm outline-none bg-transparent placeholder-gray-400"
-                      />
-                    </div>
-                    <Button
-                      type="submit"
-                      disabled={emailSending || !email}
-                      className="bg-green-700 hover:bg-green-800 text-white font-semibold shrink-0"
-                      size="sm"
-                    >
-                      {emailSending ? (
-                        <><Loader2 className="h-3.5 w-3.5 animate-spin mr-1" /> Envoi…</>
-                      ) : (
-                        <><Mail className="h-3.5 w-3.5 mr-1" /> Recevoir par email</>
-                      )}
-                    </Button>
-                  </form>
-                )}
-                {emailError && (
-                  <p className="text-xs text-red-600 mt-2">{emailError}</p>
-                )}
-                <p className="text-xs text-green-600 mt-2">
-                  ✓ Votre email permettra de retrouver ce document depuis n'importe quel appareil.
-                </p>
               </div>
+              <CheckCircle2 className="h-5 w-5 text-green-600 shrink-0 mt-0.5" />
             </div>
-            <CheckCircle2 className="h-5 w-5 text-green-600 shrink-0 mt-0.5" />
+
+            {/* Notification envoi automatique */}
+            <div className="flex items-center gap-3 bg-white border border-green-200 rounded-lg px-4 py-3">
+              <div className="bg-green-100 rounded-full p-1.5 shrink-0">
+                <Mail className="h-4 w-4 text-green-700" />
+              </div>
+              <p className="text-sm text-green-900">
+                <span className="font-semibold">Email envoyé automatiquement</span> à l'adresse renseignée lors du paiement — conservez-le pour retrouver votre ERP à tout moment.
+              </p>
+            </div>
+
+            {/* Option secondaire : envoyer à une autre adresse */}
+            <div className="border-t border-green-200 pt-3">
+              {!showAltEmailForm && !emailSent && (
+                <button
+                  onClick={() => setShowAltEmailForm(true)}
+                  className="text-sm text-green-700 underline underline-offset-2 hover:text-green-900 transition-colors"
+                >
+                  Envoyer à une autre adresse email
+                </button>
+              )}
+
+              {showAltEmailForm && !emailSent && (
+                <form onSubmit={handleSendEmail} className="flex flex-col sm:flex-row gap-2 mt-1">
+                  <div className="flex-1 flex items-center gap-2 bg-white border border-green-200 rounded-lg px-3 py-2">
+                    <Mail className="h-4 w-4 text-green-600 shrink-0" />
+                    <input
+                      type="email"
+                      required
+                      autoFocus
+                      placeholder="Autre adresse email"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      className="flex-1 text-sm outline-none bg-transparent placeholder-gray-400"
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    disabled={emailSending || !email}
+                    className="bg-green-700 hover:bg-green-800 text-white font-semibold shrink-0"
+                    size="sm"
+                  >
+                    {emailSending ? (
+                      <><Loader2 className="h-3.5 w-3.5 animate-spin mr-1" /> Envoi…</>
+                    ) : (
+                      <><Mail className="h-3.5 w-3.5 mr-1" /> Envoyer</>
+                    )}
+                  </Button>
+                </form>
+              )}
+
+              {emailSent && (
+                <div className="flex items-center gap-2 text-green-700 mt-1">
+                  <CheckCircle2 className="h-4 w-4 shrink-0" />
+                  <p className="text-sm font-medium">
+                    Email envoyé à <strong>{email}</strong>
+                  </p>
+                </div>
+              )}
+
+              {emailError && (
+                <p className="text-xs text-red-600 mt-2">{emailError}</p>
+              )}
+            </div>
           </div>
         )}
 
