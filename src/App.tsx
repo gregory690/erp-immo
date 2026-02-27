@@ -10,6 +10,7 @@ import Confidentialite from './pages/Confidentialite';
 import Ressources from './pages/Ressources';
 import FAQ from './pages/FAQ';
 import Print from './pages/Print';
+import Admin from './pages/Admin';
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="/ressources" element={<Ressources />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/print" element={<Print />} />
+        <Route path="/admin" element={<Admin />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
