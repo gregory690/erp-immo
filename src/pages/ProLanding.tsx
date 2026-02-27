@@ -1,98 +1,37 @@
 import { useNavigate } from 'react-router-dom';
-import {
-  Check, ArrowRight, Building2,
-  Clock, Euro, LayoutDashboard, RefreshCw, BadgeCheck, HeartHandshake,
-} from 'lucide-react';
+import { Check, ArrowRight, Building2, Mail } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { Badge } from '../components/ui/badge';
 import { getProSession } from '../services/pro.service';
 
 const PACK_10_FEATURES = [
-  '10 ERPs valides 6 mois chacun',
-  'Données officielles Géorisques',
-  'PDF téléchargeable immédiatement',
-  'Espace pro dédié inclus',
-  'Historique de vos ERPs',
-  'Conformité arrêté 27/09/2022',
+  '10 crédits ERP sans expiration',
+  'PDF conforme arrêté 27/09/2022',
+  'Données officielles Géorisques & IGN',
+  'Historique & re-téléchargement',
 ];
 
 const PACK_50_FEATURES = [
-  '50 ERPs valides 6 mois chacun',
-  'Tout le Pack 10 inclus',
-  'Tarif préférentiel par ERP',
-  'Idéal pour un usage régulier',
-  'Crédits sans expiration',
-];
-
-const BENEFITS = [
-  {
-    icon: Euro,
-    title: 'Économisez à chaque ERP',
-    desc: 'Le tarif unitaire diminue avec le volume. Moins vous payez par ERP, plus votre marge est préservée — ou répercutée en avantage client.',
-  },
-  {
-    icon: Clock,
-    title: 'Prêt en moins de 2 minutes',
-    desc: "Saisissez l'adresse, confirmez la position, récupérez le PDF. Aucune attente, aucun aller-retour. Parfait entre deux rendez-vous.",
-  },
-  {
-    icon: LayoutDashboard,
-    title: 'Tableau de bord centralisé',
-    desc: 'Tous vos ERPs au même endroit. Retrouvez, re-téléchargez ou transmettez n\'importe quel document en quelques secondes.',
-  },
-  {
-    icon: RefreshCw,
-    title: 'Crédits sans expiration',
-    desc: 'Achetez quand ça vous arrange. Vos crédits restent disponibles sans limite de temps — utilisez-les à votre rythme.',
-  },
-  {
-    icon: BadgeCheck,
-    title: 'Documents légalement conformes',
-    desc: "Données issues des APIs officielles de l'État (Géorisques, BRGM, IGN). Accepté par les notaires, agences et bailleurs.",
-  },
-  {
-    icon: HeartHandshake,
-    title: 'Support dédié',
-    desc: 'Un doute sur un document ? Une question sur une réglementation ? Notre équipe vous répond par email sous 24h.',
-  },
+  '50 crédits ERP sans expiration',
+  'Tout le contenu du Pack 10',
+  'Support dédié par email',
+  'Facture Stripe automatique',
 ];
 
 const REVIEWS = [
   {
     name: 'Sophie M.',
-    role: 'Diagnostiqueure immobilière — Lyon',
-    text: "Je génère en moyenne 15 ERPs par mois. Avec le pack pro, j'ai réduit mon coût unitaire de moitié et je retrouve tous mes documents en un clic depuis le dashboard. Indispensable.",
-    rating: 5,
+    role: 'Diagnostiqueure — Lyon',
+    text: "15 ERPs par mois, le dashboard centralise tout. Les notaires l'acceptent sans discussion.",
   },
   {
     name: 'Thierry B.',
-    role: 'Agent immobilier indépendant — Bordeaux',
-    text: "Ce qui m'a convaincu, c'est la conformité : données Géorisques officielles, arrêté 2022 respecté. Mes notaires l'acceptent sans discussion. Et le PDF est prêt en 2 minutes chrono.",
-    rating: 5,
+    role: 'Agent immobilier — Bordeaux',
+    text: "Données Géorisques officielles, arrêté 2022 respecté. Le PDF est prêt en 2 minutes chrono.",
   },
   {
     name: 'Camille R.',
     role: 'Gestionnaire de patrimoine — Paris',
-    text: "J'avais besoin d'une facturation mensuelle pour mon cabinet. L'équipe a été réactive, on a trouvé une formule adaptée. Le support dédié fait vraiment la différence.",
-    rating: 5,
-  },
-];
-
-const STEPS = [
-  {
-    num: '01',
-    title: 'Créez votre espace',
-    desc: 'Entrez votre email, recevez un lien de connexion instantané. Aucun mot de passe, aucun formulaire interminable.',
-  },
-  {
-    num: '02',
-    title: 'Choisissez votre pack',
-    desc: 'Sélectionnez le volume qui correspond à votre activité. Paiement sécurisé par Stripe, facture disponible.',
-  },
-  {
-    num: '03',
-    title: 'Générez à la demande',
-    desc: 'Depuis votre dashboard, lancez un ERP en 2 minutes. Le PDF est prêt avant même votre prochain rendez-vous.',
+    text: "Facturation mensuelle, support réactif. La formule sur mesure s'adapte parfaitement à notre cabinet.",
   },
 ];
 
@@ -101,138 +40,128 @@ export default function ProLanding() {
   const session = getProSession();
 
   function handleCTA() {
-    if (session) {
-      navigate('/pro/dashboard');
-    } else {
-      navigate('/pro/login');
-    }
+    navigate(session ? '/pro/dashboard' : '/pro/login');
   }
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero — navy, packs en avant-scène */}
-      <section className="bg-navy-900 px-4 pt-10 sm:pt-14 pb-14 sm:pb-24 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '28px 28px' }}
-        />
-        <div className="max-w-3xl mx-auto relative space-y-8">
 
-          {/* Eyebrow + titre */}
-          <div className="text-center space-y-4">
-            <Badge className="bg-amber-400/20 text-amber-300 border-amber-400/30 text-xs px-3 py-1 font-semibold">
-              <Building2 className="h-3.5 w-3.5 mr-1.5" />
-              Espace partenaire EDL&amp;DIAGNOSTIC
-            </Badge>
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight">
-              L'ERP professionnel,<br className="hidden sm:block" />
-              <span className="text-amber-400"> sans contrainte</span>
-            </h1>
-            <p className="text-white/65 text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
-              Crédits en volume, espace dédié, historique complet.
-              Concentrez-vous sur vos clients — on s'occupe de la conformité.
-            </p>
+      {/* Hero */}
+      <section className="bg-navy-900 px-4 py-16 sm:py-24">
+        <div className="max-w-4xl mx-auto">
+          <div className="inline-flex items-center gap-2 border border-white/20 rounded-full px-3 py-1 mb-8">
+            <Building2 className="h-3.5 w-3.5 text-amber-400" />
+            <span className="text-xs font-medium text-white/70">Espace partenaire EDL&amp;DIAGNOSTIC</span>
+          </div>
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-[1.1] max-w-2xl">
+            L'ERP professionnel pour les diagnostiqueurs
+          </h1>
+          <p className="text-white/50 text-base mt-5 max-w-lg leading-relaxed">
+            Crédits en volume, historique centralisé, PDF conforme en moins de 2 minutes.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <Button
+              size="lg"
+              onClick={handleCTA}
+              className="bg-amber-400 text-navy-900 hover:bg-amber-300 font-bold h-11 px-7 rounded-lg"
+            >
+              {session ? 'Mon espace pro' : "Accéder à l'espace pro"}
+              <ArrowRight className="h-4 w-4 ml-2" />
+            </Button>
+            <span className="text-white/30 text-xs">Connexion par lien email · Sans mot de passe</span>
+          </div>
+          <div className="mt-12 pt-8 border-t border-white/10 flex flex-wrap gap-8">
+            {[
+              { value: '< 2 min', label: 'par ERP généré' },
+              { value: '100 %', label: 'données officielles État' },
+              { value: 'Aucune', label: 'expiration des crédits' },
+            ].map(stat => (
+              <div key={stat.label}>
+                <p className="text-2xl font-extrabold text-white">{stat.value}</p>
+                <p className="text-xs text-white/35 mt-0.5">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section className="px-4 py-16 sm:py-20 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-10">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-500 mb-2">Tarifs</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-navy-900">Choisissez votre volume</h2>
           </div>
 
-          {/* Pack cards */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch mt-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
 
             {/* Pack 10 */}
-            <div className="flex flex-col bg-white rounded-2xl p-5 sm:p-6 shadow-xl shadow-black/25">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Découverte</p>
-              <p className="font-bold text-navy-900 text-lg mt-1">Pack 10 ERPs</p>
-              <div className="flex items-baseline gap-1.5 mt-3 mb-1">
-                <span className="text-4xl font-extrabold text-navy-900">83,33 €</span>
-                <span className="text-sm text-gray-400 font-medium">HT</span>
-              </div>
-              <p className="text-xs text-gray-400 mb-4">99,99 € TTC · soit 8,33 € HT / ERP</p>
-              {/* Visuel 10 ERPs */}
-              <div className="flex flex-wrap gap-1.5 mb-5 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                {Array.from({ length: 10 }).map((_, i) => (
-                  <div key={i} className="w-8 h-10 rounded bg-white border border-slate-200 shadow-sm flex flex-col items-center pt-1.5 gap-1 shrink-0">
-                    <div className="w-4 h-px bg-slate-300 rounded-full" />
-                    <div className="w-4 h-px bg-slate-300 rounded-full" />
-                    <div className="w-2.5 h-px bg-slate-300 rounded-full" />
-                  </div>
-                ))}
-              </div>
-              <ul className="space-y-2.5 flex-1">
+            <div className="border border-gray-200 rounded-xl p-6 flex flex-col">
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-5">Découverte</p>
+              <p className="text-3xl font-extrabold text-navy-900">
+                79 €<span className="text-sm font-normal text-gray-400 ml-1.5">HT</span>
+              </p>
+              <p className="text-xs text-gray-400 mt-1.5 mb-7">94,80 € TTC · 7,90 € HT / ERP</p>
+              <ul className="space-y-3 flex-1 mb-7">
                 {PACK_10_FEATURES.map(f => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
-                    <Check className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
+                  <li key={f} className="flex items-start gap-2.5 text-sm text-gray-600">
+                    <Check className="h-4 w-4 text-navy-900 mt-0.5 shrink-0" />
                     {f}
                   </li>
                 ))}
               </ul>
               <Button
                 onClick={handleCTA}
-                className="w-full mt-6 bg-navy-900 text-white hover:bg-navy-800 font-semibold"
+                variant="outline"
+                className="w-full border-gray-200 text-navy-900 hover:bg-navy-900 hover:text-white font-semibold rounded-lg transition-colors"
               >
                 Commencer
               </Button>
             </div>
 
-            {/* Pack 50 — recommandé */}
-            <div className="flex flex-col bg-amber-400 rounded-2xl px-5 sm:px-6 pt-10 pb-5 sm:pb-6 shadow-2xl shadow-amber-900/40 ring-2 ring-amber-300 relative">
-              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                <span className="inline-flex items-center gap-1.5 bg-red-600 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md">
-                  <span className="animate-bounce inline-block">🔥</span>
-                  Notre recommandation
-                </span>
-              </div>
-              <p className="text-xs font-semibold text-navy-900/50 uppercase tracking-widest">Professionnel</p>
-              <p className="font-bold text-navy-900 text-lg mt-1">Pack 50 ERPs</p>
-              <div className="flex items-baseline gap-1.5 mt-3 mb-1">
-                <span className="text-4xl font-extrabold text-navy-900">208,33 €</span>
-                <span className="text-sm text-navy-900/50 font-medium">HT</span>
-              </div>
-              <p className="text-xs text-navy-900/60 font-medium mb-4">249,99 € TTC · soit 4,17 € HT / ERP — 50% d'économie</p>
-              {/* Visuel 50 ERPs */}
-              <div className="flex flex-wrap gap-1 mb-5 p-3 bg-amber-500/30 rounded-xl border border-amber-500/30">
-                {Array.from({ length: 50 }).map((_, i) => (
-                  <div key={i} className="w-4 h-5 rounded-sm bg-navy-900/25 border border-navy-900/20 shrink-0" />
-                ))}
-              </div>
-              <ul className="space-y-2.5 flex-1">
+            {/* Pack 50 */}
+            <div className="bg-navy-900 rounded-xl p-6 flex flex-col relative">
+              <span className="absolute -top-3 left-5 inline-flex items-center gap-1.5 bg-red-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full">
+                <span className="animate-bounce inline-block">🔥</span>
+                Notre recommandation
+              </span>
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-white/35 mb-5">Professionnel</p>
+              <p className="text-3xl font-extrabold text-white">
+                199 €<span className="text-sm font-normal text-white/40 ml-1.5">HT</span>
+              </p>
+              <p className="text-xs text-white/35 mt-1.5 mb-7">238,80 € TTC · 3,98 € HT / ERP</p>
+              <ul className="space-y-3 flex-1 mb-7">
                 {PACK_50_FEATURES.map(f => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-navy-900/85">
-                    <Check className="h-4 w-4 text-navy-900/70 mt-0.5 shrink-0" />
+                  <li key={f} className="flex items-start gap-2.5 text-sm text-white/70">
+                    <Check className="h-4 w-4 text-amber-400 mt-0.5 shrink-0" />
                     {f}
                   </li>
                 ))}
               </ul>
               <Button
                 onClick={handleCTA}
-                className="w-full mt-6 bg-navy-900 text-white hover:bg-navy-800 font-bold"
+                className="w-full bg-amber-400 text-navy-900 hover:bg-amber-300 font-bold rounded-lg"
               >
                 Choisir ce pack
               </Button>
             </div>
 
             {/* Sur mesure */}
-            <div className="flex flex-col bg-white/8 border border-white/20 rounded-2xl p-5 sm:p-6 shadow-xl shadow-black/20">
-              <p className="text-xs font-semibold text-white/50 uppercase tracking-widest">Sur mesure</p>
-              <p className="font-bold text-white text-lg mt-1">Volume & Agences</p>
-              <p className="text-white/55 text-sm mt-3 mb-4 leading-relaxed">
-                Vous traitez plus de 50 ERPs/mois ou souhaitez une intégration sur-mesure ?
+            <div className="border border-gray-200 rounded-xl p-6 flex flex-col">
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-5">Sur mesure</p>
+              <p className="text-xl font-bold text-navy-900 mb-2">Volume & Agences</p>
+              <p className="text-sm text-gray-500 mb-7 leading-relaxed">
+                Plus de 50 ERPs/mois ou besoin d'une intégration personnalisée ?
               </p>
-              {/* Visuel sur mesure */}
-              <div className="flex flex-wrap gap-1 mb-5 p-3 bg-white/5 rounded-xl border border-white/10">
-                {Array.from({ length: 12 }).map((_, i) => (
-                  <div key={i} className="w-4 h-5 rounded-sm bg-white/15 border border-white/15 shrink-0" />
-                ))}
-                <div className="w-8 h-5 rounded-sm bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
-                  <span className="text-white/50 text-[10px] font-bold">+∞</span>
-                </div>
-              </div>
-              <ul className="space-y-2.5 flex-1">
+              <ul className="space-y-3 flex-1 mb-7">
                 {[
                   'Tarif négocié selon volume',
                   'Facturation mensuelle possible',
                   'Intégration API sur demande',
                   'Gestionnaire de compte dédié',
                 ].map(f => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-white/70">
-                    <Check className="h-4 w-4 text-amber-400 mt-0.5 shrink-0" />
+                  <li key={f} className="flex items-start gap-2.5 text-sm text-gray-600">
+                    <Check className="h-4 w-4 text-navy-900 mt-0.5 shrink-0" />
                     {f}
                   </li>
                 ))}
@@ -240,66 +169,77 @@ export default function ProLanding() {
               <Button
                 onClick={() => { window.location.href = 'mailto:pro@edletdiagnostic.fr?subject=Offre%20sur%20mesure%20ERP'; }}
                 variant="outline"
-                className="w-full mt-6 border-white/30 text-white hover:bg-white/10 font-semibold"
+                className="w-full border-gray-200 text-gray-700 hover:bg-gray-50 font-semibold rounded-lg"
               >
+                <Mail className="h-3.5 w-3.5 mr-1.5" />
                 Nous contacter
-                <ArrowRight className="h-4 w-4 ml-1.5" />
               </Button>
             </div>
 
           </div>
 
-          <div className="flex flex-col items-center gap-3 pt-2">
-            <div className="inline-flex items-center gap-2.5 bg-white/10 border border-white/20 rounded-full px-4 py-2">
-              <div className="bg-white rounded-full h-6 w-6 flex items-center justify-center shrink-0 overflow-hidden p-0.5">
-                <img src="/marianne.png" alt="Marianne RF" className="h-full w-full object-contain" />
-              </div>
-              <span className="text-[11px] font-semibold text-white/80 uppercase tracking-widest">
-                Données officielles · APIs de l'État
-              </span>
-            </div>
-            <p className="text-white/30 text-xs">Paiement sécurisé Stripe · Connexion par lien email, sans mot de passe</p>
-          </div>
-
+          <p className="text-xs text-gray-400 text-center mt-6">
+            Paiement sécurisé par Stripe · Facture automatique après chaque achat
+          </p>
         </div>
       </section>
 
-      {/* Avantages partenaire */}
-      <section className="px-4 py-12 sm:py-16 bg-slate-50">
-        <div className="max-w-5xl mx-auto space-y-10">
-          <div className="text-center space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-widest text-amber-500">Pourquoi rejoindre l'espace pro</p>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-navy-900">Tout ce que vous gagnez en tant que partenaire</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {BENEFITS.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="bg-white border border-gray-100 rounded-2xl p-5 space-y-3 shadow-sm hover:shadow-md transition-shadow">
-                <div className="bg-navy-900 rounded-xl w-10 h-10 flex items-center justify-center">
-                  <Icon className="h-5 w-5 text-white" />
-                </div>
-                <p className="font-bold text-gray-900">{title}</p>
-                <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
+      {/* 3 points clés */}
+      <section className="px-4 py-14 sm:py-16 bg-slate-50 border-t border-gray-100">
+        <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12">
+          {[
+            {
+              title: 'Prêt en moins de 2 minutes',
+              desc: "Adresse → PDF conforme. Sans aller-retour, sans délai. Idéal entre deux rendez-vous.",
+            },
+            {
+              title: "Données officielles de l'État",
+              desc: "APIs Géorisques, BRGM et IGN. Documents acceptés par les notaires et agences immobilières.",
+            },
+            {
+              title: 'Crédits sans expiration',
+              desc: "Achetez quand ça vous convient. Vos crédits restent disponibles sans aucune limite de temps.",
+            },
+          ].map(({ title, desc }) => (
+            <div key={title} className="space-y-2">
+              <p className="font-bold text-navy-900">{title}</p>
+              <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* Comment ça marche */}
-      <section className="px-4 py-12 sm:py-16 bg-white">
-        <div className="max-w-3xl mx-auto space-y-10">
-          <div className="text-center space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-widest text-amber-500">Simple et rapide</p>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-navy-900">Opérationnel en 3 étapes</h2>
+      <section className="px-4 py-14 sm:py-16 bg-white border-t border-gray-100">
+        <div className="max-w-3xl mx-auto">
+          <div className="mb-10">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-500 mb-2">En 3 étapes</p>
+            <h2 className="text-2xl font-bold text-navy-900">Opérationnel en moins de 5 minutes</h2>
           </div>
-          <div className="space-y-4">
-            {STEPS.map((step) => (
-              <div key={step.num} className="flex gap-5 items-start">
-                <div className="shrink-0 w-12 h-12 rounded-2xl bg-navy-900 flex items-center justify-center">
-                  <span className="text-white font-black text-sm">{step.num}</span>
-                </div>
-                <div className="flex-1 pt-1 pb-5 border-b border-gray-100 last:border-0">
-                  <p className="font-bold text-gray-900 mb-1">{step.title}</p>
+          <div className="divide-y divide-gray-100">
+            {[
+              {
+                num: '01',
+                title: 'Créez votre espace',
+                desc: 'Email uniquement — un lien de connexion vous est envoyé instantanément. Aucun mot de passe à retenir.',
+              },
+              {
+                num: '02',
+                title: 'Achetez vos crédits',
+                desc: 'Choisissez le pack adapté à votre volume. Paiement sécurisé, facture automatique par email.',
+              },
+              {
+                num: '03',
+                title: 'Générez à la demande',
+                desc: "Saisissez l'adresse depuis votre dashboard — le PDF est prêt en moins de 2 minutes.",
+              },
+            ].map(step => (
+              <div key={step.num} className="flex gap-7 py-6">
+                <span className="text-3xl font-black text-gray-100 shrink-0 w-10 text-right leading-none pt-0.5">
+                  {step.num}
+                </span>
+                <div>
+                  <p className="font-semibold text-gray-900 mb-1">{step.title}</p>
                   <p className="text-sm text-gray-500 leading-relaxed">{step.desc}</p>
                 </div>
               </div>
@@ -308,79 +248,24 @@ export default function ProLanding() {
         </div>
       </section>
 
-      {/* Comparaison B2C vs Pro */}
-      <section className="px-4 py-12 sm:py-16 bg-slate-50">
-        <div className="max-w-3xl mx-auto space-y-8">
-          <div className="text-center space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-widest text-amber-500">Offre adaptée à votre usage</p>
-            <h2 className="text-2xl font-extrabold text-navy-900">Ponctuel ou régulier — il y a une formule pour vous</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Ponctuel */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6 space-y-4">
-              <p className="font-bold text-gray-900">Usage ponctuel</p>
-              <p className="text-sm text-gray-500">Vous avez besoin d'un ERP de temps en temps — pour votre propre bien ou un client occasionnel.</p>
-              <ul className="space-y-2">
-                {['Paiement à l\'acte', 'Disponible 24h/24', 'Aucun engagement'].map(f => (
-                  <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
-                    <Check className="h-4 w-4 text-gray-400 shrink-0" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <Button
-                variant="outline"
-                onClick={() => navigate('/generer')}
-                className="w-full border-gray-200 text-gray-700 hover:bg-gray-50"
-              >
-                Générer un ERP à l'unité
-              </Button>
-            </div>
-            {/* Pro */}
-            <div className="bg-navy-900 rounded-2xl p-6 space-y-4">
-              <div className="flex items-center gap-2">
-                <p className="font-bold text-white">Espace Pro</p>
-                <Badge className="bg-amber-400 text-amber-900 border-amber-300 text-xs font-semibold">Recommandé</Badge>
-              </div>
-              <p className="text-sm text-white/65">Vous gérez plusieurs biens ou accompagnez des clients régulièrement. Le volume vous permet d'optimiser vos coûts.</p>
-              <ul className="space-y-2">
-                {['Tarif dégressif par volume', 'Dashboard & historique', 'Crédits sans expiration', 'Support dédié'].map(f => (
-                  <li key={f} className="flex items-center gap-2 text-sm text-white/80">
-                    <Check className="h-4 w-4 text-amber-400 shrink-0" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <Button
-                onClick={handleCTA}
-                className="w-full bg-amber-400 text-navy-900 hover:bg-amber-300 font-semibold"
-              >
-                Accéder à l'espace pro
-                <ArrowRight className="h-4 w-4 ml-1.5" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Avis partenaires */}
-      <section className="px-4 py-12 sm:py-16 bg-white">
-        <div className="max-w-5xl mx-auto space-y-8 sm:space-y-10">
-          <div className="text-center space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-widest text-amber-500">Ils nous font confiance</p>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-navy-900">Ce que disent nos partenaires pro</h2>
+      {/* Avis */}
+      <section className="px-4 py-14 sm:py-16 bg-slate-50 border-t border-gray-100">
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-8">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-500 mb-2">Retours partenaires</p>
+            <h2 className="text-2xl font-bold text-navy-900">Ce qu'en disent les pros</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {REVIEWS.map(({ name, role, text, rating }) => (
-              <div key={name} className="bg-slate-50 border border-gray-100 rounded-2xl p-5 space-y-4">
+            {REVIEWS.map(({ name, role, text }) => (
+              <div key={name} className="bg-white border border-gray-200 rounded-xl p-5 space-y-3">
                 <div className="flex gap-0.5">
-                  {Array.from({ length: rating }).map((_, i) => (
-                    <span key={i} className="text-amber-400 text-lg leading-none">★</span>
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <span key={i} className="text-amber-400 text-sm leading-none">★</span>
                   ))}
                 </div>
                 <p className="text-sm text-gray-700 leading-relaxed">"{text}"</p>
                 <div>
-                  <p className="font-bold text-gray-900 text-sm">{name}</p>
+                  <p className="font-semibold text-gray-900 text-sm">{name}</p>
                   <p className="text-xs text-gray-400">{role}</p>
                 </div>
               </div>
@@ -390,70 +275,35 @@ export default function ProLanding() {
       </section>
 
       {/* CTA final */}
-      <section className="bg-navy-900 px-4 py-12 sm:py-16">
+      <section className="bg-navy-900 px-4 py-14 sm:py-16">
         <div className="max-w-xl mx-auto text-center space-y-5">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Prêt à rejoindre l'espace pro ?</h2>
-          <p className="text-white/60 text-sm">Connexion immédiate par lien email. Aucun mot de passe à retenir.</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white">Prêt à rejoindre l'espace pro ?</h2>
+          <p className="text-white/40 text-sm">Connexion instantanée par lien email. Aucun mot de passe.</p>
           <Button
             size="lg"
             onClick={handleCTA}
-            className="bg-amber-400 text-navy-900 hover:bg-amber-300 font-bold h-12 px-10 text-base"
+            className="bg-amber-400 text-navy-900 hover:bg-amber-300 font-bold h-11 px-8 rounded-lg"
           >
             {session ? 'Accéder à mon espace' : "Créer mon espace pro"}
             <ArrowRight className="h-4 w-4 ml-2" />
           </Button>
-          <p className="text-white/30 text-xs">Paiement sécurisé par Stripe · Facturation disponible sur demande</p>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="px-4 py-10 sm:py-14 bg-white">
-        <div className="max-w-2xl mx-auto space-y-4">
-          <h2 className="text-xl font-bold text-navy-900 mb-6">Questions fréquentes</h2>
-          {[
-            {
-              q: 'Les crédits expirent-ils ?',
-              a: "Non. Vos crédits sont valables sans limite de temps. C'est l'ERP généré qui a une validité légale de 6 mois.",
-            },
-            {
-              q: "Puis-je retrouver un ERP généré il y a plusieurs semaines ?",
-              a: "Oui. Votre espace pro conserve l'historique de tous vos ERPs (jusqu'à 100 documents) pendant 6 mois.",
-            },
-            {
-              q: "Comment me connecter ?",
-              a: "Par lien email (magic link) : entrez votre email, cliquez le lien reçu — c'est tout. Pas de mot de passe, pas de compte à créer.",
-            },
-            {
-              q: "Puis-je obtenir une facture ?",
-              a: "Oui. La facture est générée automatiquement par Stripe après chaque achat et vous est envoyée par email.",
-            },
-          ].map(({ q, a }) => (
-            <div key={q} className="border border-gray-100 rounded-xl p-5">
-              <p className="font-semibold text-gray-900 text-sm mb-1.5">{q}</p>
-              <p className="text-sm text-gray-500 leading-relaxed">{a}</p>
-            </div>
-          ))}
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-navy-900 text-white py-8 px-4">
-        <div className="max-w-3xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-6 border-b border-white/10">
-            <span className="font-bold text-sm tracking-tight">EDL&amp;DIAGNOSTIC · Espace Pro</span>
-            <div className="flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-xs text-gray-400">
-              <button onClick={() => navigate('/mentions-legales')} className="hover:text-white underline transition-colors">Mentions légales</button>
-              <button onClick={() => navigate('/confidentialite')} className="hover:text-white underline transition-colors">Politique de confidentialité</button>
-              <button onClick={() => navigate('/cgu')} className="hover:text-white underline transition-colors">CGV</button>
-              <button onClick={() => navigate('/')} className="hover:text-white transition-colors">Accès grand public</button>
-            </div>
+      <footer className="bg-navy-900 border-t border-white/10 px-4 py-6">
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+          <span className="text-sm font-bold text-white">EDL&amp;DIAGNOSTIC · Espace Pro</span>
+          <div className="flex flex-wrap justify-center gap-x-5 gap-y-1 text-xs text-gray-500">
+            <button onClick={() => navigate('/mentions-legales')} className="hover:text-white transition-colors">Mentions légales</button>
+            <button onClick={() => navigate('/confidentialite')} className="hover:text-white transition-colors">Confidentialité</button>
+            <button onClick={() => navigate('/cgu')} className="hover:text-white transition-colors">CGV</button>
+            <button onClick={() => navigate('/')} className="hover:text-white transition-colors">Accès grand public</button>
           </div>
-          <p className="text-xs text-gray-500 text-center mt-5 leading-relaxed">
-            EDL&amp;DIAGNOSTIC — SIREN 123 456 789 ·
-            Paiement sécurisé par Stripe · Données issues des APIs officielles de l'État (Géorisques, BRGM, IGN) ·
-            Documents conformes à l'arrêté du 27/09/2022.
-          </p>
         </div>
+        <p className="text-[11px] text-gray-600 text-center mt-4">
+          Données Géorisques, BRGM, IGN · Conformité arrêté 27/09/2022 · Paiement sécurisé Stripe
+        </p>
       </footer>
 
     </div>

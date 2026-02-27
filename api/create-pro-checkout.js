@@ -6,8 +6,8 @@ import Stripe from 'stripe';
 import { kv } from '@vercel/kv';
 
 const PACKS = {
-  pack_10: { qty: 10, amount: 9999, label: 'Pack 10 ERPs' },
-  pack_50: { qty: 50, amount: 24999, label: 'Pack 50 ERPs' },
+  pack_10: { qty: 10, amount: 9480, label: 'Pack 10 ERPs' },
+  pack_50: { qty: 50, amount: 23880, label: 'Pack 50 ERPs' },
 };
 
 async function verifyProToken(token) {

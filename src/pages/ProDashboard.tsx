@@ -13,8 +13,8 @@ import {
 import type { ProAccount } from '../services/pro.service';
 
 const PACKS = [
-  { id: 'pack_10' as const, label: 'Pack 10 ERPs', price: '100 €', perUnit: '10 € / ERP', qty: 10 },
-  { id: 'pack_50' as const, label: 'Pack 50 ERPs', price: '250 €', perUnit: '5 € / ERP', qty: 50, recommended: true },
+  { id: 'pack_10' as const, label: 'Pack 10 ERPs', price: '94,80 €', perUnit: '7,90 € HT / ERP', qty: 10 },
+  { id: 'pack_50' as const, label: 'Pack 50 ERPs', price: '238,80 €', perUnit: '3,98 € HT / ERP', qty: 50, recommended: true },
 ];
 
 export default function ProDashboard() {
