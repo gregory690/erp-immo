@@ -120,6 +120,10 @@ export function ServiceSelector({ selected, onSelect, onConfirm }: ServiceSelect
       >
         Télécharger mon ERP · 19,99 €
       </Button>
+
+      <p className="hidden sm:block text-xs text-gray-400 text-center leading-relaxed">
+        En procédant au paiement, vous acceptez que le service soit fourni immédiatement et renoncez expressément à votre droit de rétractation conformément à l'art. L221-28 du Code de la consommation.
+      </p>
     </div>
   );
 }

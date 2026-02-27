@@ -522,9 +522,12 @@ export default function Generate() {
                 <>Obtenir mon ERP officiel · 19,99 €</>
               )}
             </Button>
+            <p className="text-[10px] text-gray-400 text-center leading-relaxed mt-1.5 px-2">
+              En payant, vous renoncez à votre droit de rétractation (art. L221-28 C. conso) — service fourni immédiatement.
+            </p>
             <Button
               variant="ghost"
-              className="w-full text-xs text-gray-400 mt-1 h-8"
+              className="w-full text-xs text-gray-400 mt-0.5 h-8"
               onClick={() => setStep(3)}
               disabled={paymentLoading}
             >
