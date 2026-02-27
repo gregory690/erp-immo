@@ -95,22 +95,14 @@ export interface GeorisquesResultats {
     ppr_naturels: PPRExposure;
     ppr_technologiques: PPRExposure;
     ppr_miniers: PPRExposure;
-    alea_sismique: ZonageSismique;
-    radon: RadonData;
-    sis: SISData;
-    catnat: {
-      exists: boolean;
-      arretes: CatNatArrete[];
-    };
-    argiles: ArgilesData;
-    basias: {
-      exists: boolean;
-      sites: SiteIndustriel[];
-    };
-    basol: {
-      exists: boolean;
-      sites: SiteIndustriel[];
-    };
+    // Fields below come from individual API calls — optional here
+    alea_sismique?: ZonageSismique;
+    radon?: RadonData;
+    sis?: SISData;
+    catnat?: { exists: boolean; arretes: CatNatArrete[] };
+    argiles?: ArgilesData;
+    basias?: { exists: boolean; sites: SiteIndustriel[] };
+    basol?: { exists: boolean; sites: SiteIndustriel[] };
   };
 }
 
