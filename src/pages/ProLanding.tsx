@@ -16,11 +16,12 @@ const PACK_10_FEATURES = [
   'Conformité arrêté 27/09/2022',
 ];
 
-const PACK_30_FEATURES = [
-  '30 ERPs valides 6 mois chacun',
+const PACK_50_FEATURES = [
+  '50 ERPs valides 6 mois chacun',
   'Tout le Pack 10 inclus',
   'Tarif préférentiel par ERP',
   'Idéal pour un usage régulier',
+  'Crédits sans expiration',
 ];
 
 const BENEFITS = [
@@ -190,19 +191,19 @@ export default function ProLanding() {
               </Button>
             </div>
 
-            {/* Pack 30 */}
+            {/* Pack 50 */}
             <div className="bg-gradient-to-b from-amber-400 to-amber-500 rounded-2xl p-6 space-y-5 relative shadow-xl shadow-amber-900/30 ring-2 ring-amber-300/60">
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
                 <Badge className="bg-navy-900 text-white border-navy-800 text-xs px-3 font-semibold whitespace-nowrap shadow-lg">
-                  🏆 Le plus populaire
+                  ✦ Le plus populaire
                 </Badge>
               </div>
               <div>
                 <p className="text-xs font-semibold text-navy-900/50 uppercase tracking-widest mb-1">Professionnel</p>
-                <p className="font-bold text-navy-900 text-xl">Pack 30 ERPs</p>
+                <p className="font-bold text-navy-900 text-xl">Pack 50 ERPs</p>
                 <div className="relative mt-2 w-fit">
                   <div className="flex items-baseline gap-1.5 blur-md select-none pointer-events-none">
-                    <span className="text-5xl font-extrabold text-navy-900">199,99 €</span>
+                    <span className="text-5xl font-extrabold text-navy-900">249,99 €</span>
                     <span className="text-sm text-navy-900/50 font-medium">TTC</span>
                   </div>
                   <button
@@ -213,10 +214,10 @@ export default function ProLanding() {
                     Voir le tarif
                   </button>
                 </div>
-                <p className="text-navy-900/60 text-xs mt-1 font-medium">33% moins cher par ERP qu'au Pack 10</p>
+                <p className="text-navy-900/60 text-xs mt-1 font-medium">50% moins cher par ERP qu'au Pack 10</p>
               </div>
               <ul className="space-y-2">
-                {PACK_30_FEATURES.map(f => (
+                {PACK_50_FEATURES.map(f => (
                   <li key={f} className="flex items-start gap-2 text-sm text-navy-900/80">
                     <Check className="h-4 w-4 text-navy-900 mt-0.5 shrink-0" />
                     {f}
@@ -227,7 +228,7 @@ export default function ProLanding() {
                 onClick={handleCTA}
                 className="w-full bg-navy-900 text-white hover:bg-navy-800 font-bold shadow-md"
               >
-                Choisir le Pack 30
+                Choisir le Pack 50
               </Button>
             </div>
 
