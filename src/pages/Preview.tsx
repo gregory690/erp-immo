@@ -81,15 +81,30 @@ export default function Preview() {
 
     async function doAutoEmail() {
       try {
-        // Récupère le doc depuis KV pour obtenir customer_email
-        const response = await fetch(`/api/get-erp-document?ref=${encodeURIComponent(erpRefSnapshot)}`);
-        if (!response.ok) throw new Error('fetch failed');
-        const kvDoc = await response.json() as Record<string, unknown>;
+        // Retry jusqu'à 4 tentatives pour gérer la race condition entre le webhook
+        // Stripe (qui stocke customer_email dans KV) et le chargement de la page.
+        let customerEmail: string | undefined;
+        const maxAttempts = 4;
+        const retryDelay = 3000;
 
+        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+          if (cancelled) return;
+
+          const response = await fetch(`/api/get-erp-document?ref=${encodeURIComponent(erpRefSnapshot)}`);
+          if (!response.ok) throw new Error('fetch failed');
+          const kvDoc = await response.json() as Record<string, unknown>;
+
+          customerEmail = kvDoc.customer_email as string | undefined;
+          if (customerEmail) break;
+
+          // Pas encore disponible → attendre avant de réessayer
+          if (attempt < maxAttempts) {
+            await new Promise(resolve => setTimeout(resolve, retryDelay));
+          }
+        }
+
+        if (!customerEmail) throw new Error('customer_email introuvable dans KV après retries');
         if (cancelled) return;
-
-        const customerEmail = kvDoc.customer_email as string | undefined;
-        if (!customerEmail) throw new Error('customer_email introuvable dans KV');
 
         setAutoEmailAddress(customerEmail);
         await sendERPByEmail(customerEmail, erpSnapshot);
