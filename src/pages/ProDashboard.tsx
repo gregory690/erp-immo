@@ -165,8 +165,8 @@ export default function ProDashboard() {
                     size="sm"
                     variant="outline"
                     onClick={() => setShowPacks(v => !v)}
-                    className={`shrink-0 ${account.credits > 0
-                      ? 'border-white/30 text-white hover:bg-white/10'
+                    className={`shrink-0 bg-transparent ${account.credits > 0
+                      ? 'border-white/40 text-white hover:bg-white/10'
                       : 'border-gray-400 text-gray-600 hover:bg-gray-100'
                     }`}
                   >
