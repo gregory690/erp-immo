@@ -364,6 +364,26 @@ export default function ProLanding() {
         </div>
       </section>
 
+      {/* Footer */}
+      <footer className="bg-navy-900 text-white py-8 px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-6 border-b border-white/10">
+            <span className="font-bold text-sm tracking-tight">EDL&amp;DIAGNOSTIC · Espace Pro</span>
+            <div className="flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-xs text-gray-400">
+              <button onClick={() => navigate('/mentions-legales')} className="hover:text-white underline transition-colors">Mentions légales</button>
+              <button onClick={() => navigate('/confidentialite')} className="hover:text-white underline transition-colors">Politique de confidentialité</button>
+              <button onClick={() => navigate('/cgu')} className="hover:text-white underline transition-colors">CGV</button>
+              <button onClick={() => navigate('/')} className="hover:text-white transition-colors">Accès grand public</button>
+            </div>
+          </div>
+          <p className="text-xs text-gray-500 text-center mt-5 leading-relaxed">
+            EDL&amp;DIAGNOSTIC — SIREN 123 456 789 ·
+            Paiement sécurisé par Stripe · Données issues des APIs officielles de l'État (Géorisques, BRGM, IGN) ·
+            Documents conformes à l'arrêté du 27/09/2022.
+          </p>
+        </div>
+      </footer>
+
     </div>
   );
 }
