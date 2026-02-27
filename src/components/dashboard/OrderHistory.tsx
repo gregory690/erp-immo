@@ -51,7 +51,7 @@ export function OrderHistory({ history, onView }: OrderHistoryProps) {
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2 flex-wrap">
-                    <div>
+                    <div className="min-w-0">
                       <p className="text-sm font-semibold text-gray-900 truncate">
                         {erp.bien.adresse_complete}
                       </p>

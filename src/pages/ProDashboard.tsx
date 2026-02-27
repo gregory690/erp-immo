@@ -130,7 +130,7 @@ export default function ProDashboard() {
           <>
             {/* Credits banner */}
             <div className={`rounded-xl p-5 sm:p-6 ${account.credits > 0 ? 'bg-navy-900' : 'bg-slate-200'}`}>
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <Zap className={`h-5 w-5 ${account.credits > 0 ? 'text-amber-400' : 'text-gray-500'}`} />
@@ -138,7 +138,7 @@ export default function ProDashboard() {
                       Crédits disponibles
                     </span>
                   </div>
-                  <p className={`text-4xl font-extrabold ${account.credits > 0 ? 'text-white' : 'text-gray-600'}`}>
+                  <p className={`text-3xl sm:text-4xl font-extrabold ${account.credits > 0 ? 'text-white' : 'text-gray-600'}`}>
                     {account.credits}
                     <span className={`text-base font-normal ml-2 ${account.credits > 0 ? 'text-white/50' : 'text-gray-400'}`}>
                       ERP{account.credits !== 1 ? 's' : ''}

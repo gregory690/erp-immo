@@ -269,13 +269,13 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white font-sans">
       {/* Top bar */}
-      <div className="bg-navy-900 text-white text-xs py-2 px-4 hidden sm:block">
-        <div className="max-w-6xl mx-auto flex items-center justify-center gap-8">
+      <div className="bg-navy-900 text-white text-xs py-2 px-4 overflow-x-auto">
+        <div className="max-w-6xl mx-auto flex items-center justify-center gap-6 whitespace-nowrap">
           <span className="flex items-center gap-1.5"><span>⚡</span>Livraison en 2 minutes</span>
           <span className="text-white/30">|</span>
           <span className="flex items-center gap-1.5"><span>✓</span>Accepté par les notaires</span>
-          <span className="text-white/30">|</span>
-          <span className="flex items-center gap-1.5"><span>🔒</span>Données officielles Géorisques</span>
+          <span className="text-white/30 hidden sm:inline">|</span>
+          <span className="hidden sm:flex items-center gap-1.5"><span>🔒</span>Données officielles Géorisques</span>
         </div>
       </div>
 

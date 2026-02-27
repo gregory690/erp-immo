@@ -229,7 +229,7 @@ export default function Generate() {
                   {step > s.id ? <Check className="h-4 w-4" /> : s.id}
                 </div>
                 {/* Label */}
-                <p className={`mt-1.5 text-[10px] sm:text-xs font-semibold leading-tight text-center ${step === s.id ? 'text-navy-900' : step > s.id ? 'text-green-700' : 'text-gray-400'}`}>
+                <p className={`mt-1.5 text-xs font-semibold leading-tight text-center ${step === s.id ? 'text-navy-900' : step > s.id ? 'text-green-700' : 'text-gray-400'}`}>
                   {s.label}
                 </p>
               </div>

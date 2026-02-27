@@ -13,7 +13,7 @@ interface AddressSearchProps {
 
 export function AddressSearch({
   onAddressSelected,
-  placeholder = 'Saisissez l\'adresse du bien (ex: 12 rue de la Paix, Paris)',
+  placeholder = "Saisissez l'adresse du bien (ex. : 12 rue de la Paix, Paris)",
   className,
 }: AddressSearchProps) {
   const { query, setQuery, suggestions, loading, clearSuggestions } = useAddressSearch({
@@ -58,7 +58,7 @@ export function AddressSearch({
 
       {open && suggestions.length > 0 && (
         <div className="absolute z-50 mt-1 w-full rounded-md border bg-white shadow-lg">
-          <ul className="py-1 max-h-48 sm:max-h-72 overflow-auto">
+          <ul className="py-1 max-h-32 sm:max-h-48 overflow-auto">
             {suggestions.map((feature, i) => (
               <li key={feature.properties.id ?? i}>
                 <button

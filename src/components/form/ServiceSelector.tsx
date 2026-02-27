@@ -80,7 +80,7 @@ export function ServiceSelector({ selected, onSelect, onConfirm }: ServiceSelect
                 </span>
               </div>
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-extrabold text-navy-900">19,99 €</span>
+                <span className="text-3xl sm:text-4xl font-extrabold text-navy-900">19,99 €</span>
                 <span className="text-sm text-gray-500 font-medium">TTC</span>
               </div>
             </div>

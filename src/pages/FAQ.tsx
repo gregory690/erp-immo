@@ -171,7 +171,7 @@ export default function FAQ() {
       </div>
 
       {/* FAQ */}
-      <main className="max-w-3xl mx-auto px-4 py-12 space-y-10">
+      <main className="max-w-3xl mx-auto px-4 py-8 sm:py-12 space-y-6 sm:space-y-10">
         {FAQ_CATEGORIES.map((cat) => (
           <section key={cat.categorie}>
             <h2 className="text-lg font-black text-navy-900 mb-4 pb-2 border-b-2 border-edl-700 inline-block pr-4">

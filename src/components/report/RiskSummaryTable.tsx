@@ -44,7 +44,7 @@ export function RiskSummaryTable({ items }: RiskSummaryTableProps) {
   return (
     <div>
       {/* Mobile : liste de cartes */}
-      <div className="sm:hidden space-y-2">
+      <div className="md:hidden space-y-2">
         {categories.map(cat => {
           const catItems = items.filter(i => i.category === cat);
           if (catItems.length === 0) return null;
@@ -75,7 +75,7 @@ export function RiskSummaryTable({ items }: RiskSummaryTableProps) {
       </div>
 
       {/* Desktop : tableau */}
-      <div className="hidden sm:block overflow-x-auto rounded-lg border border-border">
+      <div className="hidden md:block overflow-x-auto rounded-lg border border-border">
         <table className="w-full min-w-[520px] text-sm">
           <thead>
             <tr className="bg-navy-900 text-white">
