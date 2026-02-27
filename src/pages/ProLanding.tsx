@@ -54,32 +54,124 @@ export default function ProLanding() {
         </div>
       </header>
 
-      <div className="max-w-5xl mx-auto px-4 py-12 sm:py-20 space-y-16">
+      {/* Hero — navy background, packs in spotlight */}
+      <section className="bg-navy-900 px-4 pt-14 pb-20 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-5"
+          style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '28px 28px' }}
+        />
+        <div className="max-w-3xl mx-auto relative space-y-8">
 
-        {/* Hero */}
-        <div className="text-center space-y-5 max-w-2xl mx-auto">
-          <Badge className="bg-navy-900/10 text-navy-900 border-navy-900/20 text-xs px-3 py-1">
-            <Building2 className="h-3.5 w-3.5 mr-1.5" />
-            Usage professionnel
-          </Badge>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-navy-900 leading-tight tracking-tight">
-            L'ERP en ligne pour un<br className="hidden sm:block" /> usage intensif
-          </h1>
-          <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
-            Générez vos États des Risques et Pollutions en moins de 2 minutes.
-            Achetez des crédits en volume et gérez tous vos ERPs depuis un espace dédié.
-          </p>
-          <div className="flex justify-center pt-2">
+          {/* Title */}
+          <div className="text-center space-y-3">
+            <Badge className="bg-white/15 text-white border-white/20 text-xs px-3 py-1">
+              <Building2 className="h-3.5 w-3.5 mr-1.5" />
+              Espace professionnel
+            </Badge>
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white leading-tight tracking-tight">
+              L'ERP en volume,<br className="hidden sm:block" /> à votre rythme
+            </h1>
+            <p className="text-white/70 text-sm sm:text-base max-w-xl mx-auto">
+              Achetez des crédits une fois, générez vos ERPs quand vous voulez depuis votre espace dédié.
+            </p>
+          </div>
+
+          {/* Pack cards — hero */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-2">
+
+            {/* Pack 10 */}
+            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 space-y-5">
+              <div>
+                <p className="font-bold text-white text-lg">Pack 10 ERPs</p>
+                {/* Prix — fort blur */}
+                <div className="relative mt-2 w-fit">
+                  <div className="flex items-baseline gap-1.5 blur-md select-none pointer-events-none">
+                    <span className="text-5xl font-extrabold text-white">99,99 €</span>
+                    <span className="text-sm text-white/60 font-medium">TTC</span>
+                  </div>
+                  <button
+                    onClick={handleCTA}
+                    className="absolute inset-0 flex items-center justify-center gap-2 text-sm font-semibold text-white/90 hover:text-white transition-colors"
+                  >
+                    <Lock className="h-3.5 w-3.5" />
+                    Voir le tarif
+                  </button>
+                </div>
+              </div>
+              <ul className="space-y-2">
+                {PACK_10_FEATURES.map(f => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-white/75">
+                    <Check className="h-4 w-4 text-green-400 mt-0.5 shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Button
+                onClick={handleCTA}
+                className="w-full bg-white text-navy-900 hover:bg-white/90 font-semibold"
+              >
+                Commencer avec ce pack
+              </Button>
+            </div>
+
+            {/* Pack 30 — recommended */}
+            <div className="bg-amber-400 rounded-2xl p-6 space-y-5 relative">
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                <Badge className="bg-navy-900 text-white border-navy-800 text-xs px-3 font-semibold whitespace-nowrap">
+                  Meilleur rapport qualité/prix
+                </Badge>
+              </div>
+              <div>
+                <p className="font-bold text-navy-900 text-lg">Pack 30 ERPs</p>
+                {/* Prix — fort blur */}
+                <div className="relative mt-2 w-fit">
+                  <div className="flex items-baseline gap-1.5 blur-md select-none pointer-events-none">
+                    <span className="text-5xl font-extrabold text-navy-900">199,99 €</span>
+                    <span className="text-sm text-navy-900/60 font-medium">TTC</span>
+                  </div>
+                  <button
+                    onClick={handleCTA}
+                    className="absolute inset-0 flex items-center justify-center gap-2 text-sm font-semibold text-navy-900 hover:opacity-70 transition-opacity"
+                  >
+                    <Lock className="h-3.5 w-3.5" />
+                    Voir le tarif
+                  </button>
+                </div>
+              </div>
+              <ul className="space-y-2">
+                {PACK_30_FEATURES.map(f => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-navy-900/80">
+                    <Check className="h-4 w-4 text-navy-900 mt-0.5 shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Button
+                onClick={handleCTA}
+                className="w-full bg-navy-900 text-white hover:bg-navy-800 font-semibold"
+              >
+                Choisir le Pack 30
+              </Button>
+            </div>
+
+          </div>
+
+          {/* CTA principal */}
+          <div className="text-center space-y-2">
             <Button
               size="lg"
               onClick={handleCTA}
-              className="bg-navy-900 hover:bg-navy-800 text-base font-semibold h-12 px-8"
+              className="bg-white text-navy-900 hover:bg-white/90 font-bold h-12 px-10 text-base shadow-lg"
             >
               {session ? 'Accéder à mon espace' : "Accéder à l'espace pro"}
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
+            <p className="text-white/40 text-xs">Connexion par lien email · sans mot de passe</p>
           </div>
+
         </div>
+      </section>
+
+      <div className="max-w-5xl mx-auto px-4 py-14 space-y-12">
 
         {/* Value props */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -98,96 +190,6 @@ export default function ProLanding() {
           ))}
         </div>
 
-        {/* Pricing */}
-        <div>
-          <h2 className="text-xl font-bold text-navy-900 text-center mb-2">Choisissez votre pack</h2>
-          <p className="text-center text-sm text-gray-500 mb-8">
-            Connectez-vous pour accéder aux tarifs et commencer.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
-
-            {/* Pack 10 */}
-            <div className="bg-white border-2 border-border rounded-xl p-6 space-y-5 relative">
-              <div>
-                <p className="font-bold text-navy-900 text-lg">Pack 10 ERPs</p>
-                {/* Prix flouté */}
-                <div className="relative mt-1 inline-block">
-                  <div className="flex items-baseline gap-1.5 blur-sm select-none pointer-events-none">
-                    <span className="text-4xl font-extrabold text-navy-900">99,99 €</span>
-                    <span className="text-sm text-gray-500 font-medium">TTC</span>
-                  </div>
-                  <button
-                    onClick={handleCTA}
-                    className="absolute inset-0 flex items-center justify-center gap-1.5 text-xs font-semibold text-navy-900 hover:text-edl-700 transition-colors"
-                  >
-                    <Lock className="h-3 w-3" />
-                    Voir le tarif
-                  </button>
-                </div>
-              </div>
-              <ul className="space-y-2">
-                {PACK_10_FEATURES.map(f => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-gray-700">
-                    <Check className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <Button
-                onClick={handleCTA}
-                variant="outline"
-                className="w-full border-navy-900/30 text-navy-900 hover:bg-navy-900/5"
-              >
-                Commencer avec ce pack
-              </Button>
-            </div>
-
-            {/* Pack 30 — recommended */}
-            <div className="bg-navy-900 rounded-xl p-6 space-y-5 relative">
-              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                <Badge className="bg-amber-400 text-amber-900 border-amber-300 text-xs px-3 font-semibold whitespace-nowrap">
-                  Meilleur rapport qualité/prix
-                </Badge>
-              </div>
-              <div>
-                <p className="font-bold text-white text-lg">Pack 30 ERPs</p>
-                {/* Prix flouté */}
-                <div className="relative mt-1 inline-block">
-                  <div className="flex items-baseline gap-1.5 blur-sm select-none pointer-events-none">
-                    <span className="text-4xl font-extrabold text-white">199,99 €</span>
-                    <span className="text-sm text-white/60 font-medium">TTC</span>
-                  </div>
-                  <button
-                    onClick={handleCTA}
-                    className="absolute inset-0 flex items-center justify-center gap-1.5 text-xs font-semibold text-white hover:text-amber-300 transition-colors"
-                  >
-                    <Lock className="h-3 w-3" />
-                    Voir le tarif
-                  </button>
-                </div>
-              </div>
-              <ul className="space-y-2">
-                {PACK_30_FEATURES.map(f => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-white/80">
-                    <Check className="h-4 w-4 text-amber-400 mt-0.5 shrink-0" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <Button
-                onClick={handleCTA}
-                className="w-full bg-white text-navy-900 hover:bg-white/90 font-semibold"
-              >
-                Choisir le Pack 30
-              </Button>
-            </div>
-
-          </div>
-          <p className="text-center text-xs text-gray-400 mt-6">
-            Paiement sécurisé par Stripe · Facturation disponible sur demande
-          </p>
-        </div>
-
         {/* FAQ */}
         <div className="max-w-2xl mx-auto space-y-3">
           <h2 className="text-lg font-bold text-navy-900 mb-5">Questions fréquentes</h2>
@@ -202,7 +204,7 @@ export default function ProLanding() {
             },
             {
               q: 'Comment me connecter ?',
-              a: 'Par magic link : on vous envoie un lien par email, pas besoin de mot de passe. La session dure 24h.',
+              a: 'Par lien email : on vous envoie un lien de connexion instantané, pas besoin de mot de passe. La session dure 24h.',
             },
           ].map(({ q, a }) => (
             <div key={q} className="bg-white border border-border rounded-xl p-5">
