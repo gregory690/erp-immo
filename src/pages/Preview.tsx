@@ -220,6 +220,23 @@ export default function Preview() {
             )}
           </div>
 
+          {/* Note durée de conservation + contact */}
+          <div className="bg-white border border-border rounded-xl px-5 py-4 space-y-2 text-xs text-gray-500">
+            <p>
+              Les ERPs sont conservés <strong className="text-gray-700">6 mois</strong> à compter de leur date de création, conformément à leur durée de validité légale. Au-delà, ils sont automatiquement supprimés de notre base de données.
+            </p>
+            <p>
+              Toujours introuvable ?{' '}
+              <a
+                href="mailto:contact@edl-diagnostic-erp.fr"
+                className="text-navy-900 font-semibold underline underline-offset-2 hover:text-navy-700"
+              >
+                Contactez-nous
+              </a>{' '}
+              à <span className="font-medium">contact@edl-diagnostic-erp.fr</span> en indiquant l'adresse du bien — nous vous aiderons à retrouver votre document.
+            </p>
+          </div>
+
           <div className="text-center">
             <Button variant="outline" className="text-gray-600" onClick={() => navigate('/generer')}>
               Générer un nouvel ERP
