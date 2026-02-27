@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { MapPin, Building2, AlertCircle, RefreshCw } from 'lucide-react';
+import { MapPin, Building2, AlertCircle, RefreshCw, Move } from 'lucide-react';
 import { Card, CardContent } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
@@ -55,6 +55,14 @@ export function AddressConfirmation({
 
   return (
     <div className="space-y-4">
+      {/* Instruction drag */}
+      <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-lg px-4 py-3">
+        <Move className="h-4 w-4 text-blue-600 shrink-0" />
+        <p className="text-sm text-blue-900">
+          <span className="font-semibold">Vérifiez la position du marqueur.</span> Si besoin, déplacez-le sur la carte pour affiner la localisation — les risques seront recalculés automatiquement.
+        </p>
+      </div>
+
       {/* Map */}
       <div className="rounded-lg overflow-hidden border border-border shadow-sm">
         <div
@@ -62,10 +70,6 @@ export function AddressConfirmation({
           className="h-[240px] sm:h-[380px] w-full"
         />
       </div>
-
-      <p className="text-xs text-muted-foreground text-center">
-        Déplacez le marqueur pour affiner la localisation · le calcul des risques sera mis à jour automatiquement
-      </p>
 
       {/* Address details */}
       <Card>
