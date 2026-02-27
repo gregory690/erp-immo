@@ -8,11 +8,13 @@ import { Skeleton } from '../components/ui/skeleton';
 import { AddressSearch } from '../components/form/AddressSearch';
 import { AddressConfirmation } from '../components/form/AddressConfirmation';
 import { ServiceSelector } from '../components/form/ServiceSelector';
+import { ProServiceSelector } from '../components/form/ProServiceSelector';
 import { RiskSummaryTable } from '../components/report/RiskSummaryTable';
 import { useRiskCalculation } from '../hooks/useRiskCalculation';
 import { getParcellesFromCoords, extractReferenceCadastrale } from '../services/cadastre.service';
 import { buildRiskSummary, getGlobalRiskLevel } from '../utils/risk-aggregator';
 import { createCheckoutSession } from '../services/stripe.service';
+import { getProSession, useProCredit } from '../services/pro.service';
 
 import type { BANFeature } from '../types/ban.types';
 import type { ERPMode } from '../types/erp.types';
@@ -54,7 +56,27 @@ export default function Generate() {
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [preloadedCheckoutUrl, setPreloadedCheckoutUrl] = useState<string | null>(null);
 
+  // Pro session
+  const [isPro, setIsPro] = useState(false);
+  const [proCredits, setProCredits] = useState(0);
+  const [proConfirmLoading, setProConfirmLoading] = useState(false);
+  const [proConfirmError, setProConfirmError] = useState<string | null>(null);
+
   const { loading, progress, document: erpDocument, error, calculate } = useRiskCalculation();
+
+  // Detect pro session on mount
+  useEffect(() => {
+    const session = getProSession();
+    if (session) {
+      setIsPro(true);
+      // Fetch pro account to get current credits
+      fetch('/api/pro-account', { headers: { 'Authorization': `Bearer ${session.token}` } })
+        .then(r => r.ok ? r.json() : null)
+        .then(data => { if (data?.credits !== undefined) setProCredits(data.credits); })
+        .catch(() => {});
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function fetchCadastre(lng: number, lat: number) {
     setCadastreLoading(true);
@@ -107,8 +129,9 @@ export default function Generate() {
 
   // Pré-créer la session Stripe dès que l'ERP est calculé (pendant que l'utilisateur lit les résultats)
   // → quand il clique "Payer", l'URL est déjà prête, redirection quasi-instantanée
+  // → ignoré si l'utilisateur est connecté en pro (pas de Stripe pour lui)
   useEffect(() => {
-    if (!erpDocument || loading || !addressState) return;
+    if (!erpDocument || loading || !addressState || isPro) return;
     createCheckoutSession({
       erp_reference: erpDocument.metadata.reference,
       adresse: addressState.feature.properties.label,
@@ -138,6 +161,22 @@ export default function Generate() {
         err instanceof Error ? err.message : 'Erreur de connexion au service de paiement'
       );
       setPaymentLoading(false);
+    }
+  }
+
+  async function handleProConfirm() {
+    if (!erpDocument) return;
+    const session = getProSession();
+    if (!session) return;
+    setProConfirmError(null);
+    setProConfirmLoading(true);
+    try {
+      await useProCredit(session.token, erpDocument);
+      (window as any).plausible?.('ERP Pro généré');
+      navigate(`/apercu?ref=${encodeURIComponent(erpDocument.metadata.reference)}`);
+    } catch (err) {
+      setProConfirmError(err instanceof Error ? err.message : 'Erreur lors de la génération');
+      setProConfirmLoading(false);
     }
   }
 
@@ -440,18 +479,30 @@ export default function Generate() {
             <CardHeader className="p-4 sm:p-6">
               <CardTitle className="text-base sm:text-lg">Téléchargez votre ERP</CardTitle>
               <CardDescription>
-                Paiement sécurisé par Stripe · vous serez redirigé vers la page de paiement.
+                {isPro
+                  ? 'Générez votre ERP avec un crédit de votre compte pro.'
+                  : 'Paiement sécurisé par Stripe · vous serez redirigé vers la page de paiement.'
+                }
               </CardDescription>
             </CardHeader>
             <CardContent className="px-4 pb-4 sm:px-6 sm:pb-6 space-y-4">
-              <ServiceSelector
-                selected={selectedMode}
-                onSelect={setSelectedMode}
-                onConfirm={handleConfirm}
-              />
+              {isPro ? (
+                <ProServiceSelector
+                  credits={proCredits}
+                  onConfirm={handleProConfirm}
+                  loading={proConfirmLoading}
+                  error={proConfirmError}
+                />
+              ) : (
+                <ServiceSelector
+                  selected={selectedMode}
+                  onSelect={setSelectedMode}
+                  onConfirm={handleConfirm}
+                />
+              )}
 
-              {/* Payment loading overlay */}
-              {paymentLoading && (
+              {/* Payment loading overlay (B2C only) */}
+              {!isPro && paymentLoading && (
                 <div className="flex items-center justify-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg animate-fade-in">
                   <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
                   <div>
@@ -462,8 +513,8 @@ export default function Generate() {
                 </div>
               )}
 
-              {/* Payment error */}
-              {paymentError && (
+              {/* Payment error (B2C only) */}
+              {!isPro && paymentError && (
                 <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
                   <AlertCircle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
                   <div>
@@ -478,7 +529,7 @@ export default function Generate() {
                 variant="ghost"
                 className="w-full hidden sm:flex text-sm text-gray-500"
                 onClick={() => setStep(3)}
-                disabled={paymentLoading}
+                disabled={paymentLoading || proConfirmLoading}
               >
                 <ChevronLeft className="h-4 w-4 mr-1" />
                 Retour aux résultats
@@ -510,26 +561,50 @@ export default function Generate() {
         {/* Sticky mobile CTA — Step 4 */}
         {step === 4 && (
           <div className="sm:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-100 px-4 py-3 z-30 shadow-[0_-2px_16px_rgba(0,0,0,0.08)]">
-            <Button
-              onClick={handleConfirm}
-              disabled={!selectedMode || paymentLoading}
-              size="lg"
-              className="w-full bg-edl-700 hover:bg-edl-800 font-semibold"
-            >
-              {paymentLoading ? (
-                <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Redirection…</>
-              ) : (
-                <>Obtenir mon ERP officiel · 19,99 €</>
-              )}
-            </Button>
-            <p className="text-[10px] text-gray-400 text-center leading-relaxed mt-1.5 px-2">
-              En procédant au paiement, vous acceptez nos <a href="/cgu" target="_blank" className="underline underline-offset-2">CGV</a>.
-            </p>
+            {isPro ? (
+              <>
+                <Button
+                  onClick={proCredits > 0 ? handleProConfirm : () => navigate('/pro/dashboard')}
+                  disabled={proConfirmLoading}
+                  size="lg"
+                  className={`w-full font-semibold ${proCredits > 0 ? 'bg-navy-900 hover:bg-navy-800' : 'bg-amber-500 hover:bg-amber-600'}`}
+                >
+                  {proConfirmLoading ? (
+                    <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Génération…</>
+                  ) : proCredits > 0 ? (
+                    <>Générer mon ERP (1 crédit)</>
+                  ) : (
+                    <>Recharger mes crédits →</>
+                  )}
+                </Button>
+                {proConfirmError && (
+                  <p className="text-[10px] text-red-600 text-center mt-1.5">{proConfirmError}</p>
+                )}
+              </>
+            ) : (
+              <>
+                <Button
+                  onClick={handleConfirm}
+                  disabled={!selectedMode || paymentLoading}
+                  size="lg"
+                  className="w-full bg-edl-700 hover:bg-edl-800 font-semibold"
+                >
+                  {paymentLoading ? (
+                    <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Redirection…</>
+                  ) : (
+                    <>Obtenir mon ERP officiel · 19,99 €</>
+                  )}
+                </Button>
+                <p className="text-[10px] text-gray-400 text-center leading-relaxed mt-1.5 px-2">
+                  En procédant au paiement, vous acceptez nos <a href="/cgu" target="_blank" className="underline underline-offset-2">CGV</a>.
+                </p>
+              </>
+            )}
             <Button
               variant="ghost"
               className="w-full text-xs text-gray-400 mt-0.5 h-8"
               onClick={() => setStep(3)}
-              disabled={paymentLoading}
+              disabled={paymentLoading || proConfirmLoading}
             >
               <ChevronLeft className="h-3 w-3 mr-1" />
               Retour aux résultats

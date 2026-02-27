@@ -87,6 +87,32 @@ export default async function handler(req, res) {
     return res.status(200).json({ received: true });
   }
 
+  // ─── Branche pro_pack ────────────────────────────────────────────────────────
+  const sessionType = session.metadata?.type;
+  if (sessionType === 'pro_pack') {
+    const proEmail = session.metadata?.pro_email?.toLowerCase().trim();
+    const packQty = parseInt(session.metadata?.pack_qty || '0', 10);
+    if (proEmail && packQty > 0) {
+      try {
+        const credKey = `pro:credits:${proEmail}`;
+        const raw = await kv.get(credKey);
+        const current = raw
+          ? (typeof raw === 'string' ? JSON.parse(raw) : raw)
+          : { credits: 0, used: 0, packs: [] };
+        current.credits += packQty;
+        current.packs = [
+          { qty: packQty, date: new Date().toISOString(), stripe_id: sessionId },
+          ...(current.packs || []),
+        ];
+        await kv.set(credKey, JSON.stringify(current), { ex: 60 * 60 * 24 * 365 });
+        console.log(`Webhook: pro_pack ${packQty} crédits ajoutés pour ${proEmail}`);
+      } catch (err) {
+        console.error('Webhook: pro_pack KV error:', err.message);
+      }
+    }
+    return res.status(200).json({ received: true });
+  }
+
   const customerEmail = session.customer_details?.email;
   const erpRef = session.metadata?.erp_reference;
 

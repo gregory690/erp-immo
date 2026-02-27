@@ -11,6 +11,10 @@ import Ressources from './pages/Ressources';
 import FAQ from './pages/FAQ';
 import Print from './pages/Print';
 import Admin from './pages/Admin';
+import ProLanding from './pages/ProLanding';
+import ProLogin from './pages/ProLogin';
+import ProAuth from './pages/ProAuth';
+import ProDashboard from './pages/ProDashboard';
 
 export default function App() {
   return (
@@ -28,6 +32,10 @@ export default function App() {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/print" element={<Print />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/pro" element={<ProLanding />} />
+        <Route path="/pro/login" element={<ProLogin />} />
+        <Route path="/pro/auth" element={<ProAuth />} />
+        <Route path="/pro/dashboard" element={<ProDashboard />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
