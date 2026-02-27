@@ -283,15 +283,8 @@ export default function Home() {
       <header className="border-b border-gray-200 bg-white sticky top-0 z-40 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
           {/* Logo */}
-          <div className="flex items-center gap-1.5 shrink-0">
-            <div className="bg-edl-700 rounded p-1.5">
-              <Shield className="h-5 w-5 text-white" />
-            </div>
-            <div className="leading-tight">
-              <span className="font-black text-navy-900 text-lg tracking-tight">EDL</span>
-              <span className="font-bold text-edl-700 text-lg">&amp;</span>
-              <span className="font-black text-navy-900 text-lg tracking-tight">DIAGNOSTIC</span>
-            </div>
+          <div className="shrink-0">
+            <img src="/logo-edl.svg" alt="EDL&DIAGNOSTIC" className="h-20 w-auto" />
           </div>
 
           {/* CTA */}
@@ -682,13 +675,8 @@ export default function Home() {
       <footer className="bg-navy-900 text-white py-10 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-6">
-            <div className="flex items-center gap-2">
-              <div className="bg-edl-700 rounded p-1">
-                <Shield className="h-4 w-4 text-white" />
-              </div>
-              <span className="font-black text-white text-base tracking-tight">
-                EDL<span className="text-edl-400">&</span>DIAGNOSTIC
-              </span>
+            <div className="flex items-center">
+              <img src="/logo-edl.svg" alt="EDL&DIAGNOSTIC" className="h-20 w-auto" />
             </div>
 
             {/* Bloc RF officiel avec Marianne */}
