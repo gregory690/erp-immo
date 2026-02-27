@@ -26,8 +26,8 @@ export default async function handler(req, res) {
   // ─── Rate limiting — 3 tentatives / 5 min / email ────────────────────────
   try {
     const rateKey = `rate:recovery:${normalizedEmail}`;
+    await kv.set(rateKey, 0, { nx: true, ex: 300 });
     const count = await kv.incr(rateKey);
-    if (count === 1) await kv.expire(rateKey, 300); // 5 minutes
     if (count > 3) {
       return res.status(429).json({ error: 'Trop de tentatives. Réessayez dans 5 minutes.' });
     }
@@ -93,8 +93,8 @@ export default async function handler(req, res) {
   const erpItems = erps.map(e => `
     <tr>
       <td style="padding:12px 0;border-bottom:1px solid #f3f4f6;">
-        <p style="margin:0 0 2px;font-size:14px;font-weight:700;color:#111827;">${e.adresse}</p>
-        <p style="margin:0 0 8px;font-size:12px;color:#6b7280;">Établi le ${e.date}${e.validite ? ` · valide jusqu'au ${e.validite}` : ''}</p>
+        <p style="margin:0 0 2px;font-size:14px;font-weight:700;color:#111827;">${escapeHtml(e.adresse)}</p>
+        <p style="margin:0 0 8px;font-size:12px;color:#6b7280;">Établi le ${escapeHtml(e.date)}${e.validite ? ` · valide jusqu'au ${escapeHtml(e.validite)}` : ''}</p>
         <a href="${baseUrl}/apercu?ref=${encodeURIComponent(e.ref)}"
            style="display:inline-block;background-color:#1a3a5c;color:#ffffff;text-decoration:none;font-size:13px;font-weight:600;padding:8px 18px;">
           Accéder à mon ERP &rarr;
@@ -155,4 +155,13 @@ export default async function handler(req, res) {
   }
 
   return res.status(200).json({ sent: true });
+}
+
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }

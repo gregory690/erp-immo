@@ -14,6 +14,19 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Configuration serveur incomplète' });
   }
 
+  // ─── Rate limiting — 10 tentatives / 5 min / IP ─────────────────────────
+  try {
+    const ip = ((req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown') + '').split(',')[0].trim();
+    const rateKey = `rate:admin:${ip}`;
+    await kv.set(rateKey, 0, { nx: true, ex: 300 });
+    const count = await kv.incr(rateKey);
+    if (count > 10) {
+      return res.status(429).json({ error: 'Trop de tentatives. Réessayez dans 5 minutes.' });
+    }
+  } catch {
+    // Non bloquant
+  }
+
   const { password, email, ref } = req.body || {};
 
   if (!password || password !== adminPassword) {

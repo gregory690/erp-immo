@@ -60,7 +60,7 @@ export async function proLogin(email: string): Promise<{ sent: true }> {
   return res.json();
 }
 
-export async function proVerify(token: string): Promise<{ email: string }> {
+export async function proVerify(token: string): Promise<{ email: string; sessionToken: string }> {
   const res = await fetch('/api/pro-verify', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

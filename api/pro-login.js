@@ -29,10 +29,12 @@ export default async function handler(req, res) {
   const normalizedEmail = email.toLowerCase().trim();
 
   // ─── Rate limiting : 3 tentatives / 10 min / email ───────────────────────
+  // SET NX EX pose le TTL de façon atomique à la création → pas de clé sans TTL
+  // si le process crashe entre INCR et EXPIRE (bug du pattern classique).
   try {
     const rateKey = `pro:rate:login:${normalizedEmail}`;
+    await kv.set(rateKey, 0, { nx: true, ex: 600 });
     const count = await kv.incr(rateKey);
-    if (count === 1) await kv.expire(rateKey, 600);
     if (count > 3) {
       // On répond quand même 200 pour ne pas révéler l'état
       return res.status(200).json({ sent: true });

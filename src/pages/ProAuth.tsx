@@ -20,8 +20,8 @@ export default function ProAuth() {
     }
 
     proVerify(token)
-      .then(({ email }) => {
-        saveProSession(email, token);
+      .then(({ email, sessionToken }) => {
+        saveProSession(email, sessionToken);
         navigate('/pro/dashboard', { replace: true });
       })
       .catch(err => {

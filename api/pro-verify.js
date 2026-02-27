@@ -1,9 +1,12 @@
 // Vercel Function — pro-verify
 // Valide un magic link token. Si valide :
-//   - supprime l'entrée de session (usage unique)
-//   - recrée la session avec TTL 24h (session longue)
-//   - renvoie { email }
+//   - supprime le token du magic link (usage unique, exposé dans l'URL)
+//   - génère un NOUVEAU token UUID pour la session longue (24h)
+//   - renvoie { email, sessionToken }
+// Le token du magic link est ainsi différent du token de session stocké en localStorage,
+// ce qui évite l'exposition de la session via l'historique navigateur / logs.
 import { kv } from '@vercel/kv';
+import { randomUUID } from 'crypto';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -22,11 +25,11 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Token invalide' });
   }
 
-  const sessionKey = `pro:session:${token}`;
+  const magicLinkKey = `pro:session:${token}`;
 
   let sessionData;
   try {
-    const raw = await kv.get(sessionKey);
+    const raw = await kv.get(magicLinkKey);
     if (!raw) {
       return res.status(401).json({ error: 'Lien expiré ou déjà utilisé' });
     }
@@ -41,16 +44,18 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Session invalide' });
   }
 
-  // Supprimer le token à usage unique, puis recrée avec TTL 24h
+  // Générer un nouveau token distinct pour la session longue (24h)
+  // Le token du magic link (dans l'URL / historique) est supprimé immédiatement.
+  const sessionToken = randomUUID();
   try {
-    await kv.del(sessionKey);
-    await kv.set(sessionKey, JSON.stringify({ email }), {
+    await kv.del(magicLinkKey);
+    await kv.set(`pro:session:${sessionToken}`, JSON.stringify({ email }), {
       ex: 60 * 60 * 24, // 24h
     });
   } catch (err) {
     console.error('pro-verify: KV rotate error:', err.message);
-    // Non bloquant — on renvoie quand même l'email
+    return res.status(500).json({ error: 'Erreur serveur' });
   }
 
-  return res.status(200).json({ email });
+  return res.status(200).json({ email, sessionToken });
 }

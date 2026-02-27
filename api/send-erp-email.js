@@ -37,13 +37,15 @@ export default async function handler(req, res) {
     const ip = ((req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown') + '').split(',')[0].trim();
     const normalizedEmail = email.toLowerCase().trim();
 
+    // SET NX EX pose le TTL atomiquement à la création de la clé
+    await Promise.all([
+      kv.set(`rate:sendemail:ip:${ip}`, 0, { nx: true, ex: 600 }),
+      kv.set(`rate:sendemail:addr:${normalizedEmail}`, 0, { nx: true, ex: 3600 }),
+    ]);
     const [ipCount, emailCount] = await Promise.all([
       kv.incr(`rate:sendemail:ip:${ip}`),
       kv.incr(`rate:sendemail:addr:${normalizedEmail}`),
     ]);
-    // Initialise TTL à la première incrémentation
-    if (ipCount === 1) await kv.expire(`rate:sendemail:ip:${ip}`, 600);         // 10 min
-    if (emailCount === 1) await kv.expire(`rate:sendemail:addr:${normalizedEmail}`, 3600); // 1h
 
     if (ipCount > 5 || emailCount > 3) {
       return res.status(429).json({ error: 'Trop de tentatives. Réessayez dans quelques minutes.' });

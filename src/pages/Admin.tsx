@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, ExternalLink, Lock, Loader2, CheckCircle2, XCircle } from 'lucide-react';
+import { Search, ExternalLink, Lock, Loader2, CheckCircle2, XCircle, KeyRound } from 'lucide-react';
 import { Button } from '../components/ui/button';
 
 interface ERPResult {
@@ -52,14 +52,31 @@ export default function Admin() {
     }
   }
 
-  function handleAuth(e: React.FormEvent) {
+  async function handleAuth(e: React.FormEvent) {
     e.preventDefault();
-    if (password.length < 4) {
-      setAuthError('Mot de passe trop court.');
-      return;
-    }
     setAuthError('');
-    setAuthenticated(true);
+    setLoading(true);
+    try {
+      const res = await fetch('/api/admin-lookup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      if (res.status === 401) {
+        setAuthError('Mot de passe incorrect.');
+        return;
+      }
+      if (res.status === 429) {
+        setAuthError('Trop de tentatives. Réessayez dans 5 minutes.');
+        return;
+      }
+      // 400 = mot de passe valide mais email/ref manquants — accès accordé
+      setAuthenticated(true);
+    } catch {
+      setAuthError('Impossible de contacter le serveur.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   // ─── Écran de connexion ───────────────────────────────────────────────────
@@ -85,8 +102,11 @@ export default function Admin() {
               className="w-full border border-border rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-navy-900/20 focus:border-navy-900"
               autoFocus
             />
-            <Button type="submit" className="w-full bg-navy-900 hover:bg-navy-800">
-              Accéder
+            <Button type="submit" disabled={loading} className="w-full bg-navy-900 hover:bg-navy-800">
+              {loading
+                ? <><Loader2 className="h-4 w-4 animate-spin mr-2" />Vérification…</>
+                : <><KeyRound className="h-4 w-4 mr-2" />Accéder</>
+              }
             </Button>
           </form>
 

@@ -99,6 +99,14 @@ export default async function handler(req, res) {
         const current = raw
           ? (typeof raw === 'string' ? JSON.parse(raw) : raw)
           : { credits: 0, used: 0, packs: [] };
+
+        // Idempotence : ignorer si ce sessionId a déjà été traité
+        const alreadyProcessed = (current.packs || []).some(p => p.stripe_id === sessionId);
+        if (alreadyProcessed) {
+          console.log(`Webhook: session ${sessionId} déjà traitée, ignorée`);
+          return res.status(200).json({ received: true });
+        }
+
         current.credits += packQty;
         current.packs = [
           { qty: packQty, date: new Date().toISOString(), stripe_id: sessionId },

@@ -2,7 +2,24 @@
 // Préfixe _ : Vercel ne l'expose pas comme endpoint
 // Design : corporate plat — sans border-radius, typographie claire, palette sobre
 
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 export function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount: _catnatCount, dateRealisation, dateExpiration, hasPdf = true }) {
+
+  const safeAdresse   = escapeHtml(bien.adresse_complete);
+  const safeCodePostal = escapeHtml(bien.code_postal);
+  const safeCommune   = escapeHtml(bien.commune);
+  const safeCodeInsee = escapeHtml(bien.code_insee);
+  const safeRef       = escapeHtml(metadata.reference);
+  const safeDateReal  = escapeHtml(dateRealisation);
+  const safeDateExp   = escapeHtml(dateExpiration);
 
   return `<!DOCTYPE html>
 <html lang="fr" xmlns="http://www.w3.org/1999/xhtml">
@@ -15,7 +32,7 @@ export function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount: _ca
 <body style="margin:0;padding:0;background-color:#f4f4f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,Helvetica,sans-serif;-webkit-text-size-adjust:100%;">
 
   <!-- Pré-header invisible -->
-  <div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">Votre ERP est prêt — ${bien.adresse_complete}</div>
+  <div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">Votre ERP est prêt — ${safeAdresse}</div>
 
   <!-- Wrapper -->
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f4f4f5;padding:40px 16px;">
@@ -55,8 +72,8 @@ export function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount: _ca
                 <tr>
                   <td style="padding:20px 36px;">
                     <p style="margin:0 0 4px;font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;">Bien concerné</p>
-                    <p style="margin:0 0 2px;font-size:17px;font-weight:800;color:#111827;">${bien.adresse_complete}</p>
-                    <p style="margin:0;font-size:13px;color:#6b7280;">${bien.code_postal} ${bien.commune} &nbsp;&middot;&nbsp; INSEE : ${bien.code_insee}</p>
+                    <p style="margin:0 0 2px;font-size:17px;font-weight:800;color:#111827;">${safeAdresse}</p>
+                    <p style="margin:0;font-size:13px;color:#6b7280;">${safeCodePostal} ${safeCommune} &nbsp;&middot;&nbsp; INSEE : ${safeCodeInsee}</p>
                   </td>
                 </tr>
               </table>
@@ -74,12 +91,12 @@ export function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount: _ca
                       <tr>
                         <td width="48%" style="border:1px solid #e5e7eb;padding:14px 16px;vertical-align:top;">
                           <p style="margin:0 0 4px;font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;">Établi le</p>
-                          <p style="margin:0;font-size:15px;font-weight:700;color:#111827;">${dateRealisation}</p>
+                          <p style="margin:0;font-size:15px;font-weight:700;color:#111827;">${safeDateReal}</p>
                         </td>
                         <td width="4%"></td>
                         <td width="48%" style="border:1px solid #e5e7eb;padding:14px 16px;vertical-align:top;">
                           <p style="margin:0 0 4px;font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;">Expire le</p>
-                          <p style="margin:0;font-size:15px;font-weight:700;color:#111827;">${dateExpiration}</p>
+                          <p style="margin:0;font-size:15px;font-weight:700;color:#111827;">${safeDateExp}</p>
                           <p style="margin:4px 0 0;font-size:11px;color:#6b7280;">valable 6 mois</p>
                         </td>
                       </tr>
@@ -182,7 +199,7 @@ export function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount: _ca
                 <tr>
                   <td>
                     <p style="margin:0;font-size:11px;color:#9ca3af;line-height:1.8;">
-                      Réf. <span style="font-family:monospace;color:#6b7280;">${metadata.reference}</span><br>
+                      Réf. <span style="font-family:monospace;color:#6b7280;">${safeRef}</span><br>
                       Question ? <a href="mailto:contact@edl-diagnostic-erp.fr" style="color:#1a3a5c;text-decoration:none;">contact@edl-diagnostic-erp.fr</a><br>
                       &copy; ${new Date().getFullYear()} EDL&amp;DIAGNOSTIC &middot; <a href="https://edl-diagnostic-erp.fr" style="color:#9ca3af;text-decoration:none;">edl-diagnostic-erp.fr</a>
                     </p>
