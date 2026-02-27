@@ -131,7 +131,7 @@ export default function ProLanding() {
       </header>
 
       {/* Hero — navy, packs en avant-scène */}
-      <section className="bg-navy-900 px-4 pt-14 pb-24 relative overflow-hidden">
+      <section className="bg-navy-900 px-4 pt-10 sm:pt-14 pb-14 sm:pb-24 relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '28px 28px' }}
         />
@@ -154,17 +154,17 @@ export default function ProLanding() {
           </div>
 
           {/* Pack cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-stretch mt-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch mt-6">
 
             {/* Pack 10 */}
-            <div className="flex flex-col bg-white rounded-2xl p-6 shadow-xl shadow-black/25">
+            <div className="flex flex-col bg-white rounded-2xl p-5 sm:p-6 shadow-xl shadow-black/25">
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Découverte</p>
               <p className="font-bold text-navy-900 text-lg mt-1">Pack 10 ERPs</p>
               <div className="flex items-baseline gap-1.5 mt-3 mb-1">
-                <span className="text-4xl font-extrabold text-navy-900">99,99 €</span>
-                <span className="text-sm text-gray-400 font-medium">TTC</span>
+                <span className="text-4xl font-extrabold text-navy-900">83,33 €</span>
+                <span className="text-sm text-gray-400 font-medium">HT</span>
               </div>
-              <p className="text-xs text-gray-400 mb-5">soit 10 € / ERP</p>
+              <p className="text-xs text-gray-400 mb-5">99,99 € TTC · soit 8,33 € HT / ERP</p>
               <ul className="space-y-2.5 flex-1">
                 {PACK_10_FEATURES.map(f => (
                   <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
@@ -182,7 +182,7 @@ export default function ProLanding() {
             </div>
 
             {/* Pack 50 — recommandé */}
-            <div className="flex flex-col bg-amber-400 rounded-2xl px-6 pt-10 pb-6 shadow-2xl shadow-amber-900/40 ring-2 ring-amber-300 relative">
+            <div className="flex flex-col bg-amber-400 rounded-2xl px-5 sm:px-6 pt-10 pb-5 sm:pb-6 shadow-2xl shadow-amber-900/40 ring-2 ring-amber-300 relative">
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap">
                 <span className="inline-flex items-center gap-1.5 bg-red-600 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md">
                   <span className="animate-bounce inline-block">🔥</span>
@@ -192,10 +192,10 @@ export default function ProLanding() {
               <p className="text-xs font-semibold text-navy-900/50 uppercase tracking-widest">Professionnel</p>
               <p className="font-bold text-navy-900 text-lg mt-1">Pack 50 ERPs</p>
               <div className="flex items-baseline gap-1.5 mt-3 mb-1">
-                <span className="text-4xl font-extrabold text-navy-900">249,99 €</span>
-                <span className="text-sm text-navy-900/50 font-medium">TTC</span>
+                <span className="text-4xl font-extrabold text-navy-900">208,33 €</span>
+                <span className="text-sm text-navy-900/50 font-medium">HT</span>
               </div>
-              <p className="text-xs text-navy-900/60 font-medium mb-5">soit 5 € / ERP — 50% d'économie</p>
+              <p className="text-xs text-navy-900/60 font-medium mb-5">249,99 € TTC · soit 4,17 € HT / ERP — 50% d'économie</p>
               <ul className="space-y-2.5 flex-1">
                 {PACK_50_FEATURES.map(f => (
                   <li key={f} className="flex items-start gap-2 text-sm text-navy-900/85">
@@ -213,7 +213,7 @@ export default function ProLanding() {
             </div>
 
             {/* Sur mesure */}
-            <div className="flex flex-col bg-white/8 border border-white/20 rounded-2xl p-6 shadow-xl shadow-black/20">
+            <div className="flex flex-col bg-white/8 border border-white/20 rounded-2xl p-5 sm:p-6 shadow-xl shadow-black/20">
               <p className="text-xs font-semibold text-white/50 uppercase tracking-widest">Sur mesure</p>
               <p className="font-bold text-white text-lg mt-1">Volume & Agences</p>
               <p className="text-white/55 text-sm mt-3 mb-5 leading-relaxed">
@@ -260,15 +260,15 @@ export default function ProLanding() {
       </section>
 
       {/* Avantages partenaire */}
-      <section className="px-4 py-16 bg-slate-50">
+      <section className="px-4 py-12 sm:py-16 bg-slate-50">
         <div className="max-w-5xl mx-auto space-y-10">
           <div className="text-center space-y-2">
             <p className="text-xs font-semibold uppercase tracking-widest text-amber-500">Pourquoi rejoindre l'espace pro</p>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-navy-900">Tout ce que vous gagnez en tant que partenaire</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {BENEFITS.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="bg-white border border-gray-100 rounded-2xl p-6 space-y-3 shadow-sm hover:shadow-md transition-shadow">
+              <div key={title} className="bg-white border border-gray-100 rounded-2xl p-5 space-y-3 shadow-sm hover:shadow-md transition-shadow">
                 <div className="bg-navy-900 rounded-xl w-10 h-10 flex items-center justify-center">
                   <Icon className="h-5 w-5 text-white" />
                 </div>
@@ -281,7 +281,7 @@ export default function ProLanding() {
       </section>
 
       {/* Comment ça marche */}
-      <section className="px-4 py-16 bg-white">
+      <section className="px-4 py-12 sm:py-16 bg-white">
         <div className="max-w-3xl mx-auto space-y-10">
           <div className="text-center space-y-2">
             <p className="text-xs font-semibold uppercase tracking-widest text-amber-500">Simple et rapide</p>
@@ -304,7 +304,7 @@ export default function ProLanding() {
       </section>
 
       {/* Comparaison B2C vs Pro */}
-      <section className="px-4 py-16 bg-slate-50">
+      <section className="px-4 py-12 sm:py-16 bg-slate-50">
         <div className="max-w-3xl mx-auto space-y-8">
           <div className="text-center space-y-2">
             <p className="text-xs font-semibold uppercase tracking-widest text-amber-500">Offre adaptée à votre usage</p>
@@ -359,15 +359,15 @@ export default function ProLanding() {
       </section>
 
       {/* Avis partenaires */}
-      <section className="px-4 py-16 bg-white">
-        <div className="max-w-5xl mx-auto space-y-10">
+      <section className="px-4 py-12 sm:py-16 bg-white">
+        <div className="max-w-5xl mx-auto space-y-8 sm:space-y-10">
           <div className="text-center space-y-2">
             <p className="text-xs font-semibold uppercase tracking-widest text-amber-500">Ils nous font confiance</p>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-navy-900">Ce que disent nos partenaires pro</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {REVIEWS.map(({ name, role, text, rating }) => (
-              <div key={name} className="bg-slate-50 border border-gray-100 rounded-2xl p-6 space-y-4">
+              <div key={name} className="bg-slate-50 border border-gray-100 rounded-2xl p-5 space-y-4">
                 <div className="flex gap-0.5">
                   {Array.from({ length: rating }).map((_, i) => (
                     <span key={i} className="text-amber-400 text-lg leading-none">★</span>
@@ -385,7 +385,7 @@ export default function ProLanding() {
       </section>
 
       {/* CTA final */}
-      <section className="bg-navy-900 px-4 py-16">
+      <section className="bg-navy-900 px-4 py-12 sm:py-16">
         <div className="max-w-xl mx-auto text-center space-y-5">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Prêt à rejoindre l'espace pro ?</h2>
           <p className="text-white/60 text-sm">Connexion immédiate par lien email. Aucun mot de passe à retenir.</p>
@@ -402,7 +402,7 @@ export default function ProLanding() {
       </section>
 
       {/* FAQ */}
-      <section className="px-4 py-14 bg-white">
+      <section className="px-4 py-10 sm:py-14 bg-white">
         <div className="max-w-2xl mx-auto space-y-4">
           <h2 className="text-xl font-bold text-navy-900 mb-6">Questions fréquentes</h2>
           {[
