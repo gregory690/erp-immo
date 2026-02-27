@@ -49,6 +49,8 @@ export default async function handler(req, res) {
         },
       ],
       mode: 'payment',
+      billing_address_collection: 'required',
+      tax_id_collection: { enabled: true },
       success_url: `${baseUrl}/apercu?payment=success&ref=${encodeURIComponent(safeRef)}`,
       cancel_url: `${baseUrl}/generer?payment=cancel`,
       metadata: {
