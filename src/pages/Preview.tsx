@@ -30,7 +30,7 @@ export default function Preview() {
   const [recoveryEmail, setRecoveryEmail] = useState('');
   const [recoveryLoading, setRecoveryLoading] = useState(false);
   const [recoveryError, setRecoveryError] = useState<string | null>(null);
-  const [recoveryResults, setRecoveryResults] = useState<null | { ref: string; adresse: string; commune: string; date: string; validite: string }[]>(null);
+  const [recoverySent, setRecoverySent] = useState(false);
 
   const paymentSuccess = searchParams.get('payment') === 'success';
   const erpRef = searchParams.get('ref');
@@ -139,14 +139,13 @@ export default function Preview() {
         body: JSON.stringify({ email: recoveryEmail }),
       });
       if (res.status === 429) {
-        setRecoveryError('Trop de tentatives. Réessayez dans une minute.');
+        setRecoveryError('Trop de tentatives. Réessayez dans 5 minutes.');
         return;
       }
       if (!res.ok) throw new Error('Erreur serveur');
-      const data = await res.json() as { erps: { ref: string; adresse: string; commune: string; date: string; validite: string }[] };
-      setRecoveryResults(data.erps);
+      setRecoverySent(true);
     } catch {
-      setRecoveryError('Impossible de rechercher. Vérifiez votre connexion.');
+      setRecoveryError('Impossible d\'envoyer. Vérifiez votre connexion.');
     } finally {
       setRecoveryLoading(false);
     }
@@ -190,46 +189,33 @@ export default function Preview() {
               <p className="text-sm text-gray-500">Entrez l'email utilisé lors du paiement</p>
             </div>
 
-            <form onSubmit={handleRecoverByEmail} className="space-y-3">
-              <input
-                type="email"
-                required
-                placeholder="votre@email.fr"
-                value={recoveryEmail}
-                onChange={e => setRecoveryEmail(e.target.value)}
-                className="w-full border border-border rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-navy-900/20 focus:border-navy-900"
-              />
-              <Button type="submit" disabled={recoveryLoading} className="w-full bg-navy-900 hover:bg-navy-800">
-                {recoveryLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Retrouver mes ERPs'}
-              </Button>
-            </form>
+            {!recoverySent && (
+              <form onSubmit={handleRecoverByEmail} className="space-y-3">
+                <input
+                  type="email"
+                  required
+                  placeholder="votre@email.fr"
+                  value={recoveryEmail}
+                  onChange={e => setRecoveryEmail(e.target.value)}
+                  className="w-full border border-border rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-navy-900/20 focus:border-navy-900"
+                />
+                <Button type="submit" disabled={recoveryLoading} className="w-full bg-navy-900 hover:bg-navy-800">
+                  {recoveryLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Retrouver mes ERPs'}
+                </Button>
+              </form>
+            )}
 
             {recoveryError && (
               <p className="text-xs text-red-600 text-center">{recoveryError}</p>
             )}
 
-            {recoveryResults !== null && recoveryResults.length === 0 && (
-              <p className="text-sm text-center text-gray-500">Aucun ERP trouvé pour cet email.</p>
-            )}
-
-            {recoveryResults !== null && recoveryResults.length > 0 && (
-              <div className="space-y-2 pt-1">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{recoveryResults.length} ERP{recoveryResults.length > 1 ? 's' : ''} trouvé{recoveryResults.length > 1 ? 's' : ''}</p>
-                {recoveryResults.map(item => (
-                  <a
-                    key={item.ref}
-                    href={`/apercu?ref=${encodeURIComponent(item.ref)}`}
-                    className="flex items-center justify-between border border-border rounded-lg px-4 py-3 hover:bg-slate-50 transition-colors group"
-                  >
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900 group-hover:text-navy-900">{item.adresse || item.commune || 'Bien immobilier'}</p>
-                      <p className="text-xs text-gray-400 mt-0.5">
-                        {item.date ? new Date(item.date).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }) : ''}
-                      </p>
-                    </div>
-                    <ChevronLeft className="h-4 w-4 text-gray-400 rotate-180 group-hover:text-navy-900" />
-                  </a>
-                ))}
+            {recoverySent && (
+              <div className="flex items-start gap-3 bg-navy-900/5 rounded-lg px-4 py-3">
+                <CheckCircle2 className="h-4 w-4 text-navy-900 shrink-0 mt-0.5" />
+                <div className="space-y-0.5">
+                  <p className="text-sm font-semibold text-gray-900">Vérifiez votre boîte mail</p>
+                  <p className="text-xs text-gray-500">Si un ERP est associé à <strong>{recoveryEmail}</strong>, vous recevrez un lien d'accès dans quelques instants. Pensez à vérifier vos spams.</p>
+                </div>
               </div>
             )}
           </div>
