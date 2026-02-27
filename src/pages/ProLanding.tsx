@@ -154,19 +154,18 @@ export default function ProLanding() {
           </div>
 
           {/* Pack cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-stretch mt-6">
 
             {/* Pack 10 */}
-            <div className="bg-white rounded-2xl p-6 space-y-5 shadow-xl shadow-black/20">
-              <div>
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Découverte</p>
-                <p className="font-bold text-navy-900 text-xl">Pack 10 ERPs</p>
-                <div className="flex items-baseline gap-1.5 mt-2">
-                  <span className="text-5xl font-extrabold text-navy-900">99,99 €</span>
-                  <span className="text-sm text-navy-900/40 font-medium">TTC</span>
-                </div>
+            <div className="flex flex-col bg-white rounded-2xl p-6 shadow-xl shadow-black/25">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Découverte</p>
+              <p className="font-bold text-navy-900 text-lg mt-1">Pack 10 ERPs</p>
+              <div className="flex items-baseline gap-1.5 mt-3 mb-1">
+                <span className="text-4xl font-extrabold text-navy-900">99,99 €</span>
+                <span className="text-sm text-gray-400 font-medium">TTC</span>
               </div>
-              <ul className="space-y-2">
+              <p className="text-xs text-gray-400 mb-5">soit 10 € / ERP</p>
+              <ul className="space-y-2.5 flex-1">
                 {PACK_10_FEATURES.map(f => (
                   <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
                     <Check className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
@@ -176,54 +175,51 @@ export default function ProLanding() {
               </ul>
               <Button
                 onClick={handleCTA}
-                className="w-full bg-navy-900 text-white hover:bg-navy-800 font-semibold"
+                className="w-full mt-6 bg-navy-900 text-white hover:bg-navy-800 font-semibold"
               >
-                Commencer avec ce pack
+                Commencer
               </Button>
             </div>
 
-            {/* Pack 50 */}
-            <div className="bg-gradient-to-b from-amber-400 to-amber-500 rounded-2xl p-6 space-y-5 relative shadow-xl shadow-amber-900/30 ring-2 ring-amber-300/60">
-              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                <Badge className="bg-red-600 text-white border-red-700 text-xs px-3 font-semibold whitespace-nowrap shadow-lg">
-                  <span className="animate-bounce inline-block mr-1">🔥</span>Notre recommandation
-                </Badge>
+            {/* Pack 50 — recommandé */}
+            <div className="flex flex-col bg-amber-400 rounded-2xl px-6 pt-10 pb-6 shadow-2xl shadow-amber-900/40 ring-2 ring-amber-300 relative">
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                <span className="inline-flex items-center gap-1.5 bg-red-600 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md">
+                  <span className="animate-bounce inline-block">🔥</span>
+                  Notre recommandation
+                </span>
               </div>
-              <div>
-                <p className="text-xs font-semibold text-navy-900/50 uppercase tracking-widest mb-1">Professionnel</p>
-                <p className="font-bold text-navy-900 text-xl">Pack 50 ERPs</p>
-                <div className="flex items-baseline gap-1.5 mt-2">
-                  <span className="text-5xl font-extrabold text-navy-900">249,99 €</span>
-                  <span className="text-sm text-navy-900/50 font-medium">TTC</span>
-                </div>
-                <p className="text-navy-900/60 text-xs mt-1 font-medium">50% moins cher par ERP qu'au Pack 10</p>
+              <p className="text-xs font-semibold text-navy-900/50 uppercase tracking-widest">Professionnel</p>
+              <p className="font-bold text-navy-900 text-lg mt-1">Pack 50 ERPs</p>
+              <div className="flex items-baseline gap-1.5 mt-3 mb-1">
+                <span className="text-4xl font-extrabold text-navy-900">249,99 €</span>
+                <span className="text-sm text-navy-900/50 font-medium">TTC</span>
               </div>
-              <ul className="space-y-2">
+              <p className="text-xs text-navy-900/60 font-medium mb-5">soit 5 € / ERP — 50% d'économie</p>
+              <ul className="space-y-2.5 flex-1">
                 {PACK_50_FEATURES.map(f => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-navy-900/80">
-                    <Check className="h-4 w-4 text-navy-900 mt-0.5 shrink-0" />
+                  <li key={f} className="flex items-start gap-2 text-sm text-navy-900/85">
+                    <Check className="h-4 w-4 text-navy-900/70 mt-0.5 shrink-0" />
                     {f}
                   </li>
                 ))}
               </ul>
               <Button
                 onClick={handleCTA}
-                className="w-full bg-navy-900 text-white hover:bg-navy-800 font-bold shadow-md"
+                className="w-full mt-6 bg-navy-900 text-white hover:bg-navy-800 font-bold"
               >
-                Choisir le Pack 50
+                Choisir ce pack
               </Button>
             </div>
 
             {/* Sur mesure */}
-            <div className="bg-slate-800/80 backdrop-blur-sm border border-white/10 rounded-2xl p-6 space-y-5 sm:col-span-2 lg:col-span-1 shadow-xl shadow-black/20">
-              <div>
-                <p className="text-xs font-semibold text-white/50 uppercase tracking-widest mb-1">Sur mesure</p>
-                <p className="font-bold text-white text-xl">Volume & Agences</p>
-                <p className="text-white/55 text-sm mt-2 leading-relaxed">
-                  Vous gérez plus de 50 ERPs/mois ou souhaitez une intégration personnalisée ?
-                </p>
-              </div>
-              <ul className="space-y-2">
+            <div className="flex flex-col bg-white/8 border border-white/20 rounded-2xl p-6 shadow-xl shadow-black/20">
+              <p className="text-xs font-semibold text-white/50 uppercase tracking-widest">Sur mesure</p>
+              <p className="font-bold text-white text-lg mt-1">Volume & Agences</p>
+              <p className="text-white/55 text-sm mt-3 mb-5 leading-relaxed">
+                Vous traitez plus de 50 ERPs/mois ou souhaitez une intégration sur-mesure ?
+              </p>
+              <ul className="space-y-2.5 flex-1">
                 {[
                   'Tarif négocié selon volume',
                   'Facturation mensuelle possible',
@@ -231,7 +227,7 @@ export default function ProLanding() {
                   'Gestionnaire de compte dédié',
                 ].map(f => (
                   <li key={f} className="flex items-start gap-2 text-sm text-white/70">
-                    <Check className="h-4 w-4 text-green-400 mt-0.5 shrink-0" />
+                    <Check className="h-4 w-4 text-amber-400 mt-0.5 shrink-0" />
                     {f}
                   </li>
                 ))}
@@ -239,7 +235,7 @@ export default function ProLanding() {
               <Button
                 onClick={() => { window.location.href = 'mailto:pro@edletdiagnostic.fr?subject=Offre%20sur%20mesure%20ERP'; }}
                 variant="outline"
-                className="w-full border-white/30 text-white hover:bg-white/10 font-semibold"
+                className="w-full mt-6 border-white/30 text-white hover:bg-white/10 font-semibold"
               >
                 Nous contacter
                 <ArrowRight className="h-4 w-4 ml-1.5" />
