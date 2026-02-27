@@ -26,7 +26,7 @@ interface AddressState {
 
 const STEPS = [
   { id: 1, label: 'Mon bien', description: 'Recherche du bien' },
-  { id: 2, label: 'Confirmation', description: 'Validation sur carte' },
+  { id: 2, label: 'Localisation', description: 'Validation sur carte' },
   { id: 3, label: 'Analyse des risques', description: 'Calcul des expositions' },
   { id: 4, label: 'Obtenir mon ERP', description: 'Choix de la formule' },
 ];
