@@ -523,7 +523,7 @@ export default function Generate() {
               )}
             </Button>
             <p className="text-[10px] text-gray-400 text-center leading-relaxed mt-1.5 px-2">
-              En payant, vous renoncez à votre droit de rétractation (art. L221-28 C. conso) — service fourni immédiatement.
+              En procédant au paiement, vous acceptez nos <a href="/cgu" target="_blank" className="underline underline-offset-2">CGV</a>.
             </p>
             <Button
               variant="ghost"

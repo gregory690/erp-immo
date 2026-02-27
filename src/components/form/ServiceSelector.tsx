@@ -122,7 +122,8 @@ export function ServiceSelector({ selected, onSelect, onConfirm }: ServiceSelect
       </Button>
 
       <p className="hidden sm:block text-xs text-gray-400 text-center leading-relaxed">
-        En procédant au paiement, vous acceptez que le service soit fourni immédiatement et renoncez expressément à votre droit de rétractation conformément à l'art. L221-28 du Code de la consommation.
+        En procédant au paiement, vous acceptez nos{' '}
+        <a href="/cgu" target="_blank" className="underline underline-offset-2 hover:text-gray-600">Conditions Générales de Vente</a>.
       </p>
     </div>
   );
