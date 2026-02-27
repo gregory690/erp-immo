@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Check, FileText, Zap, Shield, ArrowRight, Building2 } from 'lucide-react';
+import { Check, FileText, Zap, Shield, ArrowRight, Building2, Lock } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { getProSession } from '../services/pro.service';
@@ -16,8 +16,8 @@ const PACK_10_FEATURES = [
 const PACK_30_FEATURES = [
   '30 ERPs valides 6 mois chacun',
   'Tout le Pack 10 +',
-  'Tarif préférentiel (6,67 €/ERP)',
-  'Idéal cabinet multi-mandats',
+  'Tarif préférentiel par ERP',
+  'Idéal usage régulier',
 ];
 
 export default function ProLanding() {
@@ -63,28 +63,20 @@ export default function ProLanding() {
             Usage professionnel
           </Badge>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-navy-900 leading-tight tracking-tight">
-            L'ERP en ligne pour les<br className="hidden sm:block" /> diagnostiqueurs immobiliers
+            L'ERP en ligne pour un<br className="hidden sm:block" /> usage intensif
           </h1>
           <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
             Générez vos États des Risques et Pollutions en moins de 2 minutes.
             Achetez des crédits en volume et gérez tous vos ERPs depuis un espace dédié.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+          <div className="flex justify-center pt-2">
             <Button
               size="lg"
               onClick={handleCTA}
               className="bg-navy-900 hover:bg-navy-800 text-base font-semibold h-12 px-8"
             >
-              {session ? 'Accéder à mon espace' : 'Accéder à l\'espace pro'}
+              {session ? 'Accéder à mon espace' : "Accéder à l'espace pro"}
               <ArrowRight className="h-4 w-4 ml-2" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={() => navigate('/generer')}
-              className="text-gray-700 text-base h-12 px-8"
-            >
-              Essayer pour 19,99 €
             </Button>
           </div>
         </div>
@@ -108,18 +100,30 @@ export default function ProLanding() {
 
         {/* Pricing */}
         <div>
-          <h2 className="text-xl font-bold text-navy-900 text-center mb-8">Choisissez votre pack</h2>
+          <h2 className="text-xl font-bold text-navy-900 text-center mb-2">Choisissez votre pack</h2>
+          <p className="text-center text-sm text-gray-500 mb-8">
+            Connectez-vous pour accéder aux tarifs et commencer.
+          </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
 
             {/* Pack 10 */}
             <div className="bg-white border-2 border-border rounded-xl p-6 space-y-5 relative">
               <div>
                 <p className="font-bold text-navy-900 text-lg">Pack 10 ERPs</p>
-                <div className="flex items-baseline gap-1.5 mt-1">
-                  <span className="text-4xl font-extrabold text-navy-900">100 €</span>
-                  <span className="text-sm text-gray-500 font-medium">TTC</span>
+                {/* Prix flouté */}
+                <div className="relative mt-1 inline-block">
+                  <div className="flex items-baseline gap-1.5 blur-sm select-none pointer-events-none">
+                    <span className="text-4xl font-extrabold text-navy-900">99,99 €</span>
+                    <span className="text-sm text-gray-500 font-medium">TTC</span>
+                  </div>
+                  <button
+                    onClick={handleCTA}
+                    className="absolute inset-0 flex items-center justify-center gap-1.5 text-xs font-semibold text-navy-900 hover:text-edl-700 transition-colors"
+                  >
+                    <Lock className="h-3 w-3" />
+                    Voir le tarif
+                  </button>
                 </div>
-                <p className="text-xs text-gray-400 mt-0.5">soit 10 € / ERP</p>
               </div>
               <ul className="space-y-2">
                 {PACK_10_FEATURES.map(f => (
@@ -147,11 +151,20 @@ export default function ProLanding() {
               </div>
               <div>
                 <p className="font-bold text-white text-lg">Pack 30 ERPs</p>
-                <div className="flex items-baseline gap-1.5 mt-1">
-                  <span className="text-4xl font-extrabold text-white">200 €</span>
-                  <span className="text-sm text-white/60 font-medium">TTC</span>
+                {/* Prix flouté */}
+                <div className="relative mt-1 inline-block">
+                  <div className="flex items-baseline gap-1.5 blur-sm select-none pointer-events-none">
+                    <span className="text-4xl font-extrabold text-white">199,99 €</span>
+                    <span className="text-sm text-white/60 font-medium">TTC</span>
+                  </div>
+                  <button
+                    onClick={handleCTA}
+                    className="absolute inset-0 flex items-center justify-center gap-1.5 text-xs font-semibold text-white hover:text-amber-300 transition-colors"
+                  >
+                    <Lock className="h-3 w-3" />
+                    Voir le tarif
+                  </button>
                 </div>
-                <p className="text-xs text-white/50 mt-0.5">soit 6,67 € / ERP · économisez 100 €</p>
               </div>
               <ul className="space-y-2">
                 {PACK_30_FEATURES.map(f => (
@@ -181,15 +194,15 @@ export default function ProLanding() {
           {[
             {
               q: 'Les crédits expirent-ils ?',
-              a: 'Non. Vos crédits sont valables sans limite de temps. C\'est l\'ERP généré qui a une validité de 6 mois.'
+              a: "Non. Vos crédits sont valables sans limite de temps. C'est l'ERP généré qui a une validité de 6 mois.",
             },
             {
               q: 'Puis-je retrouver un ERP généré il y a plusieurs semaines ?',
-              a: 'Oui. Votre espace pro conserve l\'historique de tous vos ERPs (jusqu\'à 100) pendant 6 mois.'
+              a: "Oui. Votre espace pro conserve l'historique de tous vos ERPs (jusqu'à 100) pendant 6 mois.",
             },
             {
               q: 'Comment me connecter ?',
-              a: 'Par magic link : on vous envoie un lien par email, pas besoin de mot de passe. La session dure 24h.'
+              a: 'Par magic link : on vous envoie un lien par email, pas besoin de mot de passe. La session dure 24h.',
             },
           ].map(({ q, a }) => (
             <div key={q} className="bg-white border border-border rounded-xl p-5">
