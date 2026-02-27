@@ -117,7 +117,7 @@ export default function ProLanding() {
             onClick={() => navigate('/')}
             className="hover:opacity-70 transition-opacity"
           >
-            <img src="/logo-edl.svg" alt="EDL&DIAGNOSTIC" className="h-9 w-auto" />
+            <img src="/logo-edl.png" alt="EDL&DIAGNOSTIC" className="h-11 w-auto" />
           </button>
           <Button
             size="sm"
