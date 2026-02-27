@@ -109,7 +109,13 @@ export default async function handler(req, res) {
 
         current.credits += packQty;
         current.packs = [
-          { qty: packQty, date: new Date().toISOString(), stripe_id: sessionId },
+          {
+            qty: packQty,
+            date: new Date().toISOString(),
+            stripe_id: sessionId,
+            amount_ttc: session.amount_total ?? null,
+            currency: session.currency ?? 'eur',
+          },
           ...(current.packs || []),
         ];
         await kv.set(credKey, JSON.stringify(current), { ex: 60 * 60 * 24 * 365 });

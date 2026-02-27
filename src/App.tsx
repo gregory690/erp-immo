@@ -15,6 +15,7 @@ import ProLanding from './pages/ProLanding';
 import ProLogin from './pages/ProLogin';
 import ProAuth from './pages/ProAuth';
 import ProDashboard from './pages/ProDashboard';
+import ProInvoice from './pages/ProInvoice';
 
 export default function App() {
   return (
@@ -36,6 +37,7 @@ export default function App() {
         <Route path="/pro/login" element={<ProLogin />} />
         <Route path="/pro/auth" element={<ProAuth />} />
         <Route path="/pro/dashboard" element={<ProDashboard />} />
+        <Route path="/pro/facture" element={<ProInvoice />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

@@ -13,13 +13,22 @@ export interface ProERP {
   adresse: string;
   commune: string;
   date: string | null;
+  validite: string | null;
+}
+
+export interface ProPack {
+  qty: number;
+  date: string;
+  stripe_id: string;
+  amount_ttc: number | null;
+  currency: string;
 }
 
 export interface ProAccount {
   email: string;
   credits: number;
   used: number;
-  packs: { qty: number; date: string; stripe_id: string }[];
+  packs: ProPack[];
   erps: ProERP[];
 }
 
