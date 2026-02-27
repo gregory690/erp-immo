@@ -56,6 +56,27 @@ const BENEFITS = [
   },
 ];
 
+const REVIEWS = [
+  {
+    name: 'Sophie M.',
+    role: 'Diagnostiqueure immobilière — Lyon',
+    text: "Je génère en moyenne 15 ERPs par mois. Avec le pack pro, j'ai réduit mon coût unitaire de moitié et je retrouve tous mes documents en un clic depuis le dashboard. Indispensable.",
+    rating: 5,
+  },
+  {
+    name: 'Thierry B.',
+    role: 'Agent immobilier indépendant — Bordeaux',
+    text: "Ce qui m'a convaincu, c'est la conformité : données Géorisques officielles, arrêté 2022 respecté. Mes notaires l'acceptent sans discussion. Et le PDF est prêt en 2 minutes chrono.",
+    rating: 5,
+  },
+  {
+    name: 'Camille R.',
+    role: 'Gestionnaire de patrimoine — Paris',
+    text: "J'avais besoin d'une facturation mensuelle pour mon cabinet. L'équipe a été réactive, on a trouvé une formule adaptée. Le support dédié fait vraiment la différence.",
+    rating: 5,
+  },
+];
+
 const STEPS = [
   {
     num: '01',
@@ -93,9 +114,9 @@ export default function ProLanding() {
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
           <button
             onClick={() => navigate('/')}
-            className="font-bold text-navy-900 text-sm hover:opacity-70 transition-opacity"
+            className="hover:opacity-70 transition-opacity"
           >
-            EDL&amp;DIAGNOSTIC
+            <img src="/logo-edl.svg" alt="EDL&DIAGNOSTIC" className="h-9 w-auto" />
           </button>
           <Button
             size="sm"
@@ -117,6 +138,17 @@ export default function ProLanding() {
 
           {/* Eyebrow + titre */}
           <div className="text-center space-y-4">
+            {/* Marianne */}
+            <div className="flex justify-center">
+              <div className="inline-flex items-center gap-2.5 bg-white/15 border border-white/25 rounded-full px-4 py-2 backdrop-blur-sm">
+                <div className="bg-white rounded-full h-7 w-7 flex items-center justify-center shrink-0 overflow-hidden p-0.5">
+                  <img src="/marianne.png" alt="Marianne RF" className="h-full w-full object-contain" />
+                </div>
+                <span className="text-[11px] font-semibold text-white/90 uppercase tracking-widest">
+                  Données officielles · APIs de l'État
+                </span>
+              </div>
+            </div>
             <Badge className="bg-amber-400/20 text-amber-300 border-amber-400/30 text-xs px-3 py-1 font-semibold">
               <Building2 className="h-3.5 w-3.5 mr-1.5" />
               Espace partenaire EDL&amp;DIAGNOSTIC
@@ -132,7 +164,7 @@ export default function ProLanding() {
           </div>
 
           {/* Pack cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
 
             {/* Pack 10 */}
             <div className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 space-y-5">
@@ -206,6 +238,38 @@ export default function ProLanding() {
                 className="w-full bg-navy-900 text-white hover:bg-navy-800 font-semibold"
               >
                 Choisir le Pack 30
+              </Button>
+            </div>
+
+            {/* Sur mesure */}
+            <div className="bg-white/8 backdrop-blur-sm border border-white/20 rounded-2xl p-6 space-y-5 sm:col-span-2 lg:col-span-1">
+              <div>
+                <p className="text-xs font-semibold text-white/50 uppercase tracking-widest mb-1">Sur mesure</p>
+                <p className="font-bold text-white text-xl">Volume & Agences</p>
+                <p className="text-white/55 text-sm mt-2 leading-relaxed">
+                  Vous gérez plus de 50 ERPs/mois ou souhaitez une intégration personnalisée ?
+                </p>
+              </div>
+              <ul className="space-y-2">
+                {[
+                  'Tarif négocié selon volume',
+                  'Facturation mensuelle possible',
+                  'Intégration API sur demande',
+                  'Gestionnaire de compte dédié',
+                ].map(f => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-white/70">
+                    <Check className="h-4 w-4 text-green-400 mt-0.5 shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Button
+                onClick={() => { window.location.href = 'mailto:pro@edletdiagnostic.fr?subject=Offre%20sur%20mesure%20ERP'; }}
+                variant="outline"
+                className="w-full border-white/30 text-white hover:bg-white/10 font-semibold"
+              >
+                Nous contacter
+                <ArrowRight className="h-4 w-4 ml-1.5" />
               </Button>
             </div>
 
@@ -313,6 +377,32 @@ export default function ProLanding() {
                 <ArrowRight className="h-4 w-4 ml-1.5" />
               </Button>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Avis partenaires */}
+      <section className="px-4 py-16 bg-white">
+        <div className="max-w-5xl mx-auto space-y-10">
+          <div className="text-center space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-widest text-amber-500">Ils nous font confiance</p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-navy-900">Ce que disent nos partenaires pro</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            {REVIEWS.map(({ name, role, text, rating }) => (
+              <div key={name} className="bg-slate-50 border border-gray-100 rounded-2xl p-6 space-y-4">
+                <div className="flex gap-0.5">
+                  {Array.from({ length: rating }).map((_, i) => (
+                    <span key={i} className="text-amber-400 text-lg leading-none">★</span>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-700 leading-relaxed">"{text}"</p>
+                <div>
+                  <p className="font-bold text-gray-900 text-sm">{name}</p>
+                  <p className="text-xs text-gray-400">{role}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
