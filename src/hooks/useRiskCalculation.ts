@@ -78,6 +78,18 @@ export function useRiskCalculation() {
       const results = await fetchAllRisks(input.lng, input.lat, input.code_insee);
 
       clearInterval(progressInterval);
+
+      // Si l'endpoint principal Géorisques est indisponible, on bloque la génération
+      // pour éviter de livrer un ERP vide (non conforme légalement)
+      if (!results.resultats) {
+        setState(prev => ({
+          ...prev,
+          loading: false,
+          error: 'Le service Géorisques (georisques.gouv.fr) est temporairement indisponible. Les données de risques n\'ont pas pu être récupérées. Veuillez réessayer dans quelques minutes — vos informations ne sont pas perdues.',
+        }));
+        return;
+      }
+
       setState(prev => ({
         ...prev,
         progress: {

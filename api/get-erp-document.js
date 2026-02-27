@@ -16,6 +16,12 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Paramètre ref manquant' });
   }
 
+  // Validation format UUID v4 — rejette immédiatement toute ref malformée
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  if (!uuidRegex.test(ref)) {
+    return res.status(400).json({ error: 'Référence invalide' });
+  }
+
   let data;
   try {
     data = await kv.get(ref);
