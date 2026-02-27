@@ -288,13 +288,21 @@ export default function Home() {
           </div>
 
           {/* CTA */}
-          <Button
-            className="bg-edl-700 hover:bg-edl-800 text-white font-bold shrink-0 gap-2"
-            onClick={() => navigate('/generer')}
-          >
-            Générer mon ERP
-            <span className="hidden sm:inline bg-white/20 rounded px-1.5 py-0.5 text-xs font-semibold">19,99 €</span>
-          </Button>
+          <div className="flex items-center gap-3 shrink-0">
+            <button
+              onClick={() => navigate('/pro')}
+              className="hidden sm:block text-xs font-semibold text-navy-900 hover:text-edl-700 transition-colors border border-navy-900/20 rounded-lg px-3 py-2 hover:border-edl-700/40"
+            >
+              Espace Pro
+            </button>
+            <Button
+              className="bg-edl-700 hover:bg-edl-800 text-white font-bold gap-2"
+              onClick={() => navigate('/generer')}
+            >
+              Générer mon ERP
+              <span className="hidden sm:inline bg-white/20 rounded px-1.5 py-0.5 text-xs font-semibold">19,99 €</span>
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -339,6 +347,15 @@ export default function Home() {
 
           <p className="text-xs text-white/95 mt-3 font-medium">
             ✓ 19,99 € · ✓ Données officielles Géorisques · ✓ PDF prêt en 2 minutes
+          </p>
+          <p className="mt-4 text-xs text-white/60">
+            Vous générez souvent des ERPs ?{' '}
+            <button
+              onClick={() => navigate('/pro')}
+              className="text-amber-400 hover:text-amber-300 font-semibold underline underline-offset-2 transition-colors"
+            >
+              Découvrir l'espace Pro →
+            </button>
           </p>
         </div>
       </section>
@@ -701,6 +718,7 @@ export default function Home() {
               <button onClick={() => navigate('/ressources')} className="hover:text-white underline transition-colors">Guide ERP</button>
               <button onClick={() => navigate('/faq')} className="hover:text-white underline transition-colors">FAQ</button>
               <button onClick={() => navigate('/exemple')} className="hover:text-white underline transition-colors">Exemple de document ERP</button>
+              <button onClick={() => navigate('/pro')} className="hover:text-white transition-colors font-semibold text-amber-400 hover:text-amber-300">Offre Pro</button>
               <button onClick={() => navigate('/mentions-legales')} className="hover:text-white underline transition-colors">Mentions légales</button>
               <button onClick={() => navigate('/cgu')} className="hover:text-white underline transition-colors">CGU / CGV</button>
               <button onClick={() => navigate('/confidentialite')} className="hover:text-white underline transition-colors">Politique de confidentialité</button>
