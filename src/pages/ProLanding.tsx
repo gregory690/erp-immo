@@ -194,8 +194,8 @@ export default function ProLanding() {
             {/* Pack 50 */}
             <div className="bg-gradient-to-b from-amber-400 to-amber-500 rounded-2xl p-6 space-y-5 relative shadow-xl shadow-amber-900/30 ring-2 ring-amber-300/60">
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                <Badge className="bg-navy-900 text-white border-navy-800 text-xs px-3 font-semibold whitespace-nowrap shadow-lg">
-                  ✦ Le plus populaire
+                <Badge className="bg-red-600 text-white border-red-700 text-xs px-3 font-semibold whitespace-nowrap shadow-lg">
+                  ✦ Notre recommandation
                 </Badge>
               </div>
               <div>
