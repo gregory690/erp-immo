@@ -138,17 +138,6 @@ export default function ProLanding() {
 
           {/* Eyebrow + titre */}
           <div className="text-center space-y-4">
-            {/* Marianne */}
-            <div className="flex justify-center">
-              <div className="inline-flex items-center gap-2.5 bg-white/15 border border-white/25 rounded-full px-4 py-2 backdrop-blur-sm">
-                <div className="bg-white rounded-full h-7 w-7 flex items-center justify-center shrink-0 overflow-hidden p-0.5">
-                  <img src="/marianne.png" alt="Marianne RF" className="h-full w-full object-contain" />
-                </div>
-                <span className="text-[11px] font-semibold text-white/90 uppercase tracking-widest">
-                  Données officielles · APIs de l'État
-                </span>
-              </div>
-            </div>
             <Badge className="bg-amber-400/20 text-amber-300 border-amber-400/30 text-xs px-3 py-1 font-semibold">
               <Building2 className="h-3.5 w-3.5 mr-1.5" />
               Espace partenaire EDL&amp;DIAGNOSTIC
@@ -167,18 +156,18 @@ export default function ProLanding() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
 
             {/* Pack 10 */}
-            <div className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 space-y-5">
+            <div className="bg-white rounded-2xl p-6 space-y-5 shadow-xl shadow-black/20">
               <div>
-                <p className="text-xs font-semibold text-white/50 uppercase tracking-widest mb-1">Découverte</p>
-                <p className="font-bold text-white text-xl">Pack 10 ERPs</p>
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Découverte</p>
+                <p className="font-bold text-navy-900 text-xl">Pack 10 ERPs</p>
                 <div className="relative mt-2 w-fit">
                   <div className="flex items-baseline gap-1.5 blur-md select-none pointer-events-none">
-                    <span className="text-5xl font-extrabold text-white">99,99 €</span>
-                    <span className="text-sm text-white/50 font-medium">TTC</span>
+                    <span className="text-5xl font-extrabold text-navy-900">99,99 €</span>
+                    <span className="text-sm text-navy-900/40 font-medium">TTC</span>
                   </div>
                   <button
                     onClick={handleCTA}
-                    className="absolute inset-0 flex items-center justify-center gap-1.5 text-sm font-semibold text-white/80 hover:text-white transition-colors"
+                    className="absolute inset-0 flex items-center justify-center gap-1.5 text-sm font-semibold text-navy-900/60 hover:text-navy-900 transition-colors"
                   >
                     <Lock className="h-3.5 w-3.5" />
                     Voir le tarif
@@ -187,25 +176,25 @@ export default function ProLanding() {
               </div>
               <ul className="space-y-2">
                 {PACK_10_FEATURES.map(f => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-white/70">
-                    <Check className="h-4 w-4 text-green-400 mt-0.5 shrink-0" />
+                  <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
+                    <Check className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
                     {f}
                   </li>
                 ))}
               </ul>
               <Button
                 onClick={handleCTA}
-                className="w-full bg-white text-navy-900 hover:bg-white/90 font-semibold"
+                className="w-full bg-navy-900 text-white hover:bg-navy-800 font-semibold"
               >
                 Commencer avec ce pack
               </Button>
             </div>
 
             {/* Pack 30 */}
-            <div className="bg-amber-400 rounded-2xl p-6 space-y-5 relative">
+            <div className="bg-gradient-to-b from-amber-400 to-amber-500 rounded-2xl p-6 space-y-5 relative shadow-xl shadow-amber-900/30 ring-2 ring-amber-300/60">
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
                 <Badge className="bg-navy-900 text-white border-navy-800 text-xs px-3 font-semibold whitespace-nowrap shadow-lg">
-                  ✦ Recommandé
+                  🏆 Le plus populaire
                 </Badge>
               </div>
               <div>
@@ -218,16 +207,17 @@ export default function ProLanding() {
                   </div>
                   <button
                     onClick={handleCTA}
-                    className="absolute inset-0 flex items-center justify-center gap-1.5 text-sm font-semibold text-navy-900 hover:opacity-60 transition-opacity"
+                    className="absolute inset-0 flex items-center justify-center gap-1.5 text-sm font-semibold text-navy-900/70 hover:text-navy-900 transition-colors"
                   >
                     <Lock className="h-3.5 w-3.5" />
                     Voir le tarif
                   </button>
                 </div>
+                <p className="text-navy-900/60 text-xs mt-1 font-medium">33% moins cher par ERP qu'au Pack 10</p>
               </div>
               <ul className="space-y-2">
                 {PACK_30_FEATURES.map(f => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-navy-900/75">
+                  <li key={f} className="flex items-start gap-2 text-sm text-navy-900/80">
                     <Check className="h-4 w-4 text-navy-900 mt-0.5 shrink-0" />
                     {f}
                   </li>
@@ -235,14 +225,14 @@ export default function ProLanding() {
               </ul>
               <Button
                 onClick={handleCTA}
-                className="w-full bg-navy-900 text-white hover:bg-navy-800 font-semibold"
+                className="w-full bg-navy-900 text-white hover:bg-navy-800 font-bold shadow-md"
               >
                 Choisir le Pack 30
               </Button>
             </div>
 
             {/* Sur mesure */}
-            <div className="bg-white/8 backdrop-blur-sm border border-white/20 rounded-2xl p-6 space-y-5 sm:col-span-2 lg:col-span-1">
+            <div className="bg-slate-800/80 backdrop-blur-sm border border-white/10 rounded-2xl p-6 space-y-5 sm:col-span-2 lg:col-span-1 shadow-xl shadow-black/20">
               <div>
                 <p className="text-xs font-semibold text-white/50 uppercase tracking-widest mb-1">Sur mesure</p>
                 <p className="font-bold text-white text-xl">Volume & Agences</p>
@@ -275,8 +265,16 @@ export default function ProLanding() {
 
           </div>
 
-          <div className="text-center">
-            <p className="text-white/35 text-xs">Paiement sécurisé Stripe · Connexion par lien email, sans mot de passe</p>
+          <div className="flex flex-col items-center gap-3 pt-2">
+            <div className="inline-flex items-center gap-2.5 bg-white/10 border border-white/20 rounded-full px-4 py-2">
+              <div className="bg-white rounded-full h-6 w-6 flex items-center justify-center shrink-0 overflow-hidden p-0.5">
+                <img src="/marianne.png" alt="Marianne RF" className="h-full w-full object-contain" />
+              </div>
+              <span className="text-[11px] font-semibold text-white/80 uppercase tracking-widest">
+                Données officielles · APIs de l'État
+              </span>
+            </div>
+            <p className="text-white/30 text-xs">Paiement sécurisé Stripe · Connexion par lien email, sans mot de passe</p>
           </div>
 
         </div>
