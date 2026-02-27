@@ -110,26 +110,6 @@ export default function ProLanding() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
-        <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
-          <button
-            onClick={() => navigate('/')}
-            className="hover:opacity-70 transition-opacity"
-          >
-            <img src="/logo-edl.png" alt="EDL&DIAGNOSTIC" className="h-11 w-auto" />
-          </button>
-          <Button
-            size="sm"
-            onClick={handleCTA}
-            className="bg-navy-900 hover:bg-navy-800 text-white"
-          >
-            {session ? 'Mon espace' : 'Accéder à l\'espace pro'}
-            <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
-          </Button>
-        </div>
-      </header>
-
       {/* Hero — navy, packs en avant-scène */}
       <section className="bg-navy-900 px-4 pt-10 sm:pt-14 pb-14 sm:pb-24 relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.04]"
@@ -164,7 +144,17 @@ export default function ProLanding() {
                 <span className="text-4xl font-extrabold text-navy-900">83,33 €</span>
                 <span className="text-sm text-gray-400 font-medium">HT</span>
               </div>
-              <p className="text-xs text-gray-400 mb-5">99,99 € TTC · soit 8,33 € HT / ERP</p>
+              <p className="text-xs text-gray-400 mb-4">99,99 € TTC · soit 8,33 € HT / ERP</p>
+              {/* Visuel 10 ERPs */}
+              <div className="flex flex-wrap gap-1.5 mb-5 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                {Array.from({ length: 10 }).map((_, i) => (
+                  <div key={i} className="w-8 h-10 rounded bg-white border border-slate-200 shadow-sm flex flex-col items-center pt-1.5 gap-1 shrink-0">
+                    <div className="w-4 h-px bg-slate-300 rounded-full" />
+                    <div className="w-4 h-px bg-slate-300 rounded-full" />
+                    <div className="w-2.5 h-px bg-slate-300 rounded-full" />
+                  </div>
+                ))}
+              </div>
               <ul className="space-y-2.5 flex-1">
                 {PACK_10_FEATURES.map(f => (
                   <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
@@ -195,7 +185,13 @@ export default function ProLanding() {
                 <span className="text-4xl font-extrabold text-navy-900">208,33 €</span>
                 <span className="text-sm text-navy-900/50 font-medium">HT</span>
               </div>
-              <p className="text-xs text-navy-900/60 font-medium mb-5">249,99 € TTC · soit 4,17 € HT / ERP — 50% d'économie</p>
+              <p className="text-xs text-navy-900/60 font-medium mb-4">249,99 € TTC · soit 4,17 € HT / ERP — 50% d'économie</p>
+              {/* Visuel 50 ERPs */}
+              <div className="flex flex-wrap gap-1 mb-5 p-3 bg-amber-500/30 rounded-xl border border-amber-500/30">
+                {Array.from({ length: 50 }).map((_, i) => (
+                  <div key={i} className="w-4 h-5 rounded-sm bg-navy-900/25 border border-navy-900/20 shrink-0" />
+                ))}
+              </div>
               <ul className="space-y-2.5 flex-1">
                 {PACK_50_FEATURES.map(f => (
                   <li key={f} className="flex items-start gap-2 text-sm text-navy-900/85">
@@ -216,9 +212,18 @@ export default function ProLanding() {
             <div className="flex flex-col bg-white/8 border border-white/20 rounded-2xl p-5 sm:p-6 shadow-xl shadow-black/20">
               <p className="text-xs font-semibold text-white/50 uppercase tracking-widest">Sur mesure</p>
               <p className="font-bold text-white text-lg mt-1">Volume & Agences</p>
-              <p className="text-white/55 text-sm mt-3 mb-5 leading-relaxed">
+              <p className="text-white/55 text-sm mt-3 mb-4 leading-relaxed">
                 Vous traitez plus de 50 ERPs/mois ou souhaitez une intégration sur-mesure ?
               </p>
+              {/* Visuel sur mesure */}
+              <div className="flex flex-wrap gap-1 mb-5 p-3 bg-white/5 rounded-xl border border-white/10">
+                {Array.from({ length: 12 }).map((_, i) => (
+                  <div key={i} className="w-4 h-5 rounded-sm bg-white/15 border border-white/15 shrink-0" />
+                ))}
+                <div className="w-8 h-5 rounded-sm bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
+                  <span className="text-white/50 text-[10px] font-bold">+∞</span>
+                </div>
+              </div>
               <ul className="space-y-2.5 flex-1">
                 {[
                   'Tarif négocié selon volume',
