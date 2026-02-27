@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import {
-  Check, ArrowRight, Building2, Lock,
+  Check, ArrowRight, Building2,
   Clock, Euro, LayoutDashboard, RefreshCw, BadgeCheck, HeartHandshake,
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
@@ -161,18 +161,9 @@ export default function ProLanding() {
               <div>
                 <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Découverte</p>
                 <p className="font-bold text-navy-900 text-xl">Pack 10 ERPs</p>
-                <div className="relative mt-2 w-fit">
-                  <div className="flex items-baseline gap-1.5 blur-md select-none pointer-events-none">
-                    <span className="text-5xl font-extrabold text-navy-900">99,99 €</span>
-                    <span className="text-sm text-navy-900/40 font-medium">TTC</span>
-                  </div>
-                  <button
-                    onClick={handleCTA}
-                    className="absolute inset-0 flex items-center justify-center gap-1.5 text-sm font-semibold text-navy-900/60 hover:text-navy-900 transition-colors"
-                  >
-                    <Lock className="h-3.5 w-3.5" />
-                    Voir le tarif
-                  </button>
+                <div className="flex items-baseline gap-1.5 mt-2">
+                  <span className="text-5xl font-extrabold text-navy-900">99,99 €</span>
+                  <span className="text-sm text-navy-900/40 font-medium">TTC</span>
                 </div>
               </div>
               <ul className="space-y-2">
@@ -195,24 +186,15 @@ export default function ProLanding() {
             <div className="bg-gradient-to-b from-amber-400 to-amber-500 rounded-2xl p-6 space-y-5 relative shadow-xl shadow-amber-900/30 ring-2 ring-amber-300/60">
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
                 <Badge className="bg-red-600 text-white border-red-700 text-xs px-3 font-semibold whitespace-nowrap shadow-lg">
-                  ✦ Notre recommandation
+                  <span className="animate-bounce inline-block mr-1">🔥</span>Notre recommandation
                 </Badge>
               </div>
               <div>
                 <p className="text-xs font-semibold text-navy-900/50 uppercase tracking-widest mb-1">Professionnel</p>
                 <p className="font-bold text-navy-900 text-xl">Pack 50 ERPs</p>
-                <div className="relative mt-2 w-fit">
-                  <div className="flex items-baseline gap-1.5 blur-md select-none pointer-events-none">
-                    <span className="text-5xl font-extrabold text-navy-900">249,99 €</span>
-                    <span className="text-sm text-navy-900/50 font-medium">TTC</span>
-                  </div>
-                  <button
-                    onClick={handleCTA}
-                    className="absolute inset-0 flex items-center justify-center gap-1.5 text-sm font-semibold text-navy-900/70 hover:text-navy-900 transition-colors"
-                  >
-                    <Lock className="h-3.5 w-3.5" />
-                    Voir le tarif
-                  </button>
+                <div className="flex items-baseline gap-1.5 mt-2">
+                  <span className="text-5xl font-extrabold text-navy-900">249,99 €</span>
+                  <span className="text-sm text-navy-900/50 font-medium">TTC</span>
                 </div>
                 <p className="text-navy-900/60 text-xs mt-1 font-medium">50% moins cher par ERP qu'au Pack 10</p>
               </div>
