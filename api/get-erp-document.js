@@ -97,8 +97,10 @@ export default async function handler(req, res) {
   }
 }
 
-// Retire les champs internes avant d'envoyer le document au client
+// Retire les champs internes avant d'envoyer le document au client.
+// customer_email n'est jamais exposé (RGPD) — on expose seulement un booléen
+// email_dispatched pour que le client sache si le webhook a déjà envoyé l'email.
 function sanitizeDoc(doc) {
-  const { paid, email_sent, stripe_session_id, ...safeDoc } = doc;
-  return safeDoc;
+  const { paid, email_sent, stripe_session_id, customer_email, ...safeDoc } = doc;
+  return { ...safeDoc, email_dispatched: !!email_sent };
 }

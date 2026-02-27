@@ -16,7 +16,7 @@ export default function Preview() {
 
   // Auto-email déclenché depuis la page succès (via send-erp-email.js synchrone)
   const [autoEmailStatus, setAutoEmailStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
-  const [autoEmailAddress, setAutoEmailAddress] = useState<string | null>(null);
+  const [autoEmailAddress] = useState<string | null>(null);
   const autoEmailTriggered = useRef(false);
 
   // État formulaire email (envoi à une autre adresse)
@@ -81,15 +81,16 @@ export default function Preview() {
     autoEmailTriggered.current = true;
     setAutoEmailStatus('sending');
 
-    const erpSnapshot = erp; // capture non-null values before async closure
     const erpRefSnapshot = erpRef;
     let cancelled = false;
 
     async function doAutoEmail() {
       try {
         // Retry jusqu'à 4 tentatives pour gérer la race condition entre le webhook
-        // Stripe (qui stocke customer_email dans KV) et le chargement de la page.
-        let customerEmail: string | undefined;
+        // Stripe (qui marque email_dispatched:true dans KV) et le chargement de la page.
+        // customer_email n'est plus exposé par l'API (RGPD) — on se fie uniquement
+        // au booléen email_dispatched retourné par get-erp-document.
+        let emailDispatched = false;
         const maxAttempts = 4;
         const retryDelay = 3000;
 
@@ -100,20 +101,16 @@ export default function Preview() {
           if (!response.ok) throw new Error('fetch failed');
           const kvDoc = await response.json() as Record<string, unknown>;
 
-          customerEmail = kvDoc.customer_email as string | undefined;
-          if (customerEmail) break;
+          if (kvDoc.email_dispatched) { emailDispatched = true; break; }
 
-          // Pas encore disponible → attendre avant de réessayer
+          // Webhook pas encore passé → attendre avant de réessayer
           if (attempt < maxAttempts) {
             await new Promise(resolve => setTimeout(resolve, retryDelay));
           }
         }
 
-        if (!customerEmail) throw new Error('customer_email introuvable dans KV après retries');
+        if (!emailDispatched) throw new Error('email_dispatched introuvable après retries');
         if (cancelled) return;
-
-        setAutoEmailAddress(customerEmail);
-        await sendERPByEmail(customerEmail, erpSnapshot);
 
         if (!cancelled) setAutoEmailStatus('sent');
       } catch {

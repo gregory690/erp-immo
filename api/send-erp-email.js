@@ -81,11 +81,16 @@ export default async function handler(req, res) {
   }
 
   // ─── 2. Sauvegarde dans Vercel KV ───────────────────────────────────────────
-  // On préserve les champs internes déjà présents (paid, stripe_session_id, etc.)
+  // Le document client (erpDocument) est étalé en premier, puis les champs
+  // serveur sont explicitement restaurés pour qu'ils ne puissent jamais être
+  // écrasés par des données contrôlées côté client.
   try {
     await kv.set(reference, JSON.stringify({
-      ...(existingDoc || {}),
       ...erpDocument,
+      paid: existingDoc?.paid ?? false,
+      email_sent: existingDoc?.email_sent ?? false,
+      stripe_session_id: existingDoc?.stripe_session_id ?? null,
+      customer_email: existingDoc?.customer_email ?? null,
     }), {
       ex: 60 * 60 * 24 * 180, // expire après 180 jours
     });
