@@ -59,7 +59,7 @@ export function AddressConfirmation({
       <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-lg px-4 py-3">
         <Move className="h-4 w-4 text-blue-600 shrink-0" />
         <p className="text-sm text-blue-900">
-          <span className="font-semibold">Vérifiez la position du marqueur.</span> Si besoin, déplacez-le sur la carte pour affiner la localisation — les risques seront recalculés automatiquement.
+          <span className="font-semibold">Vérifiez la position du marqueur.</span> Si besoin, déplacez-le sur la carte pour affiner la localisation. Les risques seront recalculés automatiquement.
         </p>
       </div>
 
