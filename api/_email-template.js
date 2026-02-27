@@ -26,7 +26,7 @@ export function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount: _ca
           <!-- ══ LOGO ══ -->
           <tr>
             <td style="padding:0 0 16px 0;">
-              <img src="https://edl-diagnostic-erp.fr/logo-edl.svg" alt="EDL&amp;DIAGNOSTIC" width="160" style="display:block;height:auto;border:0;" />
+              <img src="https://edl-diagnostic-erp.fr/logo-edl.png" alt="EDL&amp;DIAGNOSTIC" width="160" style="display:block;height:auto;border:0;" />
             </td>
           </tr>
 

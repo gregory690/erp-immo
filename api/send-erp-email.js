@@ -40,7 +40,7 @@ export default async function handler(req, res) {
   const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : process.env.URL || 'http://localhost:3000';
-  const redownloadUrl = `${baseUrl}/apercu?ref=${encodeURIComponent(reference)}&autoprint=true`;
+  const redownloadUrl = `${baseUrl}/apercu?ref=${encodeURIComponent(reference)}`;
 
   // ─── 1. Vérifier si le webhook a déjà géré l'email ───────────────────────────
   // Le webhook stripe-webhook.js envoie l'email en premier et marque email_sent:true.
