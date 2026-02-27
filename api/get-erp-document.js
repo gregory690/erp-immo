@@ -22,6 +22,19 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Référence invalide' });
   }
 
+  // ─── Rate limiting — 30 requêtes / 5 min / IP ────────────────────────────
+  try {
+    const ip = ((req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown') + '').split(',')[0].trim();
+    const rateKey = `rate:doc:${ip}`;
+    const count = await kv.incr(rateKey);
+    if (count === 1) await kv.expire(rateKey, 300);
+    if (count > 30) {
+      return res.status(429).json({ error: 'Trop de requêtes. Réessayez dans quelques minutes.' });
+    }
+  } catch {
+    // Non bloquant
+  }
+
   let data;
   try {
     data = await kv.get(ref);

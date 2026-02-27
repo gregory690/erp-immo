@@ -30,6 +30,28 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Adresse email invalide' });
   }
 
+  // ─── Rate limiting ────────────────────────────────────────────────────────
+  // 5 requêtes / 10 min / IP  — protège contre les bots multi-emails
+  // 3 requêtes / 1h / email   — protège contre le spam vers une même boîte
+  try {
+    const ip = ((req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown') + '').split(',')[0].trim();
+    const normalizedEmail = email.toLowerCase().trim();
+
+    const [ipCount, emailCount] = await Promise.all([
+      kv.incr(`rate:sendemail:ip:${ip}`),
+      kv.incr(`rate:sendemail:addr:${normalizedEmail}`),
+    ]);
+    // Initialise TTL à la première incrémentation
+    if (ipCount === 1) await kv.expire(`rate:sendemail:ip:${ip}`, 600);         // 10 min
+    if (emailCount === 1) await kv.expire(`rate:sendemail:addr:${normalizedEmail}`, 3600); // 1h
+
+    if (ipCount > 5 || emailCount > 3) {
+      return res.status(429).json({ error: 'Trop de tentatives. Réessayez dans quelques minutes.' });
+    }
+  } catch {
+    // Non bloquant
+  }
+
   // Validation référence (UUID v4)
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   if (!uuidRegex.test(erpDocument.metadata.reference)) {
