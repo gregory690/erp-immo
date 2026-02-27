@@ -109,6 +109,21 @@ export default async function handler(req, res) {
       ex: 60 * 60 * 24 * 180, // 180 jours
     });
     console.log(`Webhook: document ${erpRef} marqué payé, email client stocké`);
+
+    // Index email → [ref1, ref2, ...] pour la récupération de commande perdue
+    try {
+      const emailKey = `email:${customerEmail.toLowerCase()}`;
+      const existing = await kv.get(emailKey);
+      const refs = existing ? (typeof existing === 'string' ? JSON.parse(existing) : existing) : [];
+      if (!refs.includes(erpRef)) {
+        refs.unshift(erpRef);
+        await kv.set(emailKey, JSON.stringify(refs.slice(0, 20)), {
+          ex: 60 * 60 * 24 * 180,
+        });
+      }
+    } catch (err) {
+      console.error('Webhook: email index error:', err.message);
+    }
   } catch (err) {
     console.error('Webhook: KV update error:', err.message);
   }

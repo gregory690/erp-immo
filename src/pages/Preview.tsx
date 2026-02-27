@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ChevronLeft, AlertCircle, CheckCircle2, PartyPopper, Mail, Loader2 } from 'lucide-react';
+import { ChevronLeft, CheckCircle2, PartyPopper, Mail, Loader2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { ERPPreview } from '../components/report/ERPPreview';
 import { getERPHistory } from '../hooks/useRiskCalculation';
@@ -25,6 +25,12 @@ export default function Preview() {
   const [emailSending, setEmailSending] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
+
+  // Récupération de commande perdue via email
+  const [recoveryEmail, setRecoveryEmail] = useState('');
+  const [recoveryLoading, setRecoveryLoading] = useState(false);
+  const [recoveryError, setRecoveryError] = useState<string | null>(null);
+  const [recoveryResults, setRecoveryResults] = useState<null | { ref: string; adresse: string; commune: string; date: string; validite: string }[]>(null);
 
   const paymentSuccess = searchParams.get('payment') === 'success';
   const erpRef = searchParams.get('ref');
@@ -122,6 +128,30 @@ export default function Preview() {
     return () => { cancelled = true; };
   }, [paymentSuccess, erpRef, erp]);
 
+  async function handleRecoverByEmail(e: React.FormEvent) {
+    e.preventDefault();
+    setRecoveryError(null);
+    setRecoveryLoading(true);
+    try {
+      const res = await fetch('/api/get-erp-by-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: recoveryEmail }),
+      });
+      if (res.status === 429) {
+        setRecoveryError('Trop de tentatives. Réessayez dans une minute.');
+        return;
+      }
+      if (!res.ok) throw new Error('Erreur serveur');
+      const data = await res.json() as { erps: { ref: string; adresse: string; commune: string; date: string; validite: string }[] };
+      setRecoveryResults(data.erps);
+    } catch {
+      setRecoveryError('Impossible de rechercher. Vérifiez votre connexion.');
+    } finally {
+      setRecoveryLoading(false);
+    }
+  }
+
   async function handleSendEmail(e: React.FormEvent) {
     e.preventDefault();
     if (!erp || !email) return;
@@ -147,16 +177,69 @@ export default function Preview() {
 
   if (!erp) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <AlertCircle className="h-12 w-12 text-gray-400 mx-auto" />
-          <p className="text-gray-600">Aucun ERP trouvé.</p>
-          <Button
-            className="bg-edl-700 hover:bg-edl-800"
-            onClick={() => navigate('/generer')}
-          >
-            Générer un ERP
-          </Button>
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+        <div className="w-full max-w-md space-y-4">
+
+          {/* Formulaire de récupération */}
+          <div className="bg-white border border-border rounded-xl p-6 space-y-4">
+            <div className="text-center space-y-1">
+              <div className="bg-navy-900/5 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3">
+                <Mail className="h-6 w-6 text-navy-900" />
+              </div>
+              <h2 className="font-bold text-gray-900">Retrouver votre ERP</h2>
+              <p className="text-sm text-gray-500">Entrez l'email utilisé lors du paiement</p>
+            </div>
+
+            <form onSubmit={handleRecoverByEmail} className="space-y-3">
+              <input
+                type="email"
+                required
+                placeholder="votre@email.fr"
+                value={recoveryEmail}
+                onChange={e => setRecoveryEmail(e.target.value)}
+                className="w-full border border-border rounded-lg px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-navy-900/20 focus:border-navy-900"
+              />
+              <Button type="submit" disabled={recoveryLoading} className="w-full bg-navy-900 hover:bg-navy-800">
+                {recoveryLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Retrouver mes ERPs'}
+              </Button>
+            </form>
+
+            {recoveryError && (
+              <p className="text-xs text-red-600 text-center">{recoveryError}</p>
+            )}
+
+            {recoveryResults !== null && recoveryResults.length === 0 && (
+              <p className="text-sm text-center text-gray-500">Aucun ERP trouvé pour cet email.</p>
+            )}
+
+            {recoveryResults !== null && recoveryResults.length > 0 && (
+              <div className="space-y-2 pt-1">
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{recoveryResults.length} ERP{recoveryResults.length > 1 ? 's' : ''} trouvé{recoveryResults.length > 1 ? 's' : ''}</p>
+                {recoveryResults.map(item => (
+                  <a
+                    key={item.ref}
+                    href={`/apercu?ref=${encodeURIComponent(item.ref)}`}
+                    className="flex items-center justify-between border border-border rounded-lg px-4 py-3 hover:bg-slate-50 transition-colors group"
+                  >
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900 group-hover:text-navy-900">{item.adresse || item.commune || 'Bien immobilier'}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        {item.date ? new Date(item.date).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }) : ''}
+                      </p>
+                    </div>
+                    <ChevronLeft className="h-4 w-4 text-gray-400 rotate-180 group-hover:text-navy-900" />
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="text-center">
+            <Button variant="outline" className="text-gray-600" onClick={() => navigate('/generer')}>
+              Générer un nouvel ERP
+            </Button>
+          </div>
+
         </div>
       </div>
     );
