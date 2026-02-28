@@ -136,7 +136,7 @@ export function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount: _ca
                 <tr>
                   <td style="padding:28px 36px;">
                     <a href="${redownloadUrl}" style="display:inline-block;background-color:#1a3a5c;color:#ffffff;text-decoration:none;font-size:14px;font-weight:700;padding:14px 28px;letter-spacing:0.3px;">
-                      Voir / télécharger mon ERP &rarr;
+                      Voir ou télécharger mon ERP &rarr;
                     </a>
                     <p style="margin:12px 0 0;font-size:11px;color:#9ca3af;">Si le PDF n'apparaît pas en pièce jointe, utilisez ce lien pour le télécharger. Lien permanent — consultable à tout moment.</p>
                   </td>

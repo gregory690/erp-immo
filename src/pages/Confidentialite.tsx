@@ -70,7 +70,7 @@ export default function Confidentialite() {
                   </tr>
                   <tr>
                     <td className="p-2.5 border border-gray-200 font-medium">Adresse email</td>
-                    <td className="p-2.5 border border-gray-200">Adresse email saisie librement sur la page de confirmation</td>
+                    <td className="p-2.5 border border-gray-200">Saisie librement par l'utilisateur sur la page de confirmation</td>
                     <td className="p-2.5 border border-gray-200">Envoi du lien de re-téléchargement du document ERP (180 jours)</td>
                     <td className="p-2.5 border border-gray-200">Non — optionnel</td>
                   </tr>

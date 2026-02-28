@@ -1,13 +1,14 @@
 // Vercel Function — stripe-webhook
 // Écoute l'événement checkout.session.completed de Stripe.
-// Marque le document ERP comme payé dans KV et stocke l'email du client.
-// L'envoi d'email est déclenché par la page /apercu (côté client) via send-erp-email.js,
-// qui s'exécute de façon synchrone sans risque de timeout Vercel.
+// Marque le document ERP comme payé, envoie l'email (sans PDF) et pose email_sent:true.
+// Preview.tsx détecte email_dispatched:true via get-erp-document et confirme l'envoi.
 //
 // Variables d'environnement requises :
 //   STRIPE_SECRET_KEY               → clé secrète Stripe (sk_live_...)
 //   STRIPE_WEBHOOK_SECRET           → dashboard Stripe → Developers → Webhooks → Signing secret
 //   KV_REST_API_URL + KV_REST_API_TOKEN → Upstash KV
+//   RESEND_API_KEY                  → envoi email
+//   RESEND_FROM_EMAIL               → ex: erp@edletdiagnostic.fr
 //
 // Configuration Stripe :
 //   Dashboard → Developers → Webhooks → Add endpoint
@@ -16,6 +17,8 @@
 
 import Stripe from 'stripe';
 import { kv } from '@vercel/kv';
+import { Resend } from 'resend';
+import { buildEmailHTML } from './_email-template.js';
 
 // Désactiver le body parser Vercel pour pouvoir vérifier la signature Stripe
 // sur le payload brut (obligatoire pour stripe.webhooks.constructEvent)
@@ -135,12 +138,18 @@ export default async function handler(req, res) {
     return res.status(200).json({ received: true });
   }
 
-  // ─── Marquer le document comme payé et stocker l'email client dans KV ────────
-  // L'envoi d'email (PDF inclus) est géré de façon synchrone par la page /apercu
-  // via l'endpoint send-erp-email.js — pas de risque de timeout ici.
+  // ─── Marquer le document comme payé et envoyer l'email ───────────────────────
   try {
     const raw = await kv.get(erpRef);
     const existingDoc = raw ? (typeof raw === 'string' ? JSON.parse(raw) : raw) : {};
+
+    // Idempotence : si l'email a déjà été envoyé, on ne retraite pas
+    if (existingDoc?.email_sent) {
+      console.log(`Webhook: email déjà envoyé pour ${erpRef}, skip`);
+      return res.status(200).json({ received: true });
+    }
+
+    // Marquer payé + stocker email client
     await kv.set(erpRef, JSON.stringify({
       ...existingDoc,
       paid: true,
@@ -148,7 +157,7 @@ export default async function handler(req, res) {
     }), {
       ex: 60 * 60 * 24 * 180, // 180 jours
     });
-    console.log(`Webhook: document ${erpRef} marqué payé, email client stocké`);
+    console.log(`Webhook: document ${erpRef} marqué payé`);
 
     // Index email → [ref1, ref2, ...] pour la récupération de commande perdue
     try {
@@ -163,6 +172,57 @@ export default async function handler(req, res) {
       }
     } catch (err) {
       console.error('Webhook: email index error:', err.message);
+    }
+
+    // ─── Envoi email (sans PDF pour rester dans les 60s Vercel) ─────────────
+    const resendKey = process.env.RESEND_API_KEY;
+    const fromEmail = process.env.RESEND_FROM_EMAIL || 'erp@edletdiagnostic.fr';
+    if (resendKey && existingDoc?.bien && existingDoc?.metadata) {
+      try {
+        const resend = new Resend(resendKey);
+        const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+          ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+          : 'https://edl-diagnostic-erp.fr';
+        const redownloadUrl = `${baseUrl}/apercu?ref=${encodeURIComponent(erpRef)}`;
+        const dateRealisation = new Date(existingDoc.metadata.date_realisation).toLocaleDateString('fr-FR', {
+          day: '2-digit', month: 'long', year: 'numeric',
+        });
+        const dateExpiration = new Date(existingDoc.metadata.validite_jusqu_au).toLocaleDateString('fr-FR', {
+          day: '2-digit', month: 'long', year: 'numeric',
+        });
+
+        await resend.emails.send({
+          from: `EDL&DIAGNOSTIC <${fromEmail}>`,
+          to: customerEmail,
+          subject: `Votre ERP est prêt — ${existingDoc.bien.adresse_complete}`,
+          html: buildEmailHTML({
+            bien: existingDoc.bien,
+            metadata: existingDoc.metadata,
+            redownloadUrl,
+            catnatCount: existingDoc.catnat?.length ?? 0,
+            dateRealisation,
+            dateExpiration,
+            hasPdf: false, // pas de PDF dans le webhook (limite timeout Vercel)
+          }),
+        });
+
+        // Poser email_sent:true → get-erp-document retournera email_dispatched:true
+        await kv.set(erpRef, JSON.stringify({
+          ...existingDoc,
+          paid: true,
+          customer_email: customerEmail,
+          email_sent: true,
+        }), {
+          ex: 60 * 60 * 24 * 180,
+        });
+        console.log(`Webhook: email envoyé à ${customerEmail} pour ${erpRef}`);
+      } catch (err) {
+        console.error('Webhook: email send error:', err.message);
+        // Non bloquant — le webhook répond 200 même si l'email échoue
+        // Preview.tsx affichera le formulaire de secours dans ce cas
+      }
+    } else {
+      console.warn(`Webhook: email non envoyé — RESEND_API_KEY=${!!resendKey} doc.bien=${!!existingDoc?.bien}`);
     }
   } catch (err) {
     console.error('Webhook: KV update error:', err.message);

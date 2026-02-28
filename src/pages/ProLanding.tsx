@@ -20,7 +20,7 @@ const PACK_50_FEATURES = [
 const REVIEWS = [
   {
     name: 'Sophie M.',
-    role: 'Diagnostiqueure — Lyon',
+    role: 'Diagnostiqueuse — Lyon',
     text: "15 ERPs par mois, le dashboard centralise tout. Les notaires l'acceptent sans discussion.",
   },
   {
@@ -151,7 +151,7 @@ export default function ProLanding() {
               <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-5">Sur mesure</p>
               <p className="text-xl font-bold text-navy-900 mb-2">Volume & Agences</p>
               <p className="text-sm text-gray-500 mb-7 leading-relaxed">
-                Plus de 50 ERPs/mois ou besoin d'une intégration personnalisée ?
+                Plus de 50 ERPs par mois ou besoin d'une intégration personnalisée ?
               </p>
               <ul className="space-y-3 flex-1 mb-7">
                 {[
