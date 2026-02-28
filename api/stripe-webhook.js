@@ -138,6 +138,14 @@ export default async function handler(req, res) {
     return res.status(200).json({ received: true });
   }
 
+  // Sécurité : s'assurer que erpRef est un UUID v4 valide avant toute opération KV.
+  // Empêche un attaquant de cibler des clés KV arbitraires (ex: "pro:credits:…").
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  if (!uuidRegex.test(erpRef)) {
+    console.error('Webhook: erpRef invalide (non UUID v4), rejeté', { erpRef });
+    return res.status(200).json({ received: true });
+  }
+
   // ─── Marquer le document comme payé et envoyer l'email ───────────────────────
   try {
     const raw = await kv.get(erpRef);

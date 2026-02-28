@@ -40,13 +40,6 @@ export function buildEmailHTML({ bien, metadata, redownloadUrl, catnatCount: _ca
       <td align="center">
         <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;">
 
-          <!-- ══ LOGO ══ -->
-          <tr>
-            <td style="padding:0 0 16px 0;">
-              <img src="https://edl-diagnostic-erp.fr/logo-edl.png" alt="EDL&amp;DIAGNOSTIC" width="160" style="display:block;height:auto;border:0;" />
-            </td>
-          </tr>
-
           <!-- ══ CARD PRINCIPALE ══ -->
           <tr>
             <td style="background-color:#ffffff;border-top:3px solid #1a3a5c;">
