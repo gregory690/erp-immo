@@ -110,6 +110,17 @@ export default async function handler(req, res) {
           return res.status(200).json({ received: true });
         }
 
+        // Récupérer l'URL de la facture Stripe (invoice_creation activé dans create-pro-checkout)
+        let invoiceUrl = null;
+        if (session.invoice) {
+          try {
+            const invoice = await stripe.invoices.retrieve(session.invoice);
+            invoiceUrl = invoice.hosted_invoice_url || null;
+          } catch (err) {
+            console.error('Webhook: invoice retrieve error:', err.message);
+          }
+        }
+
         current.credits += packQty;
         current.packs = [
           {
@@ -118,6 +129,7 @@ export default async function handler(req, res) {
             stripe_id: sessionId,
             amount_ttc: session.amount_total ?? null,
             currency: session.currency ?? 'eur',
+            invoice_url: invoiceUrl,
           },
           ...(current.packs || []),
         ];

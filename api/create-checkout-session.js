@@ -35,6 +35,11 @@ export default async function handler(req, res) {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       locale: 'fr',
+      // Checkbox "J'accepte les CGU" — l'URL des CGU est configurée dans
+      // Stripe Dashboard → Settings → Checkout → Terms of service URL
+      // Valeur légale : art. L221-28 Code conso — renonciation au droit de rétractation
+      // pour contenu numérique livré immédiatement sur consentement exprès.
+      consent_collection: { terms_of_service: 'required' },
       line_items: [
         {
           price_data: {

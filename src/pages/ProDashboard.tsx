@@ -310,12 +310,12 @@ export default function ProDashboard() {
                           </p>
                         </div>
                         <a
-                          href={`/pro/facture?id=${encodeURIComponent(pack.stripe_id)}`}
+                          href={pack.invoice_url || `/pro/facture?id=${encodeURIComponent(pack.stripe_id)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-1 text-xs font-semibold text-navy-900 hover:underline shrink-0"
                         >
-                          Reçu <ExternalLink className="h-3 w-3" />
+                          {pack.invoice_url ? 'Facture' : 'Reçu'} <ExternalLink className="h-3 w-3" />
                         </a>
                       </div>
                     ))}

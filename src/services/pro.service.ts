@@ -22,6 +22,7 @@ export interface ProPack {
   stripe_id: string;
   amount_ttc: number | null;
   currency: string;
+  invoice_url?: string | null; // URL facture officielle Stripe (null pour anciens achats)
 }
 
 export interface ProAccount {

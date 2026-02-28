@@ -56,6 +56,15 @@ export default async function handler(req, res) {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       customer_email: email,
+      // Crée un Customer Stripe → requis pour invoice_creation
+      customer_creation: 'always',
+      // Collecte l'adresse de facturation (nécessaire pour facture fiscale)
+      billing_address_collection: 'required',
+      // Permet au client de saisir son numéro de TVA intracommunautaire
+      tax_id_collection: { enabled: true },
+      // Génère automatiquement une facture Stripe avec SIRET/TVA EDL&DIAGNOSTIC
+      // (configurer les infos vendeur dans Stripe Dashboard → Settings → Business)
+      invoice_creation: { enabled: true },
       line_items: [{
         price_data: {
           currency: 'eur',
