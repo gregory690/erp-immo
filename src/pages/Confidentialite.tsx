@@ -18,7 +18,7 @@ export default function Confidentialite() {
     setDeletionStatus('sending');
     setDeletionErrorMsg('');
     try {
-      const res = await fetch('/api/request-deletion', {
+      const res = await fetch('/api/data-deletion', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: deletionEmail }),
