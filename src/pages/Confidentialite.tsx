@@ -1,8 +1,45 @@
-import { useNavigate } from 'react-router-dom';
-import { Shield, ArrowLeft } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Shield, ArrowLeft, Trash2, CheckCircle2, AlertTriangle, Loader2 } from 'lucide-react';
 
 export default function Confidentialite() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const deleted = searchParams.get('deleted') === '1';
+  const deleteError = searchParams.get('delete_error');
+
+  const [deletionEmail, setDeletionEmail] = useState('');
+  const [deletionStatus, setDeletionStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [deletionErrorMsg, setDeletionErrorMsg] = useState('');
+
+  async function handleRequestDeletion(e: React.FormEvent) {
+    e.preventDefault();
+    setDeletionStatus('sending');
+    setDeletionErrorMsg('');
+    try {
+      const res = await fetch('/api/request-deletion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: deletionEmail }),
+      });
+      if (res.status === 429) {
+        setDeletionErrorMsg('Trop de tentatives. Réessayez dans une heure.');
+        setDeletionStatus('error');
+        return;
+      }
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setDeletionErrorMsg(data.error || 'Erreur serveur');
+        setDeletionStatus('error');
+        return;
+      }
+      setDeletionStatus('sent');
+    } catch {
+      setDeletionErrorMsg('Impossible de contacter le serveur. Vérifiez votre connexion.');
+      setDeletionStatus('error');
+    }
+  }
 
   return (
     <div className="min-h-screen bg-white font-sans overflow-x-hidden">
@@ -29,6 +66,35 @@ export default function Confidentialite() {
       <main className="max-w-3xl mx-auto px-4 py-12">
         <h1 className="text-3xl font-black text-navy-900 mb-2">Politique de confidentialité</h1>
         <p className="text-sm text-gray-400 mb-10">En vigueur au 1er janvier 2026 — Conforme au Règlement (UE) 2016/679 (RGPD)</p>
+
+        {/* Bannière confirmation suppression */}
+        {deleted && (
+          <div className="flex items-start gap-3 bg-green-50 border border-green-200 rounded-xl px-5 py-4 mb-8">
+            <CheckCircle2 className="h-5 w-5 text-green-600 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-semibold text-green-900 text-sm">Vos données ont été supprimées.</p>
+              <p className="text-xs text-green-700 mt-0.5">Tous vos ERPs et données associées ont été effacés de nos serveurs. Pensez également à vider le localStorage de votre navigateur si nécessaire.</p>
+            </div>
+          </div>
+        )}
+        {deleteError === 'expired' && (
+          <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl px-5 py-4 mb-8">
+            <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-semibold text-amber-900 text-sm">Lien expiré ou déjà utilisé.</p>
+              <p className="text-xs text-amber-700 mt-0.5">Le lien de confirmation est valable 1 heure et à usage unique. Soumettez à nouveau le formulaire ci-dessous pour recevoir un nouveau lien.</p>
+            </div>
+          </div>
+        )}
+        {(deleteError === 'invalid' || deleteError === 'server') && (
+          <div className="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl px-5 py-4 mb-8">
+            <AlertTriangle className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-semibold text-red-900 text-sm">Une erreur s'est produite.</p>
+              <p className="text-xs text-red-700 mt-0.5">Réessayez ou contactez-nous à <strong>contact@edl-diagnostic-erp.fr</strong>.</p>
+            </div>
+          </div>
+        )}
 
         <section className="space-y-8 text-gray-700 text-sm leading-relaxed">
 
@@ -148,7 +214,54 @@ export default function Confidentialite() {
               <li><strong>Limitation :</strong> demander la suspension temporaire d'un traitement contesté</li>
               <li><strong>Retrait du consentement :</strong> retirer à tout moment votre consentement à la réception d'emails, sans affecter la validité du traitement antérieur</li>
             </ul>
-            <p className="mt-3">Pour exercer vos droits, contactez : <strong>contact@edl-diagnostic-erp.fr</strong> — Réponse garantie sous 30 jours.</p>
+            <p className="mt-3 mb-5">Pour les droits d'accès, rectification, portabilité et opposition, contactez : <strong>contact@edl-diagnostic-erp.fr</strong> — Réponse garantie sous 30 jours.</p>
+
+            {/* Formulaire droit à l'effacement */}
+            <div className="border border-gray-200 rounded-xl p-5 bg-slate-50">
+              <div className="flex items-center gap-2 mb-3">
+                <Trash2 className="h-4 w-4 text-red-500 shrink-0" />
+                <p className="font-semibold text-gray-900 text-sm">Supprimer toutes mes données</p>
+              </div>
+              <p className="text-xs text-gray-500 mb-4 leading-relaxed">
+                Entrez l'adresse email utilisée lors de votre commande. Vous recevrez un email de confirmation avec un lien valable <strong>1 heure</strong>. Un clic sur ce lien supprimera définitivement tous vos ERPs et données associées de nos serveurs.
+              </p>
+
+              {deletionStatus === 'sent' ? (
+                <div className="flex items-start gap-3 bg-green-50 border border-green-200 rounded-lg px-4 py-3">
+                  <CheckCircle2 className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-semibold text-green-900">Email envoyé — vérifiez votre boîte mail.</p>
+                    <p className="text-xs text-green-700 mt-0.5">Si un compte existe pour cette adresse, vous recevrez un lien de confirmation dans quelques instants. Pensez à vérifier vos spams.</p>
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={handleRequestDeletion} className="flex flex-col sm:flex-row gap-2">
+                  <input
+                    type="email"
+                    required
+                    placeholder="votre@email.fr"
+                    value={deletionEmail}
+                    onChange={e => setDeletionEmail(e.target.value)}
+                    disabled={deletionStatus === 'sending'}
+                    className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-400 bg-white disabled:opacity-60"
+                  />
+                  <button
+                    type="submit"
+                    disabled={deletionStatus === 'sending' || !deletionEmail}
+                    className="flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-700 disabled:opacity-60 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors shrink-0"
+                  >
+                    {deletionStatus === 'sending'
+                      ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Envoi…</>
+                      : <><Trash2 className="h-3.5 w-3.5" /> Demander la suppression</>
+                    }
+                  </button>
+                </form>
+              )}
+
+              {deletionStatus === 'error' && (
+                <p className="text-xs text-red-600 mt-2">{deletionErrorMsg}</p>
+              )}
+            </div>
           </div>
 
           <div>
