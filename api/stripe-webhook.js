@@ -17,9 +17,6 @@
 
 import Stripe from 'stripe';
 import { kv } from '@vercel/kv';
-import { Resend } from 'resend';
-import { buildEmailHTML } from './_email-template.js';
-import { generatePDFAttachment, buildPDFFilename } from './_generate-pdf.js';
 
 // Désactiver le body parser Vercel pour pouvoir vérifier la signature Stripe
 // sur le payload brut (obligatoire pour stripe.webhooks.constructEvent)
@@ -195,69 +192,10 @@ export default async function handler(req, res) {
       console.error('Webhook: email index error:', err.message);
     }
 
-    // ─── Envoi email avec PDF (PDFShift, timeout 40s) ────────────────────────
-    const resendKey = process.env.RESEND_API_KEY;
-    const fromEmail = process.env.RESEND_FROM_EMAIL || 'erp@edletdiagnostic.fr';
-    if (resendKey && existingDoc?.bien && existingDoc?.metadata) {
-      try {
-        const resend = new Resend(resendKey);
-        const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-          ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-          : 'https://edl-diagnostic-erp.fr';
-        const redownloadUrl = `${baseUrl}/apercu?ref=${encodeURIComponent(erpRef)}`;
-        const dateRealisation = new Date(existingDoc.metadata.date_realisation).toLocaleDateString('fr-FR', {
-          day: '2-digit', month: 'long', year: 'numeric',
-        });
-        const dateExpiration = new Date(existingDoc.metadata.validite_jusqu_au).toLocaleDateString('fr-FR', {
-          day: '2-digit', month: 'long', year: 'numeric',
-        });
-
-        // Générer le PDF via PDFShift (timeout 40s pour rester dans les 60s Vercel)
-        const printUrl = `${baseUrl}/print?ref=${encodeURIComponent(erpRef)}`;
-        let pdfAttachment = null;
-        try {
-          pdfAttachment = await Promise.race([
-            generatePDFAttachment(printUrl, buildPDFFilename(existingDoc)),
-            new Promise((_, reject) => setTimeout(() => reject(new Error('PDF timeout')), 40000)),
-          ]);
-        } catch (pdfErr) {
-          console.warn('Webhook: PDF non généré, email envoyé sans PDF:', pdfErr.message);
-        }
-
-        await resend.emails.send({
-          from: `EDL&DIAGNOSTIC <${fromEmail}>`,
-          to: customerEmail,
-          subject: `Votre ERP est prêt — ${existingDoc.bien.adresse_complete}`,
-          html: buildEmailHTML({
-            bien: existingDoc.bien,
-            metadata: existingDoc.metadata,
-            redownloadUrl,
-            catnatCount: existingDoc.catnat?.length ?? 0,
-            dateRealisation,
-            dateExpiration,
-            hasPdf: !!pdfAttachment,
-          }),
-          ...(pdfAttachment ? { attachments: [pdfAttachment] } : {}),
-        });
-
-        // Poser email_sent:true → get-erp-document retournera email_dispatched:true
-        await kv.set(erpRef, JSON.stringify({
-          ...existingDoc,
-          paid: true,
-          customer_email: customerEmail,
-          email_sent: true,
-        }), {
-          ex: 60 * 60 * 24 * 180,
-        });
-        console.log(`Webhook: email envoyé à ${customerEmail} pour ${erpRef}`);
-      } catch (err) {
-        console.error('Webhook: email send error:', err.message);
-        // Non bloquant — le webhook répond 200 même si l'email échoue
-        // Preview.tsx affichera le formulaire de secours dans ce cas
-      }
-    } else {
-      console.warn(`Webhook: email non envoyé — RESEND_API_KEY=${!!resendKey} doc.bien=${!!existingDoc?.bien}`);
-    }
+    // L'email avec PDF est déclenché par Preview.tsx via send-erp-email.js
+    // (fire-and-forget côté client après confirmation du paiement).
+    // Le webhook se contente de marquer paid + customer_email — réponse rapide à Stripe.
+    console.log(`Webhook: document ${erpRef} prêt, email délégué à send-erp-email`);
   } catch (err) {
     console.error('Webhook: KV update error:', err.message);
   }

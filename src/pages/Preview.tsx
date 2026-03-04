@@ -86,12 +86,10 @@ export default function Preview() {
 
     async function doAutoEmail() {
       try {
-        // Retry jusqu'à 4 tentatives pour gérer la race condition entre le webhook
-        // Stripe (qui marque email_dispatched:true dans KV) et le chargement de la page.
-        // customer_email n'est plus exposé par l'API (RGPD) — on se fie uniquement
-        // au booléen email_dispatched retourné par get-erp-document.
-        let emailDispatched = false;
-        const maxAttempts = 8;
+        // Attendre que le webhook ait marqué paid:true dans KV (généralement <5s).
+        // customer_email est maintenant exposé par l'API pour les docs payés.
+        let customerEmail: string | null = null;
+        const maxAttempts = 10;
         const retryDelay = 2000;
 
         for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -101,22 +99,32 @@ export default function Preview() {
           if (!response.ok) throw new Error('fetch failed');
           const kvDoc = await response.json() as Record<string, unknown>;
 
-          if (kvDoc.email_dispatched) { emailDispatched = true; break; }
+          if (kvDoc.paid && kvDoc.customer_email) {
+            customerEmail = kvDoc.customer_email as string;
+            break;
+          }
 
-          // Webhook pas encore passé → attendre avant de réessayer
           if (attempt < maxAttempts) {
             await new Promise(resolve => setTimeout(resolve, retryDelay));
           }
         }
 
-        if (!emailDispatched) throw new Error('email_dispatched introuvable après retries');
+        if (!customerEmail) throw new Error('Paiement non confirmé après retries');
         if (cancelled) return;
+
+        // Déclencher l'envoi email+PDF en fire-and-forget (prend 1-2 min avec PDFShift)
+        // On n'attend pas la réponse — l'utilisateur est notifié immédiatement.
+        fetch('/api/send-erp-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: customerEmail, erpDocument: erp }),
+        }).catch(() => { /* non bloquant */ });
 
         if (!cancelled) setAutoEmailStatus('sent');
       } catch {
         if (!cancelled) {
           setAutoEmailStatus('error');
-          setShowAltEmailForm(true); // Ouvre le formulaire manuel en fallback
+          setShowAltEmailForm(true);
         }
       }
     }
@@ -304,10 +312,9 @@ export default function Preview() {
                 </div>
                 <div className="text-sm text-green-900 space-y-0.5">
                   <p>
-                    <span className="font-semibold">Email envoyé</span>
-                    {autoEmailAddress ? ` à ${autoEmailAddress}` : ' automatiquement'} · conservez-le pour retrouver votre ERP à tout moment.
+                    <span className="font-semibold">Email en cours d'envoi</span> — votre ERP avec PDF arrive dans <span className="font-semibold">1 à 2 minutes</span>.
                   </p>
-                  <p className="text-xs text-green-700">Si vous ne le recevez pas dans les prochaines minutes, vérifiez vos <span className="font-semibold">spams ou courriers indésirables</span>.</p>
+                  <p className="text-xs text-green-700">Si vous ne le recevez pas, vérifiez vos <span className="font-semibold">spams ou courriers indésirables</span>.</p>
                 </div>
               </div>
             )}
