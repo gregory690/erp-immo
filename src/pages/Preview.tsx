@@ -91,8 +91,8 @@ export default function Preview() {
         // customer_email n'est plus exposé par l'API (RGPD) — on se fie uniquement
         // au booléen email_dispatched retourné par get-erp-document.
         let emailDispatched = false;
-        const maxAttempts = 4;
-        const retryDelay = 3000;
+        const maxAttempts = 8;
+        const retryDelay = 2000;
 
         for (let attempt = 1; attempt <= maxAttempts; attempt++) {
           if (cancelled) return;
