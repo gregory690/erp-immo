@@ -66,15 +66,21 @@ export default async function handler(req, res) {
     });
 
     // ─── 2. Sauvegarder le document ERP dans KV avec l'ID de session ──────────
-    // Fire-and-forget : on ne bloque pas la réponse sur la sauvegarde KV.
-    // Le webhook stripe sauvegarde aussi le document après paiement.
+    // Bloquant : on attend la sauvegarde KV pour garantir que le document est
+    // disponible quand le webhook stripe-webhook.js le lit après paiement.
     if (erpDocument?.metadata?.reference && safeRef) {
-      kv.set(safeRef, JSON.stringify({
-        ...erpDocument,
-        stripe_session_id: session.id,
-      }), {
-        ex: 60 * 60 * 24 * 180, // 180 jours
-      }).catch(kvErr => console.error('KV pre-save error:', kvErr.message));
+      try {
+        await kv.set(safeRef, JSON.stringify({
+          ...erpDocument,
+          stripe_session_id: session.id,
+        }), {
+          ex: 60 * 60 * 24 * 180, // 180 jours
+        });
+      } catch (kvErr) {
+        console.error('KV pre-save error:', kvErr.message);
+        // Non bloquant sur la réponse — le webhook peut échouer à envoyer l'email
+        // mais le checkout continue (le document sera recréé manuellement si besoin)
+      }
     }
 
     return res.status(200).json({ url: session.url });
