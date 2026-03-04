@@ -30,30 +30,6 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Adresse email invalide' });
   }
 
-  // ─── Rate limiting ────────────────────────────────────────────────────────
-  // 5 requêtes / 10 min / IP  — protège contre les bots multi-emails
-  // 3 requêtes / 1h / email   — protège contre le spam vers une même boîte
-  try {
-    const ip = ((req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown') + '').split(',')[0].trim();
-    const normalizedEmail = email.toLowerCase().trim();
-
-    // SET NX EX pose le TTL atomiquement à la création de la clé
-    await Promise.all([
-      kv.set(`rate:sendemail:ip:${ip}`, 0, { nx: true, ex: 600 }),
-      kv.set(`rate:sendemail:addr:${normalizedEmail}`, 0, { nx: true, ex: 3600 }),
-    ]);
-    const [ipCount, emailCount] = await Promise.all([
-      kv.incr(`rate:sendemail:ip:${ip}`),
-      kv.incr(`rate:sendemail:addr:${normalizedEmail}`),
-    ]);
-
-    if (ipCount > 5 || emailCount > 3) {
-      return res.status(429).json({ error: 'Trop de tentatives. Réessayez dans quelques minutes.' });
-    }
-  } catch {
-    // Non bloquant
-  }
-
   // Validation référence (UUID v4)
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   if (!uuidRegex.test(erpDocument.metadata.reference)) {
@@ -61,14 +37,8 @@ export default async function handler(req, res) {
   }
 
   const reference = erpDocument.metadata.reference;
-  const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : process.env.URL || 'http://localhost:3000';
-  const redownloadUrl = `${baseUrl}/apercu?ref=${encodeURIComponent(reference)}`;
 
-  // ─── 1. Vérifier si le webhook a déjà géré l'email ───────────────────────────
-  // Le webhook stripe-webhook.js envoie l'email en premier et marque email_sent:true.
-  // Si c'est déjà fait, on ne renvoie pas un second email.
+  // ─── 1. Lire le doc KV pour vérifier statut ──────────────────────────────────
   let existingDoc = null;
   try {
     const raw = await kv.get(reference);
@@ -78,9 +48,39 @@ export default async function handler(req, res) {
   }
 
   if (existingDoc?.email_sent) {
-    console.log(`send-erp-email: email déjà envoyé par le webhook pour ref ${reference} — skip`);
-    return res.status(200).json({ success: true, info: 'email_already_sent_by_webhook' });
+    console.log(`send-erp-email: email déjà envoyé pour ref ${reference} — skip`);
+    return res.status(200).json({ success: true, info: 'email_already_sent' });
   }
+
+  // ─── Rate limiting ────────────────────────────────────────────────────────
+  // Bypasse si le document est payé (le paiement Stripe est lui-même un rate limiter).
+  // S'applique uniquement aux envois manuels (formulaire de re-envoi).
+  if (!existingDoc?.paid) {
+    try {
+      const ip = ((req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown') + '').split(',')[0].trim();
+      const normalizedEmail = email.toLowerCase().trim();
+
+      await Promise.all([
+        kv.set(`rate:sendemail:ip:${ip}`, 0, { nx: true, ex: 600 }),
+        kv.set(`rate:sendemail:addr:${normalizedEmail}`, 0, { nx: true, ex: 3600 }),
+      ]);
+      const [ipCount, emailCount] = await Promise.all([
+        kv.incr(`rate:sendemail:ip:${ip}`),
+        kv.incr(`rate:sendemail:addr:${normalizedEmail}`),
+      ]);
+
+      if (ipCount > 5 || emailCount > 3) {
+        return res.status(429).json({ error: 'Trop de tentatives. Réessayez dans quelques minutes.' });
+      }
+    } catch {
+      // Non bloquant
+    }
+  }
+
+  const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : process.env.URL || 'http://localhost:3000';
+  const redownloadUrl = `${baseUrl}/apercu?ref=${encodeURIComponent(reference)}`;
 
   // ─── 2. Sauvegarde dans Vercel KV ───────────────────────────────────────────
   // Le document client (erpDocument) est étalé en premier, puis les champs
