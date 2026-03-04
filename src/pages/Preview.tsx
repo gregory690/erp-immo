@@ -86,8 +86,7 @@ export default function Preview() {
     async function doAutoEmail() {
       try {
         // Attendre que le webhook ait marqué paid:true dans KV (généralement <5s).
-        // customer_email est maintenant exposé par l'API pour les docs payés.
-        let customerEmail: string | null = null;
+        let paid = false;
         const maxAttempts = 10;
         const retryDelay = 2000;
 
@@ -98,25 +97,22 @@ export default function Preview() {
           if (!response.ok) throw new Error('fetch failed');
           const kvDoc = await response.json() as Record<string, unknown>;
 
-          if (kvDoc.paid && kvDoc.customer_email) {
-            customerEmail = kvDoc.customer_email as string;
-            break;
-          }
+          if (kvDoc.paid) { paid = true; break; }
 
           if (attempt < maxAttempts) {
             await new Promise(resolve => setTimeout(resolve, retryDelay));
           }
         }
 
-        if (!customerEmail) throw new Error('Paiement non confirmé après retries');
+        if (!paid) throw new Error('Paiement non confirmé après retries');
         if (cancelled) return;
 
-        // Déclencher l'envoi email+PDF en fire-and-forget (prend 1-2 min avec PDFShift)
-        // On n'attend pas la réponse — l'utilisateur est notifié immédiatement.
+        // Déclencher l'envoi email+PDF en fire-and-forget (prend 1-2 min avec PDFShift).
+        // send-erp-email.js lit customer_email directement depuis KV (jamais exposé au client).
         fetch('/api/send-erp-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: customerEmail, erpDocument: erp }),
+          body: JSON.stringify({ erpDocument: erp }),
         }).catch(() => { /* non bloquant */ });
 
         if (!cancelled) setAutoEmailStatus('sent');

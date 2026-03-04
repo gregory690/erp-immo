@@ -18,16 +18,10 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { email, erpDocument } = req.body || {};
+  const { email: emailFromClient, erpDocument } = req.body || {};
 
-  if (!email || !erpDocument?.metadata?.reference) {
-    return res.status(400).json({ error: 'Email et document ERP requis' });
-  }
-
-  // Validation format email
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-  if (!emailRegex.test(email) || email.length > 254) {
-    return res.status(400).json({ error: 'Adresse email invalide' });
+  if (!erpDocument?.metadata?.reference) {
+    return res.status(400).json({ error: 'Document ERP requis' });
   }
 
   // Validation référence (UUID v4)
@@ -38,7 +32,7 @@ export default async function handler(req, res) {
 
   const reference = erpDocument.metadata.reference;
 
-  // ─── 1. Lire le doc KV pour vérifier statut ──────────────────────────────────
+  // ─── 1. Lire le doc KV pour vérifier statut et récupérer customer_email ──────
   let existingDoc = null;
   try {
     const raw = await kv.get(reference);
@@ -52,10 +46,26 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true, info: 'email_already_sent' });
   }
 
-  // ─── Rate limiting ────────────────────────────────────────────────────────
-  // Bypasse si le document est payé (le paiement Stripe est lui-même un rate limiter).
-  // S'applique uniquement aux envois manuels (formulaire de re-envoi).
-  if (!existingDoc?.paid) {
+  // Pour les docs payés : utiliser customer_email depuis KV (source de confiance Stripe).
+  // Pour les envois manuels (formulaire) : utiliser l'email fourni par le client.
+  const isPaid = !!existingDoc?.paid;
+  const email = isPaid
+    ? (existingDoc?.customer_email || null)
+    : (emailFromClient || null);
+
+  if (!email) {
+    return res.status(400).json({ error: 'Email destinataire introuvable' });
+  }
+
+  // Validation format email (dans les deux cas)
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (!emailRegex.test(email) || email.length > 254) {
+    return res.status(400).json({ error: 'Adresse email invalide' });
+  }
+
+  // ─── Rate limiting (envois manuels uniquement) ────────────────────────────
+  // Pour les docs payés, le paiement Stripe + email_sent sont les garde-fous.
+  if (!isPaid) {
     try {
       const ip = ((req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown') + '').split(',')[0].trim();
       const normalizedEmail = email.toLowerCase().trim();

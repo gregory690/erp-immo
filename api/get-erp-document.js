@@ -98,9 +98,9 @@ export default async function handler(req, res) {
 }
 
 // Retire les champs internes avant d'envoyer le document au client.
-// customer_email est exposé uniquement pour les documents payés (ref = UUID v4 non-guessable).
-// Preview.tsx l'utilise pour déclencher l'envoi du PDF sans que l'utilisateur re-saisisse son email.
+// customer_email n'est jamais exposé (RGPD) — Preview.tsx déclenche send-erp-email.js
+// qui lit customer_email directement depuis KV.
 function sanitizeDoc(doc) {
-  const { email_sent, stripe_session_id, ...safeDoc } = doc;
+  const { email_sent, stripe_session_id, customer_email, ...safeDoc } = doc;
   return { ...safeDoc, email_dispatched: !!email_sent };
 }
