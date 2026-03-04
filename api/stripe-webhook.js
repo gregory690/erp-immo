@@ -19,6 +19,7 @@ import Stripe from 'stripe';
 import { kv } from '@vercel/kv';
 import { Resend } from 'resend';
 import { buildEmailHTML } from './_email-template.js';
+import { generatePDFAttachment, buildPDFFilename } from './_generate-pdf.js';
 
 // Désactiver le body parser Vercel pour pouvoir vérifier la signature Stripe
 // sur le payload brut (obligatoire pour stripe.webhooks.constructEvent)
@@ -194,7 +195,7 @@ export default async function handler(req, res) {
       console.error('Webhook: email index error:', err.message);
     }
 
-    // ─── Envoi email (sans PDF pour rester dans les 60s Vercel) ─────────────
+    // ─── Envoi email avec PDF (PDFShift, timeout 40s) ────────────────────────
     const resendKey = process.env.RESEND_API_KEY;
     const fromEmail = process.env.RESEND_FROM_EMAIL || 'erp@edletdiagnostic.fr';
     if (resendKey && existingDoc?.bien && existingDoc?.metadata) {
@@ -211,6 +212,18 @@ export default async function handler(req, res) {
           day: '2-digit', month: 'long', year: 'numeric',
         });
 
+        // Générer le PDF via PDFShift (timeout 40s pour rester dans les 60s Vercel)
+        const printUrl = `${baseUrl}/print?ref=${encodeURIComponent(erpRef)}`;
+        let pdfAttachment = null;
+        try {
+          pdfAttachment = await Promise.race([
+            generatePDFAttachment(printUrl, buildPDFFilename(existingDoc)),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('PDF timeout')), 40000)),
+          ]);
+        } catch (pdfErr) {
+          console.warn('Webhook: PDF non généré, email envoyé sans PDF:', pdfErr.message);
+        }
+
         await resend.emails.send({
           from: `EDL&DIAGNOSTIC <${fromEmail}>`,
           to: customerEmail,
@@ -222,8 +235,9 @@ export default async function handler(req, res) {
             catnatCount: existingDoc.catnat?.length ?? 0,
             dateRealisation,
             dateExpiration,
-            hasPdf: false, // pas de PDF dans le webhook (limite timeout Vercel)
+            hasPdf: !!pdfAttachment,
           }),
+          ...(pdfAttachment ? { attachments: [pdfAttachment] } : {}),
         });
 
         // Poser email_sent:true → get-erp-document retournera email_dispatched:true
