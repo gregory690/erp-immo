@@ -16,7 +16,6 @@ export default function Preview() {
 
   // Auto-email déclenché depuis la page succès (via send-erp-email.js synchrone)
   const [autoEmailStatus, setAutoEmailStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
-  const [autoEmailAddress] = useState<string | null>(null);
   const autoEmailTriggered = useRef(false);
 
   // État formulaire email (envoi à une autre adresse)
