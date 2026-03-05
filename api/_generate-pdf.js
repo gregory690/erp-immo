@@ -23,7 +23,7 @@ export async function generatePDFAttachment(printUrl, filename) {
     body: JSON.stringify({
       source: printUrl,
       use_print: true,
-      delay: 9000,
+      delay: 3000,
     }),
   });
 

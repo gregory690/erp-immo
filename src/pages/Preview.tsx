@@ -107,15 +107,21 @@ export default function Preview() {
         if (!paid) throw new Error('Paiement non confirmé après retries');
         if (cancelled) return;
 
-        // Déclencher l'envoi email+PDF en fire-and-forget (prend 1-2 min avec PDFShift).
-        // send-erp-email.js lit customer_email directement depuis KV (jamais exposé au client).
-        fetch('/api/send-erp-email', {
+        // Déclencher send-erp-email.js — montrer 'sent' immédiatement (bonne UX),
+        // mais attendre la vraie réponse pour détecter une erreur silencieuse.
+        // send-erp-email.js lit customer_email depuis KV (jamais exposé au client).
+        if (!cancelled) setAutoEmailStatus('sent');
+
+        const emailRes = await fetch('/api/send-erp-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ erpDocument: erp }),
-        }).catch(() => { /* non bloquant */ });
-
-        if (!cancelled) setAutoEmailStatus('sent');
+        });
+        if (!emailRes.ok && !cancelled) {
+          console.error('send-erp-email failed:', emailRes.status);
+          setAutoEmailStatus('error');
+          setShowAltEmailForm(true);
+        }
       } catch {
         if (!cancelled) {
           setAutoEmailStatus('error');
