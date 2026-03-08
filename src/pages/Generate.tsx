@@ -26,6 +26,9 @@ interface AddressState {
   lng: number;
 }
 
+const DRAFT_KEY = 'erp_wizard_draft';
+const DRAFT_TTL_MS = 24 * 60 * 60 * 1000; // 24h
+
 const STEPS = [
   { id: 1, label: 'Mon bien', description: 'Recherche du bien' },
   { id: 2, label: 'Localisation', description: 'Validation sur carte' },
@@ -63,6 +66,33 @@ export default function Generate() {
   const [proConfirmError, setProConfirmError] = useState<string | null>(null);
 
   const { loading, progress, document: erpDocument, error, calculate } = useRiskCalculation();
+
+  // Restore draft address from localStorage on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(DRAFT_KEY);
+      if (saved) {
+        const { data, savedAt } = JSON.parse(saved);
+        if (Date.now() - savedAt < DRAFT_TTL_MS) {
+          setAddressState(data);
+        } else {
+          localStorage.removeItem(DRAFT_KEY);
+        }
+      }
+    } catch {
+      localStorage.removeItem(DRAFT_KEY);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Save draft address to localStorage whenever it changes
+  useEffect(() => {
+    if (addressState) {
+      try {
+        localStorage.setItem(DRAFT_KEY, JSON.stringify({ data: addressState, savedAt: Date.now() }));
+      } catch {}
+    }
+  }, [addressState]);
 
   // Detect pro session on mount
   useEffect(() => {
@@ -154,6 +184,7 @@ export default function Generate() {
         commune: addressState.feature.properties.city,
         erpDocument,
       });
+      localStorage.removeItem(DRAFT_KEY);
       (window as any).plausible?.('Paiement initié');
       window.location.href = checkoutUrl;
     } catch (err) {
@@ -172,6 +203,7 @@ export default function Generate() {
     setProConfirmLoading(true);
     try {
       await useProCredit(session.token, erpDocument);
+      localStorage.removeItem(DRAFT_KEY);
       (window as any).plausible?.('ERP Pro généré');
       navigate(`/apercu?ref=${encodeURIComponent(erpDocument.metadata.reference)}`);
     } catch (err) {
