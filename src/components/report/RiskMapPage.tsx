@@ -97,7 +97,9 @@ export function RiskMapPage({
         });
       });
 
-      new maplibregl.Marker({ color: '#dc2626', scale: 1.2 })
+      const markerEl = document.createElement('div');
+      markerEl.style.cssText = 'width:14px;height:14px;border-radius:50%;background:#dc2626;border:2.5px solid white;box-shadow:0 1px 4px rgba(0,0,0,0.5)';
+      new maplibregl.Marker({ element: markerEl })
         .setLngLat([lng, lat])
         .addTo(map);
     });
