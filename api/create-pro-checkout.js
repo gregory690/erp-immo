@@ -63,6 +63,15 @@ export default async function handler(req, res) {
       customer_creation: 'always',
       // Collecte l'adresse de facturation (nécessaire pour facture fiscale)
       billing_address_collection: 'required',
+      // Champ "Raison sociale" obligatoire → rend le checkout explicitement B2B
+      custom_fields: [
+        {
+          key: 'company',
+          label: { type: 'custom', custom: 'Raison sociale' },
+          type: 'text',
+          optional: false,
+        },
+      ],
       // Permet au client de saisir son numéro de TVA intracommunautaire
       tax_id_collection: { enabled: true },
       // Génère automatiquement une facture Stripe avec SIRET/TVA EDL&DIAGNOSTIC
