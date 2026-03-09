@@ -160,7 +160,7 @@ export default function ProInvoice() {
           <div className="bg-slate-50 border border-gray-200 rounded px-4 py-3 mb-8">
             <p className="text-xs text-gray-400 mb-1">Référence de transaction</p>
             <p className="text-xs font-mono text-gray-600 break-all">{pack.stripe_id}</p>
-            <p className="text-xs text-gray-400 mt-1">Paiement traité par Stripe · {pack.currency.toUpperCase()}</p>
+            <p className="text-xs text-gray-400 mt-1">Paiement traité par Stripe · {pack.currency?.toUpperCase() ?? 'EUR'}</p>
           </div>
 
           {/* Mentions */}
