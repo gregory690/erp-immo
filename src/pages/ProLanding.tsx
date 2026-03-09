@@ -128,10 +128,10 @@ export default function ProLanding() {
     if (!wEmail || !wDept || !wCap) return;
     setWStatus('loading');
     try {
-      const res = await fetch('/api/leads-waitlist', {
+      const res = await fetch('/api/pro-auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: wEmail, dept: wDept, cap: wCap }),
+        body: JSON.stringify({ action: 'waitlist', email: wEmail, dept: wDept, cap: wCap }),
       });
       if (!res.ok) throw new Error();
       setWStatus('success');
