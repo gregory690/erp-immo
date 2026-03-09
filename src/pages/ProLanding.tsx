@@ -1,5 +1,6 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check, ArrowRight, Building2 } from 'lucide-react';
+import { Check, ArrowRight, Building2, ChevronDown } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { getProSession } from '../services/pro.service';
 
@@ -10,8 +11,8 @@ const PACK_FEATURES_BASE = [
   'Historique & re-téléchargement',
 ];
 
-const PACK_15_EXTRAS = ['Facture Stripe automatique', 'Support par email'];
-const PACK_50_EXTRAS = ['Meilleur prix / ERP', 'Facture Stripe automatique', 'Support prioritaire'];
+const PACK_15_EXTRAS = ['Facture automatique par email', 'Support par email'];
+const PACK_50_EXTRAS = ['Meilleur prix / ERP', 'Facture automatique par email', 'Support prioritaire'];
 
 const REVIEWS = [
   {
@@ -21,19 +22,123 @@ const REVIEWS = [
   },
   {
     name: 'Thierry B.',
-    role: 'Agent immobilier — Bordeaux',
+    role: 'Diagnostiqueur — Bordeaux',
     text: "Données Géorisques officielles, arrêté 2022 respecté. Le PDF est prêt en 2 minutes chrono.",
   },
   {
     name: 'Camille R.',
-    role: 'Gestionnaire de patrimoine — Paris',
-    text: "Facturation mensuelle, support réactif. La formule sur mesure s'adapte parfaitement à notre cabinet.",
+    role: 'Cabinet de diagnostic — Paris',
+    text: "Facturation à l'unité, support réactif. Pas d'abonnement, on achète quand on a du volume.",
   },
 ];
+
+const FAQS = [
+  {
+    q: "Qu'est-ce qu'un État des Risques et Pollutions (ERP) ?",
+    a: "L'ERP est un document réglementaire obligatoire depuis l'arrêté du 27 septembre 2022. Il informe l'acheteur ou le locataire des risques naturels, miniers, technologiques, sismiques et de pollution des sols auxquels est exposé un bien immobilier. Il doit être annexé à tout compromis de vente ou bail.",
+  },
+  {
+    q: "Combien de temps faut-il pour générer un ERP avec votre outil ?",
+    a: "Moins de 2 minutes. Vous saisissez l'adresse, les données sont récupérées automatiquement depuis les APIs officielles (Géorisques, IGN, BRGM), et le PDF conforme est généré instantanément. Pas de ressaisie, pas de délai.",
+  },
+  {
+    q: "Les ERP générés sont-ils acceptés par les notaires et agences immobilières ?",
+    a: "Oui. Nos documents sont générés à partir des mêmes sources que les services officiels de l'État (Géorisques, cadastre IGN). Le format et le contenu sont conformes à l'arrêté du 27/09/2022. Ils sont acceptés sans réserve par les études notariales.",
+  },
+  {
+    q: "Mes crédits ont-ils une date d'expiration ?",
+    a: "Non. Vos crédits sont valables sans limite de durée. Achetez quand votre activité le demande, utilisez-les à votre rythme.",
+  },
+  {
+    q: "Puis-je acheter des crédits sans abonnement mensuel ?",
+    a: "Oui, c'est justement le principe. Pas d'abonnement, pas d'engagement. Vous achetez un pack de crédits une fois, vous les utilisez quand vous en avez besoin. Une facture vous est envoyée automatiquement après chaque achat.",
+  },
+  {
+    q: "Comment fonctionne la marketplace de leads diagnostics ?",
+    a: "La marketplace met en relation des diagnostiqueurs avec des particuliers ou professionnels qui recherchent activement un diagnostiqueur dans leur zone. Vous définissez votre secteur géographique et votre cap mensuel — vous n'achetez que les leads qui correspondent à votre capacité. Le système est automatique : dès qu'un lead qualifié est disponible dans votre zone, il vous est proposé.",
+  },
+];
+
+const CAP_OPTIONS = ['5 leads / mois', '10 leads / mois', '20 leads / mois', '50 leads / mois', 'Plus de 50'];
 
 export default function ProLanding() {
   const navigate = useNavigate();
   const session = getProSession();
+
+  // ── SEO ──────────────────────────────────────────────────────────────────
+  useEffect(() => {
+    const prev = document.title;
+    document.title = 'ERP Professionnel pour Diagnostiqueurs — Logiciel en ligne | EDL&DIAGNOSTIC';
+
+    let meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
+    const prevDesc = meta?.content ?? '';
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute('name', 'description');
+      document.head.appendChild(meta);
+    }
+    meta.content =
+      "Générez vos États des Risques et Pollutions en moins de 2 minutes. Logiciel ERP professionnel pour diagnostiqueurs immobiliers — données officielles Géorisques, conformité arrêté 2022, crédits sans expiration.";
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'pro-jsonld';
+    script.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: "ERP Pro — EDL&DIAGNOSTIC",
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web',
+      description:
+        "Logiciel de génération d'États des Risques et Pollutions pour diagnostiqueurs immobiliers professionnels. Conformité arrêté 27/09/2022, données Géorisques & IGN.",
+      offers: {
+        '@type': 'AggregateOffer',
+        priceCurrency: 'EUR',
+        lowPrice: '60',
+        highPrice: '150',
+        offerCount: '3',
+      },
+      provider: {
+        '@type': 'Organization',
+        name: 'EDL&DIAGNOSTIC',
+        url: 'https://edl-diagnostic-erp.fr',
+      },
+    });
+    document.head.appendChild(script);
+
+    return () => {
+      document.title = prev;
+      if (meta) meta.content = prevDesc;
+      const s = document.getElementById('pro-jsonld');
+      if (s) s.remove();
+    };
+  }, []);
+
+  // ── FAQ state ─────────────────────────────────────────────────────────────
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  // ── Waitlist state ────────────────────────────────────────────────────────
+  const [wEmail, setWEmail] = useState('');
+  const [wDept, setWDept] = useState('');
+  const [wCap, setWCap] = useState('');
+  const [wStatus, setWStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  async function handleWaitlist(e: React.FormEvent) {
+    e.preventDefault();
+    if (!wEmail || !wDept || !wCap) return;
+    setWStatus('loading');
+    try {
+      const res = await fetch('/api/leads-waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: wEmail, dept: wDept, cap: wCap }),
+      });
+      if (!res.ok) throw new Error();
+      setWStatus('success');
+    } catch {
+      setWStatus('error');
+    }
+  }
 
   function handleCTA() {
     navigate(session ? '/pro/dashboard' : '/pro/login');
@@ -42,7 +147,7 @@ export default function ProLanding() {
   return (
     <div className="min-h-screen bg-white">
 
-      {/* Hero */}
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="bg-navy-900 px-4 py-16 sm:py-24">
         <div className="max-w-4xl mx-auto">
           <div className="inline-flex items-center gap-2 border border-white/20 rounded-full px-3 py-1 mb-8">
@@ -50,10 +155,10 @@ export default function ProLanding() {
             <span className="text-xs font-medium text-white/70">Espace partenaire EDL&amp;DIAGNOSTIC</span>
           </div>
           <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-[1.1] max-w-2xl">
-            L'ERP professionnel pour les diagnostiqueurs
+            Le logiciel ERP des diagnostiqueurs immobiliers
           </h1>
           <p className="text-white/50 text-base mt-5 max-w-lg leading-relaxed">
-            Crédits en volume, historique centralisé, PDF conforme en moins de 2 minutes.
+            Générez vos États des Risques et Pollutions en moins de 2 minutes. Données officielles Géorisques, conformité arrêté 2022, crédits sans expiration.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Button
@@ -81,17 +186,18 @@ export default function ProLanding() {
         </div>
       </section>
 
-      {/* Pricing */}
+      {/* ── Pricing ──────────────────────────────────────────────────────── */}
       <section className="px-4 py-16 sm:py-20 bg-white">
         <div className="max-w-4xl mx-auto">
           <div className="mb-10">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-500 mb-2">Tarifs</p>
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-500 mb-2">Tarifs ERP Pro</p>
             <h2 className="text-2xl sm:text-3xl font-bold text-navy-900">Choisissez votre volume</h2>
+            <p className="text-sm text-gray-500 mt-2">Crédits valables à vie · Facture automatique · Paiement sécurisé Stripe</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start">
 
-            {/* Pack Découverte — 10 ERPs */}
+            {/* Pack Découverte */}
             <div className="border border-gray-200 rounded-xl p-6 flex flex-col">
               <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-5">Découverte</p>
               <p className="text-3xl font-extrabold text-navy-900">
@@ -115,7 +221,7 @@ export default function ProLanding() {
               </Button>
             </div>
 
-            {/* Pack Pro — 15 ERPs */}
+            {/* Pack Pro */}
             <div className="border border-gray-200 rounded-xl p-6 flex flex-col">
               <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-5">Pro</p>
               <p className="text-3xl font-extrabold text-navy-900">
@@ -139,7 +245,7 @@ export default function ProLanding() {
               </Button>
             </div>
 
-            {/* Pack Pro+ — 50 ERPs (recommandé) */}
+            {/* Pack Pro+ */}
             <div className="bg-navy-900 rounded-xl p-6 flex flex-col relative">
               <span className="absolute -top-3 left-5 inline-flex items-center gap-1.5 bg-red-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full">
                 <span className="animate-bounce inline-block">🔥</span>
@@ -180,7 +286,182 @@ export default function ProLanding() {
         </div>
       </section>
 
-      {/* 3 points clés */}
+      {/* ── Comment ça marche ─────────────────────────────────────────────── */}
+      <section className="px-4 py-14 sm:py-16 bg-slate-50 border-t border-gray-100">
+        <div className="max-w-3xl mx-auto">
+          <div className="mb-10">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-500 mb-2">En 3 étapes</p>
+            <h2 className="text-2xl font-bold text-navy-900">Opérationnel en moins de 5 minutes</h2>
+          </div>
+          <div className="divide-y divide-gray-200">
+            {[
+              {
+                num: '01',
+                title: 'Créez votre espace pro',
+                desc: "Email uniquement — un lien de connexion vous est envoyé instantanément. Aucun mot de passe à retenir.",
+              },
+              {
+                num: '02',
+                title: 'Achetez vos crédits ERP',
+                desc: "Choisissez le pack adapté à votre volume d'activité. Paiement sécurisé Stripe, facture automatique par email.",
+              },
+              {
+                num: '03',
+                title: 'Générez à la demande',
+                desc: "Saisissez l'adresse depuis votre dashboard — le PDF conforme est prêt en moins de 2 minutes.",
+              },
+            ].map(step => (
+              <div key={step.num} className="flex gap-7 py-6">
+                <span className="text-3xl font-black text-gray-100 shrink-0 w-10 text-right leading-none pt-0.5">
+                  {step.num}
+                </span>
+                <div>
+                  <p className="font-semibold text-gray-900 mb-1">{step.title}</p>
+                  <p className="text-sm text-gray-500 leading-relaxed">{step.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Marketplace Leads ─────────────────────────────────────────────── */}
+      <section className="px-4 py-16 sm:py-20 bg-white border-t border-gray-100">
+        <div className="max-w-4xl mx-auto">
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+            {/* Left — pitch */}
+            <div>
+              <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-full px-3 py-1 mb-6">
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                <span className="text-xs font-semibold text-amber-700">Lancement bientôt — places limitées par zone</span>
+              </div>
+
+              <h2 className="text-2xl sm:text-3xl font-bold text-navy-900 leading-tight mb-4">
+                Recevez des demandes de clients directement dans votre zone
+              </h2>
+              <p className="text-gray-500 text-sm leading-relaxed mb-8">
+                Notre marketplace met en relation des diagnostiqueurs avec des particuliers et agences qui cherchent activement un professionnel. Vous définissez votre secteur et votre cap mensuel — nous vous envoyons les leads en automatique.
+              </p>
+
+              <ul className="space-y-4">
+                {[
+                  {
+                    title: 'Leads qualifiés dans votre secteur',
+                    desc: 'Particuliers vendeurs, agences, notaires — contacts vérifiés avec adresse du bien et type de diagnostic.',
+                  },
+                  {
+                    title: 'Achat à l\'unité, sans abonnement',
+                    desc: 'Vous payez uniquement les leads reçus. Pas d\'engagement, pas de forfait mensuel.',
+                  },
+                  {
+                    title: 'Capping configurable',
+                    desc: 'Définissez un plafond mensuel de leads selon votre capacité. Le système s\'arrête automatiquement.',
+                  },
+                ].map(({ title, desc }) => (
+                  <li key={title} className="flex gap-3">
+                    <span className="mt-1 h-5 w-5 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                      <Check className="h-3 w-3 text-amber-600" />
+                    </span>
+                    <div>
+                      <p className="font-semibold text-gray-900 text-sm">{title}</p>
+                      <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{desc}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Right — waitlist form */}
+            <div className="bg-slate-50 border border-gray-200 rounded-2xl p-7">
+              {wStatus === 'success' ? (
+                <div className="text-center py-8 space-y-3">
+                  <div className="text-4xl">✅</div>
+                  <p className="font-bold text-navy-900 text-lg">Vous êtes sur la liste !</p>
+                  <p className="text-sm text-gray-500 leading-relaxed">
+                    Nous vous contacterons en priorité au lancement dans votre département.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <p className="font-bold text-navy-900 text-lg mb-1">Rejoindre la liste d'attente</p>
+                  <p className="text-xs text-gray-500 mb-6">
+                    Soyez notifié en priorité au lancement dans votre département.
+                  </p>
+
+                  <form onSubmit={handleWaitlist} className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                        Email professionnel
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        value={wEmail}
+                        onChange={e => setWEmail(e.target.value)}
+                        placeholder="vous@exemple.fr"
+                        className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-navy-900/30 bg-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                        Département(s) d'intervention
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={wDept}
+                        onChange={e => setWDept(e.target.value)}
+                        placeholder="Ex : 69 · Rhône, 01 · Ain"
+                        className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-navy-900/30 bg-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                        Leads souhaités / mois
+                      </label>
+                      <select
+                        required
+                        value={wCap}
+                        onChange={e => setWCap(e.target.value)}
+                        className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-navy-900/30 bg-white"
+                      >
+                        <option value="">Sélectionnez un cap</option>
+                        {CAP_OPTIONS.map(o => (
+                          <option key={o} value={o}>{o}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {wStatus === 'error' && (
+                      <p className="text-xs text-red-600">Une erreur est survenue. Réessayez ou contactez-nous.</p>
+                    )}
+
+                    <Button
+                      type="submit"
+                      disabled={wStatus === 'loading'}
+                      className="w-full bg-navy-900 hover:bg-navy-900/90 text-white font-bold rounded-lg h-10"
+                    >
+                      {wStatus === 'loading' ? 'Envoi…' : "Je veux recevoir des leads"}
+                      {wStatus !== 'loading' && <ArrowRight className="h-4 w-4 ml-2" />}
+                    </Button>
+
+                    <p className="text-[11px] text-gray-400 text-center">
+                      Sans engagement · Aucune carte bancaire requise
+                    </p>
+                  </form>
+                </>
+              )}
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ── 3 points clés ────────────────────────────────────────────────── */}
       <section className="px-4 py-14 sm:py-16 bg-slate-50 border-t border-gray-100">
         <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12">
           {[
@@ -205,46 +486,35 @@ export default function ProLanding() {
         </div>
       </section>
 
-      {/* Comment ça marche */}
+      {/* ── FAQ ──────────────────────────────────────────────────────────── */}
       <section className="px-4 py-14 sm:py-16 bg-white border-t border-gray-100">
         <div className="max-w-3xl mx-auto">
           <div className="mb-10">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-500 mb-2">En 3 étapes</p>
-            <h2 className="text-2xl font-bold text-navy-900">Opérationnel en moins de 5 minutes</h2>
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-500 mb-2">FAQ</p>
+            <h2 className="text-2xl font-bold text-navy-900">Questions fréquentes</h2>
           </div>
           <div className="divide-y divide-gray-100">
-            {[
-              {
-                num: '01',
-                title: 'Créez votre espace',
-                desc: 'Email uniquement — un lien de connexion vous est envoyé instantanément. Aucun mot de passe à retenir.',
-              },
-              {
-                num: '02',
-                title: 'Achetez vos crédits',
-                desc: 'Choisissez le pack adapté à votre volume. Paiement sécurisé, facture automatique par email.',
-              },
-              {
-                num: '03',
-                title: 'Générez à la demande',
-                desc: "Saisissez l'adresse depuis votre dashboard — le PDF est prêt en moins de 2 minutes.",
-              },
-            ].map(step => (
-              <div key={step.num} className="flex gap-7 py-6">
-                <span className="text-3xl font-black text-gray-100 shrink-0 w-10 text-right leading-none pt-0.5">
-                  {step.num}
-                </span>
-                <div>
-                  <p className="font-semibold text-gray-900 mb-1">{step.title}</p>
-                  <p className="text-sm text-gray-500 leading-relaxed">{step.desc}</p>
-                </div>
+            {FAQS.map((faq, i) => (
+              <div key={i} className="py-4">
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  className="w-full flex items-center justify-between gap-4 text-left"
+                >
+                  <span className="font-semibold text-gray-900 text-sm leading-snug">{faq.q}</span>
+                  <ChevronDown
+                    className={`h-4 w-4 text-gray-400 shrink-0 transition-transform ${openFaq === i ? 'rotate-180' : ''}`}
+                  />
+                </button>
+                {openFaq === i && (
+                  <p className="mt-3 text-sm text-gray-500 leading-relaxed pr-8">{faq.a}</p>
+                )}
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Avis */}
+      {/* ── Avis ─────────────────────────────────────────────────────────── */}
       <section className="px-4 py-14 sm:py-16 bg-slate-50 border-t border-gray-100">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
@@ -270,7 +540,7 @@ export default function ProLanding() {
         </div>
       </section>
 
-      {/* CTA final */}
+      {/* ── CTA final ────────────────────────────────────────────────────── */}
       <section className="bg-navy-900 px-4 py-14 sm:py-16">
         <div className="max-w-xl mx-auto text-center space-y-5">
           <h2 className="text-2xl sm:text-3xl font-bold text-white">Prêt à rejoindre l'espace pro ?</h2>
@@ -286,7 +556,7 @@ export default function ProLanding() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* ── Footer ───────────────────────────────────────────────────────── */}
       <footer className="bg-navy-900 border-t border-white/10 px-4 py-6">
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <span className="text-sm font-bold text-white">EDL&amp;DIAGNOSTIC · Espace Pro</span>
