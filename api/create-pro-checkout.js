@@ -1,16 +1,16 @@
 // Vercel Function — create-pro-checkout
 // Crée une Stripe Checkout Session pour l'achat de crédits pro.
-// Pack Découverte 10 ERPs : 72 € TTC (60 € HT)
-// Pack Pro 15 ERPs        : 90 € TTC (75 € HT)
-// Pack Pro+ 50 ERPs       : 180 € TTC (150 € HT)
-// Auth : token dans le body (pour simplifier l'appel depuis le frontend)
+// Pack Découverte 10 ERPs : 60 € HT → 72 € TTC
+// Pack Pro 15 ERPs        : 75 € HT → 90 € TTC
+// Pack Pro+ 50 ERPs       : 150 € HT → 180 € TTC
+// Les montants sont passés en HT + TVA 20% exclusive → facture conforme HT/TVA/TTC
 import Stripe from 'stripe';
 import { kv } from '@vercel/kv';
 
 const PACKS = {
-  pack_10: { qty: 10, amount: 7200,  label: 'Pack Découverte — 10 ERPs' },
-  pack_15: { qty: 15, amount: 9000,  label: 'Pack Pro — 15 ERPs' },
-  pack_50: { qty: 50, amount: 18000, label: 'Pack Pro+ — 50 ERPs' },
+  pack_10: { qty: 10, htAmount: 6000,  label: 'Pack Découverte — 10 ERPs' },
+  pack_15: { qty: 15, htAmount: 7500,  label: 'Pack Pro — 15 ERPs' },
+  pack_50: { qty: 50, htAmount: 15000, label: 'Pack Pro+ — 50 ERPs' },
 };
 
 async function verifyProToken(token) {
@@ -23,6 +23,28 @@ async function verifyProToken(token) {
     const session = typeof raw === 'string' ? JSON.parse(raw) : raw;
     return session.email || null;
   } catch {
+    return null;
+  }
+}
+
+// Récupère ou crée le taux de TVA française 20% (gratuit, persistant dans Stripe)
+async function getOrCreateTaxRate(stripe) {
+  try {
+    const list = await stripe.taxRates.list({ active: true, limit: 100 });
+    const existing = list.data.find(
+      r => r.percentage === 20 && !r.inclusive && r.jurisdiction === 'FR'
+    );
+    if (existing) return existing.id;
+    const created = await stripe.taxRates.create({
+      display_name: 'TVA',
+      description: 'TVA française 20%',
+      jurisdiction: 'FR',
+      percentage: 20,
+      inclusive: false, // exclusive = TVA ajoutée en sus du HT
+    });
+    return created.id;
+  } catch (err) {
+    console.error('create-pro-checkout: tax rate error:', err.message);
     return null;
   }
 }
@@ -53,7 +75,10 @@ export default async function handler(req, res) {
     : process.env.URL || 'http://localhost:3000';
 
   const stripe = new Stripe(secretKey, { apiVersion: '2024-06-20' });
-  const { qty, amount, label } = PACKS[pack];
+  const { qty, htAmount, label } = PACKS[pack];
+
+  // Taux de TVA 20% — créé une seule fois dans Stripe, réutilisé ensuite
+  const taxRateId = await getOrCreateTaxRate(stripe);
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -78,21 +103,23 @@ export default async function handler(req, res) {
           optional: true,
         },
       ],
-      // Validation Stripe du numéro de TVA (complète le champ custom)
+      // Validation Stripe du numéro de TVA acheteur
       tax_id_collection: { enabled: true },
-      // Génère automatiquement une facture Stripe avec SIRET/TVA EDL&DIAGNOSTIC
+      // Génère automatiquement une facture Stripe avec décomposition HT / TVA / TTC
       // (configurer les infos vendeur dans Stripe Dashboard → Settings → Business)
       invoice_creation: { enabled: true },
       line_items: [{
         price_data: {
           currency: 'eur',
-          unit_amount: amount,
+          unit_amount: htAmount,       // montant HT en centimes
+          tax_behavior: 'exclusive',   // TVA ajoutée en sus → facture HT + TVA + TTC
           product_data: {
             name: label,
             description: `${qty} crédits ERP · EDL&DIAGNOSTIC Pro`,
           },
         },
         quantity: 1,
+        ...(taxRateId ? { tax_rates: [taxRateId] } : {}),
       }],
       metadata: {
         type: 'pro_pack',
