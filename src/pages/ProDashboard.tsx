@@ -15,8 +15,8 @@ import type { ProAccount } from '../services/pro.service';
 
 const PACKS = [
   { id: 'pack_10' as const, label: 'Découverte — 10 ERPs', priceHt: '60 €', priceTtc: '72 €', perUnit: '6 € HT / ERP', qty: 10 },
-  { id: 'pack_15' as const, label: 'Pro — 15 ERPs',        priceHt: '75 €', priceTtc: '90 €', perUnit: '5 € HT / ERP', qty: 15, recommended: true },
-  { id: 'pack_50' as const, label: 'Pro+ — 50 ERPs',       priceHt: '150 €', priceTtc: '180 €', perUnit: '3 € HT / ERP', qty: 50 },
+  { id: 'pack_15' as const, label: 'Pro — 15 ERPs',        priceHt: '75 €', priceTtc: '90 €', perUnit: '5 € HT / ERP', qty: 15 },
+  { id: 'pack_50' as const, label: 'Pro+ — 50 ERPs',       priceHt: '150 €', priceTtc: '180 €', perUnit: '3 € HT / ERP', qty: 50, recommended: true },
 ];
 
 function formatDate(d: string | null): string {

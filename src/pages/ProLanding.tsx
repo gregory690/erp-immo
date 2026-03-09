@@ -115,42 +115,15 @@ export default function ProLanding() {
               </Button>
             </div>
 
-            {/* Pack Pro — 15 ERPs (recommandé) */}
-            <div className="bg-navy-900 rounded-xl p-6 flex flex-col relative">
-              <span className="absolute -top-3 left-5 inline-flex items-center gap-1.5 bg-red-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full">
-                <span className="animate-bounce inline-block">🔥</span>
-                Notre recommandation
-              </span>
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-white/35 mb-5">Pro</p>
-              <p className="text-3xl font-extrabold text-white">
-                75 €<span className="text-sm font-normal text-white/40 ml-1.5">HT</span>
+            {/* Pack Pro — 15 ERPs */}
+            <div className="border border-gray-200 rounded-xl p-6 flex flex-col">
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-5">Pro</p>
+              <p className="text-3xl font-extrabold text-navy-900">
+                75 €<span className="text-sm font-normal text-gray-400 ml-1.5">HT</span>
               </p>
-              <p className="text-xs text-white/35 mt-1.5 mb-7">90 € TTC · 5 € HT / ERP · 15 crédits</p>
+              <p className="text-xs text-gray-400 mt-1.5 mb-7">90 € TTC · 5 € HT / ERP · 15 crédits</p>
               <ul className="space-y-3 flex-1 mb-7">
                 {[...PACK_FEATURES_BASE, ...PACK_15_EXTRAS].map(f => (
-                  <li key={f} className="flex items-start gap-2.5 text-sm text-white/70">
-                    <Check className="h-4 w-4 text-amber-400 mt-0.5 shrink-0" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <Button
-                onClick={handleCTA}
-                className="w-full bg-amber-400 text-navy-900 hover:bg-amber-300 font-bold rounded-lg"
-              >
-                Choisir ce pack
-              </Button>
-            </div>
-
-            {/* Pack Pro+ — 50 ERPs */}
-            <div className="border border-gray-200 rounded-xl p-6 flex flex-col">
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-5">Pro+</p>
-              <p className="text-3xl font-extrabold text-navy-900">
-                150 €<span className="text-sm font-normal text-gray-400 ml-1.5">HT</span>
-              </p>
-              <p className="text-xs text-gray-400 mt-1.5 mb-7">180 € TTC · 3 € HT / ERP · 50 crédits</p>
-              <ul className="space-y-3 flex-1 mb-7">
-                {[...PACK_FEATURES_BASE, ...PACK_50_EXTRAS].map(f => (
                   <li key={f} className="flex items-start gap-2.5 text-sm text-gray-600">
                     <Check className="h-4 w-4 text-navy-900 mt-0.5 shrink-0" />
                     {f}
@@ -161,6 +134,33 @@ export default function ProLanding() {
                 onClick={handleCTA}
                 variant="outline"
                 className="w-full border-gray-200 text-navy-900 hover:bg-navy-900 hover:text-white font-semibold rounded-lg transition-colors"
+              >
+                Choisir ce pack
+              </Button>
+            </div>
+
+            {/* Pack Pro+ — 50 ERPs (recommandé) */}
+            <div className="bg-navy-900 rounded-xl p-6 flex flex-col relative">
+              <span className="absolute -top-3 left-5 inline-flex items-center gap-1.5 bg-red-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full">
+                <span className="animate-bounce inline-block">🔥</span>
+                Meilleur rapport
+              </span>
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-white/35 mb-5">Pro+</p>
+              <p className="text-3xl font-extrabold text-white">
+                150 €<span className="text-sm font-normal text-white/40 ml-1.5">HT</span>
+              </p>
+              <p className="text-xs text-white/35 mt-1.5 mb-7">180 € TTC · 3 € HT / ERP · 50 crédits</p>
+              <ul className="space-y-3 flex-1 mb-7">
+                {[...PACK_FEATURES_BASE, ...PACK_50_EXTRAS].map(f => (
+                  <li key={f} className="flex items-start gap-2.5 text-sm text-white/70">
+                    <Check className="h-4 w-4 text-amber-400 mt-0.5 shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Button
+                onClick={handleCTA}
+                className="w-full bg-amber-400 text-navy-900 hover:bg-amber-300 font-bold rounded-lg"
               >
                 Choisir ce pack
               </Button>
