@@ -63,7 +63,7 @@ export default async function handler(req, res) {
       customer_creation: 'always',
       // Collecte l'adresse de facturation (nécessaire pour facture fiscale)
       billing_address_collection: 'required',
-      // Champ "Raison sociale" obligatoire → rend le checkout explicitement B2B
+      // Champs B2B toujours visibles (raison sociale obligatoire, TVA optionnelle)
       custom_fields: [
         {
           key: 'company',
@@ -71,8 +71,14 @@ export default async function handler(req, res) {
           type: 'text',
           optional: false,
         },
+        {
+          key: 'tva',
+          label: { type: 'custom', custom: 'N° TVA intracommunautaire (optionnel)' },
+          type: 'text',
+          optional: true,
+        },
       ],
-      // Permet au client de saisir son numéro de TVA intracommunautaire
+      // Validation Stripe du numéro de TVA (complète le champ custom)
       tax_id_collection: { enabled: true },
       // Génère automatiquement une facture Stripe avec SIRET/TVA EDL&DIAGNOSTIC
       // (configurer les infos vendeur dans Stripe Dashboard → Settings → Business)
