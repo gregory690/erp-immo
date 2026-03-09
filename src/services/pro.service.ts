@@ -58,10 +58,10 @@ export function clearProSession(): void {
 // ─── API calls ────────────────────────────────────────────────────────────────
 
 export async function proLogin(email: string): Promise<{ sent: true }> {
-  const res = await fetch('/api/pro-login', {
+  const res = await fetch('/api/pro-auth', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email }),
+    body: JSON.stringify({ action: 'login', email }),
   });
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));
@@ -71,10 +71,10 @@ export async function proLogin(email: string): Promise<{ sent: true }> {
 }
 
 export async function proVerify(token: string): Promise<{ email: string; sessionToken: string }> {
-  const res = await fetch('/api/pro-verify', {
+  const res = await fetch('/api/pro-auth', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ token }),
+    body: JSON.stringify({ action: 'verify', token }),
   });
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));
