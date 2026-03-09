@@ -14,9 +14,9 @@ import {
 import type { ProAccount } from '../services/pro.service';
 
 const PACKS = [
-  { id: 'pack_10' as const, label: 'Découverte — 10 ERPs', price: '72 € TTC', perUnit: '6 € HT / ERP', qty: 10 },
-  { id: 'pack_15' as const, label: 'Pro — 15 ERPs',        price: '90 € TTC', perUnit: '5 € HT / ERP', qty: 15, recommended: true },
-  { id: 'pack_50' as const, label: 'Pro+ — 50 ERPs',       price: '180 € TTC', perUnit: '3 € HT / ERP', qty: 50 },
+  { id: 'pack_10' as const, label: 'Découverte — 10 ERPs', priceHt: '60 €', priceTtc: '72 €', perUnit: '6 € HT / ERP', qty: 10 },
+  { id: 'pack_15' as const, label: 'Pro — 15 ERPs',        priceHt: '75 €', priceTtc: '90 €', perUnit: '5 € HT / ERP', qty: 15, recommended: true },
+  { id: 'pack_50' as const, label: 'Pro+ — 50 ERPs',       priceHt: '150 €', priceTtc: '180 €', perUnit: '3 € HT / ERP', qty: 50 },
 ];
 
 function formatDate(d: string | null): string {
@@ -267,8 +267,11 @@ export default function ProDashboard() {
                           <p className="text-xs text-gray-400">{pack.perUnit}</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-xl font-extrabold text-navy-900">{pack.price}</p>
-                          <p className="text-[10px] text-gray-400">TTC</p>
+                          <p className="text-xl font-extrabold text-navy-900">
+                            {pack.priceHt}
+                            <span className="text-xs font-normal text-gray-400 ml-1">HT</span>
+                          </p>
+                          <p className="text-[10px] text-gray-400">{pack.priceTtc} TTC</p>
                         </div>
                       </div>
                       {packLoading === pack.id && (
