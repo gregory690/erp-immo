@@ -217,8 +217,8 @@ export default function ProDashboard() {
                     variant="outline"
                     onClick={() => setShowPacks(v => !v)}
                     className={`shrink-0 bg-transparent ${account.credits > 0
-                      ? 'border-white/40 text-white hover:bg-white/10'
-                      : 'border-gray-400 text-gray-600 hover:bg-gray-100'
+                      ? 'border-white/40 text-white hover:bg-white/10 hover:text-white'
+                      : 'border-gray-400 text-gray-600 hover:bg-gray-100 hover:text-gray-600'
                     }`}
                   >
                     <CreditCard className="h-3.5 w-3.5 mr-1.5" />
