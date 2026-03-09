@@ -18,6 +18,7 @@ const ProLogin = lazy(() => import('./pages/ProLogin'));
 const ProAuth = lazy(() => import('./pages/ProAuth'));
 const ProDashboard = lazy(() => import('./pages/ProDashboard'));
 const ProInvoice = lazy(() => import('./pages/ProInvoice'));
+const CityERP = lazy(() => import('./pages/CityERP'));
 
 function PageLoader() {
   return (
@@ -49,6 +50,7 @@ export default function App() {
           <Route path="/pro/auth" element={<ProAuth />} />
           <Route path="/pro/dashboard" element={<ProDashboard />} />
           <Route path="/pro/facture" element={<ProInvoice />} />
+          <Route path="/erp/:slug" element={<CityERP />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
