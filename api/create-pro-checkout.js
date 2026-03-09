@@ -1,16 +1,16 @@
 // Vercel Function — create-pro-checkout
 // Crée une Stripe Checkout Session pour l'achat de crédits pro.
-// Pack Découverte 10 ERPs : 69,90 € TTC
-// Pack Pro 15 ERPs        : 89,90 € TTC
-// Pack Pro+ 50 ERPs       : 199,90 € TTC
+// Pack Découverte 10 ERPs : 72 € TTC (60 € HT)
+// Pack Pro 15 ERPs        : 90 € TTC (75 € HT)
+// Pack Pro+ 50 ERPs       : 180 € TTC (150 € HT)
 // Auth : token dans le body (pour simplifier l'appel depuis le frontend)
 import Stripe from 'stripe';
 import { kv } from '@vercel/kv';
 
 const PACKS = {
-  pack_10: { qty: 10, amount: 6990,  label: 'Pack Découverte — 10 ERPs' },
-  pack_15: { qty: 15, amount: 8990,  label: 'Pack Pro — 15 ERPs' },
-  pack_50: { qty: 50, amount: 19990, label: 'Pack Pro+ — 50 ERPs' },
+  pack_10: { qty: 10, amount: 7200,  label: 'Pack Découverte — 10 ERPs' },
+  pack_15: { qty: 15, amount: 9000,  label: 'Pack Pro — 15 ERPs' },
+  pack_50: { qty: 50, amount: 18000, label: 'Pack Pro+ — 50 ERPs' },
 };
 
 async function verifyProToken(token) {

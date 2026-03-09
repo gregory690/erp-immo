@@ -95,9 +95,9 @@ export default function ProLanding() {
             <div className="border border-gray-200 rounded-xl p-6 flex flex-col">
               <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-5">Découverte</p>
               <p className="text-3xl font-extrabold text-navy-900">
-                58,25 €<span className="text-sm font-normal text-gray-400 ml-1.5">HT</span>
+                60 €<span className="text-sm font-normal text-gray-400 ml-1.5">HT</span>
               </p>
-              <p className="text-xs text-gray-400 mt-1.5 mb-7">69,90 € TTC · 5,83 € HT / ERP · 10 crédits</p>
+              <p className="text-xs text-gray-400 mt-1.5 mb-7">72 € TTC · 6 € HT / ERP · 10 crédits</p>
               <ul className="space-y-3 flex-1 mb-7">
                 {PACK_FEATURES_BASE.map(f => (
                   <li key={f} className="flex items-start gap-2.5 text-sm text-gray-600">
@@ -123,9 +123,9 @@ export default function ProLanding() {
               </span>
               <p className="text-[11px] font-semibold uppercase tracking-widest text-white/35 mb-5">Pro</p>
               <p className="text-3xl font-extrabold text-white">
-                74,92 €<span className="text-sm font-normal text-white/40 ml-1.5">HT</span>
+                75 €<span className="text-sm font-normal text-white/40 ml-1.5">HT</span>
               </p>
-              <p className="text-xs text-white/35 mt-1.5 mb-7">89,90 € TTC · 4,99 € HT / ERP · 15 crédits</p>
+              <p className="text-xs text-white/35 mt-1.5 mb-7">90 € TTC · 5 € HT / ERP · 15 crédits</p>
               <ul className="space-y-3 flex-1 mb-7">
                 {[...PACK_FEATURES_BASE, ...PACK_15_EXTRAS].map(f => (
                   <li key={f} className="flex items-start gap-2.5 text-sm text-white/70">
@@ -146,9 +146,9 @@ export default function ProLanding() {
             <div className="border border-gray-200 rounded-xl p-6 flex flex-col">
               <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-5">Pro+</p>
               <p className="text-3xl font-extrabold text-navy-900">
-                166,58 €<span className="text-sm font-normal text-gray-400 ml-1.5">HT</span>
+                150 €<span className="text-sm font-normal text-gray-400 ml-1.5">HT</span>
               </p>
-              <p className="text-xs text-gray-400 mt-1.5 mb-7">199,90 € TTC · 3,33 € HT / ERP · 50 crédits</p>
+              <p className="text-xs text-gray-400 mt-1.5 mb-7">180 € TTC · 3 € HT / ERP · 50 crédits</p>
               <ul className="space-y-3 flex-1 mb-7">
                 {[...PACK_FEATURES_BASE, ...PACK_50_EXTRAS].map(f => (
                   <li key={f} className="flex items-start gap-2.5 text-sm text-gray-600">
