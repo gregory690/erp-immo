@@ -75,6 +75,18 @@ export default async function handler(req, res) {
     : process.env.URL || 'http://localhost:3000';
 
   const stripe = new Stripe(secretKey, { apiVersion: '2024-06-20' });
+
+  // Rate limiting : 10 sessions / heure / IP
+  try {
+    const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
+    const rateKey = `rate:pro-checkout:${ip}`;
+    await kv.set(rateKey, 0, { nx: true, ex: 3600 });
+    const count = await kv.incr(rateKey);
+    if (count > 10) {
+      return res.status(429).json({ error: 'Trop de requêtes. Réessayez dans une heure.' });
+    }
+  } catch { /* non bloquant */ }
+
   const { qty, htAmount, label } = PACKS[pack];
 
   // Taux de TVA 20% — créé une seule fois dans Stripe, réutilisé ensuite

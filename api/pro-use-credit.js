@@ -45,12 +45,23 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Référence document invalide' });
   }
 
+  // ─── Idempotence : rejeter si cette référence a déjà été utilisée ────────
+  try {
+    const existing = await kv.get(reference);
+    if (existing) {
+      const doc = typeof existing === 'string' ? JSON.parse(existing) : existing;
+      if (doc?.paid && doc?.pro_email === email) {
+        return res.status(200).json({ success: true, credits_remaining: null, duplicate: true });
+      }
+    }
+  } catch { /* non bloquant */ }
+
   // ─── Verrou distribué pour éviter la race condition ─────────────────────
   const credKey = `pro:credits:${email}`;
   const lockKey = `pro:lock:credit:${email}`;
   let lockAcquired = false;
   try {
-    lockAcquired = await kv.set(lockKey, '1', { nx: true, ex: 10 });
+    lockAcquired = await kv.set(lockKey, '1', { nx: true, ex: 60 });
   } catch (err) {
     console.error('pro-use-credit: lock error:', err.message);
     return res.status(500).json({ error: 'Erreur serveur' });

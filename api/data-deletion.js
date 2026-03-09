@@ -102,6 +102,13 @@ export default async function handler(req, res) {
   // POST { email } — Demande de suppression → envoi email de confirmation
   // ══════════════════════════════════════════════════════════════════
   if (req.method === 'POST') {
+    // Protection CSRF : vérifier que la requête vient d'un Origin autorisé
+    const origin = req.headers.origin || '';
+    const allowed = ['https://edl-diagnostic-erp.fr', 'http://localhost:5173', 'http://localhost:3000'];
+    if (origin && !allowed.includes(origin)) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
     const { email } = req.body || {};
     if (!email) return res.status(400).json({ error: 'Email requis' });
 
