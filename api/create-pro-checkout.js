@@ -1,13 +1,16 @@
 // Vercel Function — create-pro-checkout
 // Crée une Stripe Checkout Session pour l'achat de crédits pro.
-// Pack 10 ERPs : 99,99 € TTC · Pack 50 ERPs : 249,99 € TTC
+// Pack Découverte 10 ERPs : 69,90 € TTC
+// Pack Pro 15 ERPs        : 89,90 € TTC
+// Pack Pro+ 50 ERPs       : 199,90 € TTC
 // Auth : token dans le body (pour simplifier l'appel depuis le frontend)
 import Stripe from 'stripe';
 import { kv } from '@vercel/kv';
 
 const PACKS = {
-  pack_10: { qty: 10, amount: 9480, label: 'Pack 10 ERPs' },
-  pack_50: { qty: 50, amount: 23880, label: 'Pack 50 ERPs' },
+  pack_10: { qty: 10, amount: 6990,  label: 'Pack Découverte — 10 ERPs' },
+  pack_15: { qty: 15, amount: 8990,  label: 'Pack Pro — 15 ERPs' },
+  pack_50: { qty: 50, amount: 19990, label: 'Pack Pro+ — 50 ERPs' },
 };
 
 async function verifyProToken(token) {
@@ -32,7 +35,7 @@ export default async function handler(req, res) {
   const { pack, token } = req.body || {};
 
   if (!pack || !PACKS[pack]) {
-    return res.status(400).json({ error: 'Pack invalide. Valeurs acceptées : pack_10, pack_50' });
+    return res.status(400).json({ error: 'Pack invalide. Valeurs acceptées : pack_10, pack_15, pack_50' });
   }
 
   const email = await verifyProToken(token);

@@ -1,21 +1,17 @@
 import { useNavigate } from 'react-router-dom';
-import { Check, ArrowRight, Building2, Mail } from 'lucide-react';
+import { Check, ArrowRight, Building2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { getProSession } from '../services/pro.service';
 
-const PACK_10_FEATURES = [
-  '10 crédits ERP sans expiration',
+const PACK_FEATURES_BASE = [
+  'Crédits sans expiration',
   'PDF conforme arrêté 27/09/2022',
   'Données officielles Géorisques & IGN',
   'Historique & re-téléchargement',
 ];
 
-const PACK_50_FEATURES = [
-  '50 crédits ERP sans expiration',
-  'Tout le contenu du Pack 10',
-  'Support dédié par email',
-  'Facture Stripe automatique',
-];
+const PACK_15_EXTRAS = ['Facture Stripe automatique', 'Support par email'];
+const PACK_50_EXTRAS = ['Meilleur prix / ERP', 'Facture Stripe automatique', 'Support prioritaire'];
 
 const REVIEWS = [
   {
@@ -93,17 +89,17 @@ export default function ProLanding() {
             <h2 className="text-2xl sm:text-3xl font-bold text-navy-900">Choisissez votre volume</h2>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start">
 
-            {/* Pack 10 */}
+            {/* Pack Découverte — 10 ERPs */}
             <div className="border border-gray-200 rounded-xl p-6 flex flex-col">
               <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-5">Découverte</p>
               <p className="text-3xl font-extrabold text-navy-900">
-                79 €<span className="text-sm font-normal text-gray-400 ml-1.5">HT</span>
+                58,25 €<span className="text-sm font-normal text-gray-400 ml-1.5">HT</span>
               </p>
-              <p className="text-xs text-gray-400 mt-1.5 mb-7">94,80 € TTC · 7,90 € HT / ERP</p>
+              <p className="text-xs text-gray-400 mt-1.5 mb-7">69,90 € TTC · 5,83 € HT / ERP · 10 crédits</p>
               <ul className="space-y-3 flex-1 mb-7">
-                {PACK_10_FEATURES.map(f => (
+                {PACK_FEATURES_BASE.map(f => (
                   <li key={f} className="flex items-start gap-2.5 text-sm text-gray-600">
                     <Check className="h-4 w-4 text-navy-900 mt-0.5 shrink-0" />
                     {f}
@@ -119,19 +115,19 @@ export default function ProLanding() {
               </Button>
             </div>
 
-            {/* Pack 50 */}
+            {/* Pack Pro — 15 ERPs (recommandé) */}
             <div className="bg-navy-900 rounded-xl p-6 flex flex-col relative">
               <span className="absolute -top-3 left-5 inline-flex items-center gap-1.5 bg-red-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full">
                 <span className="animate-bounce inline-block">🔥</span>
                 Notre recommandation
               </span>
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-white/35 mb-5">Professionnel</p>
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-white/35 mb-5">Pro</p>
               <p className="text-3xl font-extrabold text-white">
-                199 €<span className="text-sm font-normal text-white/40 ml-1.5">HT</span>
+                74,92 €<span className="text-sm font-normal text-white/40 ml-1.5">HT</span>
               </p>
-              <p className="text-xs text-white/35 mt-1.5 mb-7">238,80 € TTC · 3,98 € HT / ERP</p>
+              <p className="text-xs text-white/35 mt-1.5 mb-7">89,90 € TTC · 4,99 € HT / ERP · 15 crédits</p>
               <ul className="space-y-3 flex-1 mb-7">
-                {PACK_50_FEATURES.map(f => (
+                {[...PACK_FEATURES_BASE, ...PACK_15_EXTRAS].map(f => (
                   <li key={f} className="flex items-start gap-2.5 text-sm text-white/70">
                     <Check className="h-4 w-4 text-amber-400 mt-0.5 shrink-0" />
                     {f}
@@ -146,20 +142,15 @@ export default function ProLanding() {
               </Button>
             </div>
 
-            {/* Sur mesure */}
+            {/* Pack Pro+ — 50 ERPs */}
             <div className="border border-gray-200 rounded-xl p-6 flex flex-col">
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-5">Sur mesure</p>
-              <p className="text-xl font-bold text-navy-900 mb-2">Volume & Agences</p>
-              <p className="text-sm text-gray-500 mb-7 leading-relaxed">
-                Plus de 50 ERPs par mois ou besoin d'une intégration personnalisée ?
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-5">Pro+</p>
+              <p className="text-3xl font-extrabold text-navy-900">
+                166,58 €<span className="text-sm font-normal text-gray-400 ml-1.5">HT</span>
               </p>
+              <p className="text-xs text-gray-400 mt-1.5 mb-7">199,90 € TTC · 3,33 € HT / ERP · 50 crédits</p>
               <ul className="space-y-3 flex-1 mb-7">
-                {[
-                  'Tarif négocié selon volume',
-                  'Facturation mensuelle possible',
-                  'Intégration API sur demande',
-                  'Gestionnaire de compte dédié',
-                ].map(f => (
+                {[...PACK_FEATURES_BASE, ...PACK_50_EXTRAS].map(f => (
                   <li key={f} className="flex items-start gap-2.5 text-sm text-gray-600">
                     <Check className="h-4 w-4 text-navy-900 mt-0.5 shrink-0" />
                     {f}
@@ -167,19 +158,24 @@ export default function ProLanding() {
                 ))}
               </ul>
               <Button
-                onClick={() => { window.location.href = 'mailto:pro@edletdiagnostic.fr?subject=Offre%20sur%20mesure%20ERP'; }}
+                onClick={handleCTA}
                 variant="outline"
-                className="w-full border-gray-200 text-gray-700 hover:bg-gray-50 font-semibold rounded-lg"
+                className="w-full border-gray-200 text-navy-900 hover:bg-navy-900 hover:text-white font-semibold rounded-lg transition-colors"
               >
-                <Mail className="h-3.5 w-3.5 mr-1.5" />
-                Nous contacter
+                Choisir ce pack
               </Button>
             </div>
 
           </div>
 
           <p className="text-xs text-gray-400 text-center mt-6">
-            Paiement sécurisé par Stripe · Facture automatique après chaque achat
+            Paiement sécurisé par Stripe · Facture automatique après chaque achat ·{' '}
+            <button
+              onClick={() => { window.location.href = 'mailto:pro@edletdiagnostic.fr?subject=Offre%20sur%20mesure%20ERP'; }}
+              className="underline hover:text-gray-600"
+            >
+              Volume &gt; 50 ERPs ? Contactez-nous
+            </button>
           </p>
         </div>
       </section>

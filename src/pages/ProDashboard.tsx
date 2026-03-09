@@ -14,8 +14,9 @@ import {
 import type { ProAccount } from '../services/pro.service';
 
 const PACKS = [
-  { id: 'pack_10' as const, label: 'Pack 10 ERPs', price: '94,80 €', perUnit: '7,90 € HT / ERP', qty: 10 },
-  { id: 'pack_50' as const, label: 'Pack 50 ERPs', price: '238,80 €', perUnit: '3,98 € HT / ERP', qty: 50, recommended: true },
+  { id: 'pack_10' as const, label: 'Découverte — 10 ERPs', price: '69,90 €', perUnit: '5,83 € HT / ERP', qty: 10 },
+  { id: 'pack_15' as const, label: 'Pro — 15 ERPs',        price: '89,90 €', perUnit: '4,99 € HT / ERP', qty: 15, recommended: true },
+  { id: 'pack_50' as const, label: 'Pro+ — 50 ERPs',       price: '199,90 €', perUnit: '3,33 € HT / ERP', qty: 50 },
 ];
 
 function formatDate(d: string | null): string {
@@ -76,7 +77,7 @@ export default function ProDashboard() {
     }
   }
 
-  async function handleBuyPack(packId: 'pack_10' | 'pack_50') {
+  async function handleBuyPack(packId: 'pack_10' | 'pack_15' | 'pack_50') {
     if (!session) return;
     setPackError(null);
     setPackLoading(packId);

@@ -104,7 +104,7 @@ export function ProServiceSelector({ credits, onConfirm, loading = false, error 
           onClick={onConfirm}
           disabled={loading}
           size="lg"
-          className="hidden sm:flex w-full bg-navy-900 hover:bg-navy-800 text-base font-semibold h-12"
+          className="flex w-full bg-navy-900 hover:bg-navy-800 text-base font-semibold h-12"
         >
           {loading ? 'Génération en cours…' : 'Générer mon ERP (1 crédit)'}
         </Button>
@@ -112,7 +112,7 @@ export function ProServiceSelector({ credits, onConfirm, loading = false, error 
         <Button
           onClick={() => navigate('/pro/dashboard')}
           size="lg"
-          className="hidden sm:flex w-full bg-amber-500 hover:bg-amber-600 text-white text-base font-semibold h-12"
+          className="flex w-full bg-amber-500 hover:bg-amber-600 text-white text-base font-semibold h-12"
         >
           Recharger mes crédits →
         </Button>

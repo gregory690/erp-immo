@@ -99,7 +99,7 @@ export async function getProAccount(token: string): Promise<ProAccount> {
 }
 
 export async function createProCheckout(
-  pack: 'pack_10' | 'pack_50',
+  pack: 'pack_10' | 'pack_15' | 'pack_50',
   token: string
 ): Promise<{ url: string }> {
   const res = await fetch('/api/create-pro-checkout', {
