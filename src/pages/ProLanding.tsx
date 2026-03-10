@@ -191,9 +191,15 @@ export default function ProLanding() {
     <div className="min-h-screen bg-white">
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="bg-navy-900 px-4 py-16 sm:py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(251,191,36,0.1)_0%,_transparent_55%)] pointer-events-none" />
-        <div className="max-w-5xl mx-auto relative">
+      <section className="relative overflow-hidden">
+        {/* Split bg: left navy, right white (desktop only) */}
+        <div className="absolute inset-0 flex pointer-events-none">
+          <div className="w-full lg:w-1/2 bg-navy-900 relative">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(251,191,36,0.1)_0%,_transparent_55%)]" />
+          </div>
+          <div className="hidden lg:block lg:w-1/2 bg-white" />
+        </div>
+        <div className="max-w-5xl mx-auto relative px-4 py-16 sm:py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
             {/* ── Colonne gauche — texte ── */}
@@ -366,8 +372,8 @@ export default function ProLanding() {
 
               {/* Trust note */}
               <div className="flex items-center gap-2.5 px-1">
-                <BadgeCheck className="h-4 w-4 text-amber-400 shrink-0" />
-                <p className="text-white/55 text-xs">Données officielles Géorisques & IGN · Conformité arrêté 27/09/2022</p>
+                <BadgeCheck className="h-4 w-4 text-amber-500 shrink-0" />
+                <p className="text-gray-500 text-xs">Données officielles Géorisques & IGN · Conformité arrêté 27/09/2022</p>
               </div>
 
             </div>
@@ -415,6 +421,101 @@ export default function ProLanding() {
         </div>
       </section>
 
+      {/* ── 3 points clés ────────────────────────────────────────────────── */}
+      <section className="px-4 py-14 sm:py-16 bg-slate-50 border-t border-gray-100">
+        <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12">
+          {[
+            {
+              title: 'Prêt en moins de 2 minutes',
+              desc: "Adresse → PDF conforme. Sans aller-retour, sans délai. Idéal entre deux rendez-vous.",
+            },
+            {
+              title: "Données officielles de l'État",
+              desc: "APIs Géorisques, BRGM et IGN. Documents acceptés par les notaires et agences immobilières.",
+            },
+            {
+              title: 'Crédits valables 12 mois',
+              desc: "Achetez quand ça vous convient. Vos crédits sont valables pendant 12 mois à compter de chaque achat.",
+            },
+          ].map(({ title, desc }) => (
+            <div key={title} className="space-y-2">
+              <p className="font-bold text-navy-900">{title}</p>
+              <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── FAQ ──────────────────────────────────────────────────────────── */}
+      <section className="px-4 py-14 sm:py-16 bg-white border-t border-gray-100">
+        <div className="max-w-3xl mx-auto">
+          <div className="mb-10">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-500 mb-2">FAQ</p>
+            <h2 className="text-2xl font-bold text-navy-900">Questions fréquentes</h2>
+          </div>
+          <div className="divide-y divide-gray-100">
+            {FAQS.map((faq, i) => (
+              <div key={i} className="py-4">
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  className="w-full flex items-center justify-between gap-4 text-left"
+                >
+                  <span className="font-semibold text-gray-900 text-sm leading-snug">{faq.q}</span>
+                  <ChevronDown
+                    className={`h-4 w-4 text-gray-400 shrink-0 transition-transform ${openFaq === i ? 'rotate-180' : ''}`}
+                  />
+                </button>
+                {openFaq === i && (
+                  <p className="mt-3 text-sm text-gray-500 leading-relaxed pr-8">{faq.a}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Avis ─────────────────────────────────────────────────────────── */}
+      <section className="px-4 py-14 sm:py-16 bg-slate-50 border-t border-gray-100">
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-8">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-500 mb-2">Retours partenaires</p>
+            <h2 className="text-2xl font-bold text-navy-900">Ce qu'en disent les pros</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {REVIEWS.map(({ name, role, text }) => (
+              <div key={name} className="bg-white border border-gray-200 rounded-xl p-5 space-y-3">
+                <div className="flex gap-0.5">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <span key={i} className="text-amber-400 text-sm leading-none">★</span>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-700 leading-relaxed">"{text}"</p>
+                <div>
+                  <p className="font-semibold text-gray-900 text-sm">{name}</p>
+                  <p className="text-xs text-gray-400">{role}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA final ────────────────────────────────────────────────────── */}
+      <section className="bg-navy-900 px-4 py-14 sm:py-16">
+        <div className="max-w-xl mx-auto text-center space-y-5">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white">Prêt à rejoindre l'espace pro ?</h2>
+          <p className="text-white/40 text-sm">Connexion instantanée par lien email. Aucun mot de passe.</p>
+          <Button
+            size="lg"
+            onClick={handleCTA}
+            className="bg-amber-400 text-navy-900 hover:bg-amber-300 font-bold h-11 px-8 rounded-lg"
+          >
+            {session ? 'Accéder à mon espace' : "Créer mon espace pro"}
+            <ArrowRight className="h-4 w-4 ml-2" />
+          </Button>
+        </div>
+      </section>
+
       {/* ── Marketplace Leads ─────────────────────────────────────────────── */}
       <section id="leads" className="px-4 py-16 sm:py-20 bg-white border-t border-gray-100">
         <div className="max-w-4xl mx-auto">
@@ -442,8 +543,8 @@ export default function ProLanding() {
                     desc: 'Particuliers vendeurs, agences, notaires — contacts vérifiés avec adresse du bien et type de diagnostic.',
                   },
                   {
-                    title: 'Achat à l\'unité, sans abonnement',
-                    desc: 'Vous payez uniquement les leads reçus. Pas d\'engagement, pas de forfait mensuel.',
+                    title: "Achat à l'unité, sans abonnement",
+                    desc: "Vous payez uniquement les leads reçus. Pas d'engagement, pas de forfait mensuel.",
                   },
                   {
                     title: 'Nombre de missions ajustable',
@@ -548,101 +649,6 @@ export default function ProLanding() {
             </div>
 
           </div>
-        </div>
-      </section>
-
-      {/* ── 3 points clés ────────────────────────────────────────────────── */}
-      <section className="px-4 py-14 sm:py-16 bg-slate-50 border-t border-gray-100">
-        <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12">
-          {[
-            {
-              title: 'Prêt en moins de 2 minutes',
-              desc: "Adresse → PDF conforme. Sans aller-retour, sans délai. Idéal entre deux rendez-vous.",
-            },
-            {
-              title: "Données officielles de l'État",
-              desc: "APIs Géorisques, BRGM et IGN. Documents acceptés par les notaires et agences immobilières.",
-            },
-            {
-              title: 'Crédits valables 12 mois',
-              desc: "Achetez quand ça vous convient. Vos crédits sont valables pendant 12 mois à compter de chaque achat.",
-            },
-          ].map(({ title, desc }) => (
-            <div key={title} className="space-y-2">
-              <p className="font-bold text-navy-900">{title}</p>
-              <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── FAQ ──────────────────────────────────────────────────────────── */}
-      <section className="px-4 py-14 sm:py-16 bg-white border-t border-gray-100">
-        <div className="max-w-3xl mx-auto">
-          <div className="mb-10">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-500 mb-2">FAQ</p>
-            <h2 className="text-2xl font-bold text-navy-900">Questions fréquentes</h2>
-          </div>
-          <div className="divide-y divide-gray-100">
-            {FAQS.map((faq, i) => (
-              <div key={i} className="py-4">
-                <button
-                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full flex items-center justify-between gap-4 text-left"
-                >
-                  <span className="font-semibold text-gray-900 text-sm leading-snug">{faq.q}</span>
-                  <ChevronDown
-                    className={`h-4 w-4 text-gray-400 shrink-0 transition-transform ${openFaq === i ? 'rotate-180' : ''}`}
-                  />
-                </button>
-                {openFaq === i && (
-                  <p className="mt-3 text-sm text-gray-500 leading-relaxed pr-8">{faq.a}</p>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Avis ─────────────────────────────────────────────────────────── */}
-      <section className="px-4 py-14 sm:py-16 bg-slate-50 border-t border-gray-100">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-500 mb-2">Retours partenaires</p>
-            <h2 className="text-2xl font-bold text-navy-900">Ce qu'en disent les pros</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {REVIEWS.map(({ name, role, text }) => (
-              <div key={name} className="bg-white border border-gray-200 rounded-xl p-5 space-y-3">
-                <div className="flex gap-0.5">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <span key={i} className="text-amber-400 text-sm leading-none">★</span>
-                  ))}
-                </div>
-                <p className="text-sm text-gray-700 leading-relaxed">"{text}"</p>
-                <div>
-                  <p className="font-semibold text-gray-900 text-sm">{name}</p>
-                  <p className="text-xs text-gray-400">{role}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA final ────────────────────────────────────────────────────── */}
-      <section className="bg-navy-900 px-4 py-14 sm:py-16">
-        <div className="max-w-xl mx-auto text-center space-y-5">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white">Prêt à rejoindre l'espace pro ?</h2>
-          <p className="text-white/40 text-sm">Connexion instantanée par lien email. Aucun mot de passe.</p>
-          <Button
-            size="lg"
-            onClick={handleCTA}
-            className="bg-amber-400 text-navy-900 hover:bg-amber-300 font-bold h-11 px-8 rounded-lg"
-          >
-            {session ? 'Accéder à mon espace' : "Créer mon espace pro"}
-            <ArrowRight className="h-4 w-4 ml-2" />
-          </Button>
         </div>
       </section>
 
