@@ -25,28 +25,28 @@ const REVIEWS = [
 
 const FAQS = [
   {
-    q: "Qu'est-ce qu'un État des Risques et Pollutions (ERP) ?",
-    a: "L'ERP est un document réglementaire obligatoire depuis l'arrêté du 27 septembre 2022. Il informe l'acheteur ou le locataire des risques naturels, miniers, technologiques, sismiques et de pollution des sols auxquels est exposé un bien immobilier. Il doit être annexé à tout compromis de vente ou bail.",
-  },
-  {
-    q: "Combien de temps faut-il pour générer un ERP avec votre outil ?",
+    q: "Combien de temps faut-il pour générer un ERP ?",
     a: "Moins de 2 minutes. Vous saisissez l'adresse, les données sont récupérées automatiquement depuis les APIs officielles (Géorisques, IGN, BRGM), et le PDF conforme est généré instantanément. Pas de ressaisie, pas de délai.",
   },
   {
-    q: "Les ERP générés sont-ils acceptés par les notaires et agences immobilières ?",
+    q: "Les ERP générés sont-ils acceptés par les notaires ?",
     a: "Oui. Nos documents sont générés à partir des mêmes sources que les services officiels de l'État (Géorisques, cadastre IGN). Le format et le contenu sont conformes à l'arrêté du 27/09/2022. Ils sont acceptés sans réserve par les études notariales.",
-  },
-  {
-    q: "Mes crédits ont-ils une date d'expiration ?",
-    a: "Oui, chaque pack est valable 12 mois à compter de la date d'achat. Vous pouvez utiliser vos crédits à votre rythme pendant toute cette période. L'échéance est visible dans votre espace pro, sous « Mes achats ».",
   },
   {
     q: "Puis-je acheter des crédits sans abonnement mensuel ?",
     a: "Oui, c'est justement le principe. Pas d'abonnement, pas d'engagement. Vous achetez un pack de crédits une fois, vous les utilisez quand vous en avez besoin. Une facture vous est envoyée automatiquement après chaque achat.",
   },
   {
+    q: "Mes crédits ont-ils une date d'expiration ?",
+    a: "Oui, chaque pack est valable 12 mois à compter de la date d'achat. Vous pouvez utiliser vos crédits à votre rythme pendant toute cette période. L'échéance est visible dans votre espace pro, sous « Mes achats ».",
+  },
+  {
+    q: "Qu'est-ce qu'un État des Risques et Pollutions (ERP) ?",
+    a: "L'ERP est un document réglementaire obligatoire depuis l'arrêté du 27 septembre 2022. Il informe l'acheteur ou le locataire des risques naturels, miniers, technologiques, sismiques et de pollution des sols auxquels est exposé un bien immobilier. Il doit être annexé à tout compromis de vente ou bail.",
+  },
+  {
     q: "Comment fonctionne la marketplace de contacts diagnostics ?",
-    a: "La marketplace met en relation des diagnostiqueurs avec des particuliers ou professionnels qui recherchent activement un professionnel dans leur zone. Vous définissez votre secteur géographique et le nombre de missions que vous souhaitez recevoir par mois. Vous ne payez que les demandes reçues. Le système est automatique : dès qu'une mission qualifiée est disponible dans votre secteur, elle vous est transmise.",
+    a: "La marketplace met en relation des diagnostiqueurs avec des particuliers ou professionnels qui recherchent activement un professionnel dans leur zone. Vous définissez votre secteur géographique et le nombre de missions que vous souhaitez recevoir par mois. Vous ne payez que les demandes reçues.",
   },
 ];
 
@@ -170,7 +170,15 @@ export default function ProLanding() {
 
   // ── FAQ state ─────────────────────────────────────────────────────────────
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [showAllFaq, setShowAllFaq] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [socialProof] = useState(() => {
+    const packs = [10, 15, 50];
+    return {
+      qty: packs[Math.floor(Math.random() * packs.length)],
+      mins: Math.floor(Math.random() * 16) + 2,
+    };
+  });
 
   function scrollTo(id: string, openLeads = false) {
     setMenuOpen(false);
@@ -283,33 +291,25 @@ export default function ProLanding() {
                 Moins chers.<br />
                 <span className="text-amber-500">Conformes.</span>
               </h1>
-              <ul className="mt-8 space-y-4">
+
+              <div className="mt-5 inline-flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-full px-4 py-1.5">
+                <Banknote className="h-3.5 w-3.5 text-amber-500 shrink-0" />
+                <span className="text-sm font-bold text-amber-700">À partir de 1,72 € HT / ERP</span>
+              </div>
+
+              <ul className="mt-7 space-y-3">
                 {[
-                  {
-                    icon: <Clock className="h-5 w-5 text-amber-500 shrink-0" />,
-                    title: 'ERP généré en moins de 2 minutes',
-                    desc: "Arrêtez de passer 20 minutes sur les sites officiels. Adresse saisie → PDF prêt.",
-                  },
-                  {
-                    icon: <Banknote className="h-5 w-5 text-amber-500 shrink-0" />,
-                    title: 'À partir de 1,72 € HT le document',
-                    desc: "Tarif dégressif selon le volume : de 7 € HT à l'unité jusqu'à 1,72 € HT en moyenne. Pas d'abonnement.",
-                  },
-                  {
-                    icon: <BadgeCheck className="h-5 w-5 text-amber-500 shrink-0" />,
-                    title: 'Accepté sans réserve par les notaires',
-                    desc: "Sources Géorisques & IGN officielles. Conforme à l'arrêté du 27/09/2022.",
-                  },
-                ].map(({ icon, title, desc }) => (
-                  <li key={title} className="flex items-start gap-3">
-                    <span className="mt-0.5">{icon}</span>
-                    <div>
-                      <p className="font-semibold text-navy-900 text-sm">{title}</p>
-                      <p className="text-gray-500 text-xs mt-0.5 leading-relaxed">{desc}</p>
-                    </div>
+                  { icon: <Clock className="h-4 w-4 text-amber-500 shrink-0" />, title: 'Adresse → PDF conforme en moins de 2 minutes' },
+                  { icon: <BadgeCheck className="h-4 w-4 text-amber-500 shrink-0" />, title: 'Accepté sans réserve par les notaires' },
+                  { icon: <Check className="h-4 w-4 text-amber-500 shrink-0" />, title: 'Sans abonnement · crédits valables 12 mois' },
+                ].map(({ icon, title }) => (
+                  <li key={title} className="flex items-center gap-2.5">
+                    {icon}
+                    <p className="text-gray-700 text-sm">{title}</p>
                   </li>
                 ))}
               </ul>
+
               <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-4">
                 <Button
                   size="lg"
@@ -319,7 +319,15 @@ export default function ProLanding() {
                   {session ? 'Mon espace pro' : "Accéder à l'espace pro"}
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
-                <span className="text-gray-500 text-xs sm:text-sm text-center sm:text-left">Sans abonnement · Connexion par lien email</span>
+                <span className="text-gray-500 text-xs sm:text-sm text-center sm:text-left">Connexion par lien email · sans mot de passe</span>
+              </div>
+
+              {/* Social proof live */}
+              <div className="mt-5 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse shrink-0" />
+                <p className="text-xs text-gray-400">
+                  Un diagnostiqueur vient d'acheter un pack de <strong className="text-gray-600">{socialProof.qty} ERPs</strong> · il y a {socialProof.mins} min
+                </p>
               </div>
             </div>
 
@@ -493,8 +501,8 @@ export default function ProLanding() {
             <h2 className="text-2xl font-bold text-navy-900">Questions fréquentes</h2>
           </div>
           <div className="divide-y divide-gray-100">
-            {FAQS.map((faq, i) => (
-              <div key={i} className="py-4">
+            {(showAllFaq ? FAQS : FAQS.slice(0, 3)).map((faq, i) => (
+              <div key={i} className="py-5">
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   className="w-full flex items-center justify-between gap-4 text-left"
@@ -510,6 +518,14 @@ export default function ProLanding() {
               </div>
             ))}
           </div>
+          {!showAllFaq && (
+            <button
+              onClick={() => setShowAllFaq(true)}
+              className="mt-4 text-sm font-medium text-navy-900 hover:underline flex items-center gap-1"
+            >
+              Voir toutes les questions <ChevronDown className="h-3.5 w-3.5" />
+            </button>
+          )}
         </div>
       </section>
 
