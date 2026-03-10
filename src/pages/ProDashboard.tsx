@@ -706,50 +706,50 @@ export default function ProDashboard() {
         </div>
       </div>
 
-    </div>
-
-    {/* Success overlay — affiché après un achat Stripe réussi */}
-    {showSuccessOverlay && !loading && account && (
-      <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4"
-        onClick={() => setShowSuccessOverlay(false)}
-      >
+      {/* Success overlay — affiché après un achat Stripe réussi */}
+      {showSuccessOverlay && !loading && account && (
         <div
-          className="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-8 text-center space-y-5"
-          onClick={e => e.stopPropagation()}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4"
+          onClick={() => setShowSuccessOverlay(false)}
         >
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-            <Check className="h-8 w-8 text-green-600" />
-          </div>
-          <div className="space-y-2">
-            <p className="text-xl font-extrabold text-gray-900">Paiement confirmé !</p>
-            {account.packs[0] && (
-              <p className="text-3xl font-black text-navy-900">
-                +{account.packs[0].qty}
-                <span className="text-base font-normal text-gray-500 ml-1.5">
-                  crédit{account.packs[0].qty > 1 ? 's' : ''} ERP
-                </span>
-              </p>
-            )}
-            <p className="text-sm text-gray-500">Vos crédits sont disponibles immédiatement.</p>
-          </div>
-          <div className="flex flex-col gap-2 pt-1">
-            <Button
-              onClick={() => { setShowSuccessOverlay(false); navigate('/generer'); }}
-              className="w-full bg-navy-900 hover:bg-navy-800 font-bold"
-            >
-              <Plus className="h-4 w-4 mr-1.5" />
-              Générer un ERP maintenant
-            </Button>
-            <button
-              onClick={() => setShowSuccessOverlay(false)}
-              className="text-sm text-gray-400 hover:text-gray-600 py-1"
-            >
-              Fermer
-            </button>
+          <div
+            className="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-8 text-center space-y-5"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+              <Check className="h-8 w-8 text-green-600" />
+            </div>
+            <div className="space-y-2">
+              <p className="text-xl font-extrabold text-gray-900">Paiement confirmé !</p>
+              {account.packs[0] && (
+                <p className="text-3xl font-black text-navy-900">
+                  +{account.packs[0].qty}
+                  <span className="text-base font-normal text-gray-500 ml-1.5">
+                    crédit{account.packs[0].qty > 1 ? 's' : ''} ERP
+                  </span>
+                </p>
+              )}
+              <p className="text-sm text-gray-500">Vos crédits sont disponibles immédiatement.</p>
+            </div>
+            <div className="flex flex-col gap-2 pt-1">
+              <Button
+                onClick={() => { setShowSuccessOverlay(false); navigate('/generer'); }}
+                className="w-full bg-navy-900 hover:bg-navy-800 font-bold"
+              >
+                <Plus className="h-4 w-4 mr-1.5" />
+                Générer un ERP maintenant
+              </Button>
+              <button
+                onClick={() => setShowSuccessOverlay(false)}
+                className="text-sm text-gray-400 hover:text-gray-600 py-1"
+              >
+                Fermer
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
+
+    </div>
   );
 }
