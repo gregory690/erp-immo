@@ -126,12 +126,13 @@ export default function ProLanding() {
   const [sliderQty, setSliderQty] = useState(20);
 
   const PACKS = [
-    { name: 'Découverte', erps: 10,  totalHT: 60,  pricePerErp: 6   },
-    { name: 'Pro',        erps: 15,  totalHT: 75,  pricePerErp: 5   },
-    { name: 'Pro+',       erps: 50,  totalHT: 150, pricePerErp: 3   },
-    { name: 'Expert',     erps: 100, totalHT: 250, pricePerErp: 2.5 },
-    { name: 'Premium',    erps: 150, totalHT: 300, pricePerErp: 2   },
-    { name: 'Élite',      erps: 250, totalHT: 375, pricePerErp: 1.5 },
+    { name: 'Découverte', erps: 10,  totalHT: 60,  pricePerErp: 6    },
+    { name: 'Pro',        erps: 15,  totalHT: 75,  pricePerErp: 5    },
+    { name: 'Pro+',       erps: 50,  totalHT: 150, pricePerErp: 3    },
+    { name: 'Expert',     erps: 100, totalHT: 250, pricePerErp: 2.5  },
+    { name: 'Premium',    erps: 150, totalHT: 300, pricePerErp: 2    },
+    { name: 'Élite',      erps: 250, totalHT: 437, pricePerErp: 1.75 },
+    { name: 'Ultime',     erps: 500, totalHT: 500, pricePerErp: 1    },
   ];
 
   function getRecommendedPack(qty: number) {
@@ -140,7 +141,8 @@ export default function ProLanding() {
     if (qty <= 50)  return PACKS[2];
     if (qty <= 100) return PACKS[3];
     if (qty <= 150) return PACKS[4];
-    return PACKS[5];
+    if (qty <= 250) return PACKS[5];
+    return PACKS[6];
   }
 
   const recommendedPack = getRecommendedPack(sliderQty);
@@ -250,14 +252,14 @@ export default function ProLanding() {
                   <input
                     type="range"
                     min={1}
-                    max={250}
+                    max={500}
                     value={sliderQty}
                     onChange={e => setSliderQty(Number(e.target.value))}
                     className="w-full cursor-pointer accent-amber-400"
                   />
                   <div className="flex justify-between text-[10px] text-white/50 mt-1">
                     <span>1 ERP</span>
-                    <span>250 ERPs</span>
+                    <span>500 ERPs</span>
                   </div>
                 </div>
 
@@ -309,108 +311,6 @@ export default function ProLanding() {
             </div>
 
           </div>
-        </div>
-      </section>
-
-      {/* ── Pricing ──────────────────────────────────────────────────────── */}
-      <section className="px-4 py-16 sm:py-20 bg-slate-50 border-t border-gray-100">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-10">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-500 mb-2">Tarifs</p>
-            <h2 className="text-2xl sm:text-3xl font-bold text-navy-900">Achetez vos ERPs à l'unité</h2>
-            <p className="text-sm text-gray-500 mt-2">Sans abonnement · ERPs sans date limite · Facture automatique par email</p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start">
-
-            {/* Pack Découverte */}
-            <div className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col">
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 mb-5">Découverte</p>
-              <p className="text-3xl font-extrabold text-navy-900">
-                60 €<span className="text-sm font-normal text-gray-500 ml-1.5">HT</span>
-              </p>
-              <p className="text-sm text-gray-500 mt-1 mb-1">10 ERPs · 6 € HT / ERP</p>
-              <p className="text-xs text-gray-400 mb-7">72 € TTC</p>
-              <ul className="space-y-3 flex-1 mb-7">
-                {PACK_FEATURES_BASE.map(f => (
-                  <li key={f} className="flex items-start gap-2.5 text-sm text-gray-700">
-                    <Check className="h-4 w-4 text-navy-900 mt-0.5 shrink-0" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <Button
-                onClick={handleCTA}
-                variant="outline"
-                className="w-full border-gray-300 text-navy-900 hover:bg-navy-900 hover:text-white font-semibold rounded-lg transition-colors"
-              >
-                Commencer
-              </Button>
-            </div>
-
-            {/* Pack Pro */}
-            <div className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col">
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 mb-5">Pro</p>
-              <p className="text-3xl font-extrabold text-navy-900">
-                75 €<span className="text-sm font-normal text-gray-500 ml-1.5">HT</span>
-              </p>
-              <p className="text-sm text-gray-500 mt-1 mb-1">15 ERPs · 5 € HT / ERP</p>
-              <p className="text-xs text-gray-400 mb-7">90 € TTC</p>
-              <ul className="space-y-3 flex-1 mb-7">
-                {[...PACK_FEATURES_BASE, ...PACK_15_EXTRAS].map(f => (
-                  <li key={f} className="flex items-start gap-2.5 text-sm text-gray-700">
-                    <Check className="h-4 w-4 text-navy-900 mt-0.5 shrink-0" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <Button
-                onClick={handleCTA}
-                variant="outline"
-                className="w-full border-gray-300 text-navy-900 hover:bg-navy-900 hover:text-white font-semibold rounded-lg transition-colors"
-              >
-                Choisir
-              </Button>
-            </div>
-
-            {/* Pack Pro+ */}
-            <div className="bg-navy-900 rounded-xl p-6 flex flex-col relative">
-              <span className="absolute -top-3 left-5 inline-flex items-center gap-1.5 bg-amber-400 text-navy-900 text-[10px] font-bold px-2.5 py-1 rounded-full">
-                Meilleur prix / ERP
-              </span>
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-white/60 mb-5">Pro+</p>
-              <p className="text-3xl font-extrabold text-white">
-                150 €<span className="text-sm font-normal text-white/60 ml-1.5">HT</span>
-              </p>
-              <p className="text-sm text-white/80 mt-1 mb-1">50 ERPs · 3 € HT / ERP</p>
-              <p className="text-xs text-white/55 mb-7">180 € TTC</p>
-              <ul className="space-y-3 flex-1 mb-7">
-                {[...PACK_FEATURES_BASE, ...PACK_50_EXTRAS].map(f => (
-                  <li key={f} className="flex items-start gap-2.5 text-sm text-white/85">
-                    <Check className="h-4 w-4 text-amber-400 mt-0.5 shrink-0" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <Button
-                onClick={handleCTA}
-                className="w-full bg-amber-400 text-navy-900 hover:bg-amber-300 font-bold rounded-lg"
-              >
-                Choisir
-              </Button>
-            </div>
-
-          </div>
-
-          <p className="text-xs text-gray-400 text-center mt-6">
-            Paiement sécurisé par Stripe · Facture automatique après chaque achat ·{' '}
-            <button
-              onClick={() => { window.location.href = 'mailto:pro@edletdiagnostic.fr?subject=Offre%20sur%20mesure%20ERP'; }}
-              className="underline hover:text-gray-600"
-            >
-              Plus de 50 ERPs / mois ? Contactez-nous
-            </button>
-          </p>
         </div>
       </section>
 
