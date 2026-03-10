@@ -138,14 +138,12 @@ export default function ProLanding() {
   const [buyError, setBuyError] = useState<string | null>(null);
 
   async function handleBuy() {
-    if (!session) {
-      navigate('/pro/login');
-      return;
-    }
     setBuyLoading(true);
     setBuyError(null);
     try {
-      const { url } = await createProCheckoutByQty(sliderQty, session.token);
+      // Token présent si connecté → email pré-rempli dans Stripe
+      // Token absent → Stripe collecte l'email, webhook crée le compte et envoie le lien de connexion
+      const { url } = await createProCheckoutByQty(sliderQty, session?.token);
       window.location.href = url;
     } catch (err) {
       setBuyError(err instanceof Error ? err.message : 'Erreur de paiement');
@@ -249,7 +247,7 @@ export default function ProLanding() {
             </div>
 
             {/* ── Colonne droite — Simulateur de tarif ── */}
-            <div className="hidden lg:block space-y-3">
+            <div className="space-y-3">
 
               <div className="rounded-2xl overflow-hidden border border-white/10">
 
@@ -326,9 +324,7 @@ export default function ProLanding() {
                   >
                     {buyLoading
                       ? <Loader2 className="h-4 w-4 animate-spin" />
-                      : session
-                        ? `Acheter ${sliderQty} ERPs — ${totalHT} € HT`
-                        : `Commencer — ${totalHT} € HT`
+                      : `Acheter ${sliderQty} ERPs — ${totalHT} € HT`
                     }
                   </button>
                   {buyError && <p className="text-red-300 text-xs text-center">{buyError}</p>}

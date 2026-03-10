@@ -91,12 +91,17 @@ export default async function handler(req, res) {
   // ─── Branche pro_pack ────────────────────────────────────────────────────────
   const sessionType = session.metadata?.type;
   if (sessionType === 'pro_pack') {
-    const proEmail = session.metadata?.pro_email?.toLowerCase().trim();
+    // pro_email présent si achat connecté ; sinon fallback sur customer_details (achat anonyme)
+    const proEmail = (
+      session.metadata?.pro_email || session.customer_details?.email
+    )?.toLowerCase().trim();
     const packQty = parseInt(session.metadata?.pack_qty || '0', 10);
+
     if (proEmail && packQty > 0) {
       try {
         const credKey = `pro:credits:${proEmail}`;
         const raw = await kv.get(credKey);
+        const isNewAccount = !raw; // premier achat → compte à créer
         const current = raw
           ? (typeof raw === 'string' ? JSON.parse(raw) : raw)
           : { credits: 0, used: 0, packs: [] };
@@ -132,7 +137,44 @@ export default async function handler(req, res) {
           ...(current.packs || []),
         ];
         await kv.set(credKey, JSON.stringify(current), { ex: 60 * 60 * 24 * 365 });
-        console.log(`Webhook: pro_pack ${packQty} crédits ajoutés pour ${proEmail}`);
+        console.log(`Webhook: pro_pack ${packQty} crédits ajoutés pour ${proEmail} (nouveau: ${isNewAccount})`);
+
+        // Nouveau compte : générer un lien de connexion et envoyer l'email de bienvenue
+        if (isNewAccount && process.env.RESEND_API_KEY) {
+          try {
+            const { randomUUID } = await import('crypto');
+            const loginToken = randomUUID();
+            await kv.set(`pro:session:${loginToken}`, JSON.stringify({ email: proEmail }), { ex: 60 * 60 * 24 });
+
+            const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+              ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+              : 'https://erp-immo.vercel.app';
+            const loginLink = `${baseUrl}/pro/auth?token=${loginToken}`;
+
+            await fetch('https://api.resend.com/emails', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+              },
+              body: JSON.stringify({
+                from: process.env.RESEND_FROM_EMAIL,
+                to: proEmail,
+                subject: `Votre espace pro EDL&DIAGNOSTIC est prêt — ${packQty} ERP${packQty > 1 ? 's' : ''} disponibles`,
+                html: `<!DOCTYPE html><html><body style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:32px 16px;color:#1a3a5c;">
+<h1 style="font-size:22px;font-weight:800;margin-bottom:8px;">Bienvenue dans votre espace pro</h1>
+<p style="color:#555;margin-bottom:4px;">Votre achat de <strong>${packQty} ERP${packQty > 1 ? 's' : ''}</strong> a bien été enregistré.</p>
+<p style="color:#555;margin-bottom:24px;">Vos crédits sont disponibles immédiatement — cliquez ci-dessous pour accéder à votre espace.</p>
+<a href="${loginLink}" style="display:inline-block;background:#1a3a5c;color:#ffffff;padding:14px 28px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;">Accéder à mon espace pro →</a>
+<p style="margin-top:24px;font-size:12px;color:#999;">Ce lien est valable 24h · EDL&amp;DIAGNOSTIC — ERP professionnel</p>
+</body></html>`,
+              }),
+            });
+            console.log(`Webhook: email de bienvenue envoyé à ${proEmail}`);
+          } catch (err) {
+            console.error('Webhook: welcome email error:', err.message);
+          }
+        }
       } catch (err) {
         console.error('Webhook: pro_pack KV error:', err.message);
       }

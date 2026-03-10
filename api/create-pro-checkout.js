@@ -81,13 +81,18 @@ export default async function handler(req, res) {
   const { qty, token } = req.body || {};
 
   const parsedQty = parseInt(qty, 10);
-  if (!parsedQty || parsedQty < 1 || parsedQty > 10000) {
-    return res.status(400).json({ error: 'Quantité invalide (1–10 000 ERPs)' });
+  if (!parsedQty || parsedQty < 1 || parsedQty > 500) {
+    return res.status(400).json({ error: 'Quantité invalide (1–500 ERPs)' });
   }
 
-  const email = await verifyProToken(token);
-  if (!email) {
-    return res.status(401).json({ error: 'Non authentifié' });
+  // Token optionnel — si présent : session pro existante (email pré-rempli dans Stripe)
+  //                 — si absent  : achat anonyme, Stripe collecte l'email, webhook crée le compte
+  let email = null;
+  if (token) {
+    email = await verifyProToken(token);
+    if (!email) {
+      return res.status(401).json({ error: 'Session expirée. Reconnectez-vous.' });
+    }
   }
 
   const secretKey = process.env.STRIPE_SECRET_KEY;
@@ -122,7 +127,7 @@ export default async function handler(req, res) {
   try {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
-      customer_email: email,
+      ...(email ? { customer_email: email } : {}), // pré-rempli si connecté, Stripe collecte sinon
       customer_creation: 'always',
       billing_address_collection: 'required',
       custom_fields: [
@@ -156,7 +161,7 @@ export default async function handler(req, res) {
       }],
       metadata: {
         type: 'pro_pack',
-        pro_email: email,
+        ...(email ? { pro_email: email } : {}), // absent si achat anonyme → webhook lira customer_details.email
         pack_qty: String(parsedQty),
       },
       success_url: `${baseUrl}/pro/dashboard?pack_success=1`,

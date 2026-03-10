@@ -108,12 +108,12 @@ export async function createProCheckout(
 
 export async function createProCheckoutByQty(
   qty: number,
-  token: string
+  token?: string // optionnel : absent = achat anonyme, Stripe collecte l'email
 ): Promise<{ url: string }> {
   const res = await fetch('/api/create-pro-checkout', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ qty, token }),
+    body: JSON.stringify({ qty, ...(token ? { token } : {}) }),
   });
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));
