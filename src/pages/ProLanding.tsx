@@ -52,6 +52,25 @@ const FAQS = [
 
 const CAP_OPTIONS = ['5 missions / mois', '10 missions / mois', '20 missions / mois', '50 missions / mois', 'Plus de 50'];
 
+// Tarification graduée — chaque tranche facturée à son taux propre.
+// Le total est TOUJOURS strictement croissant avec le volume.
+const GRAD_TIERS = [
+  { from: 1,   to: 50,  rate: 3.0,  label: '1–50',    rateFmt: '3,00' },
+  { from: 51,  to: 100, rate: 2.5,  label: '51–100',  rateFmt: '2,50' },
+  { from: 101, to: 200, rate: 2.0,  label: '101–200', rateFmt: '2,00' },
+  { from: 201, to: 300, rate: 1.5,  label: '201–300', rateFmt: '1,50' },
+  { from: 301, to: 500, rate: 1.0,  label: '301–500', rateFmt: '1,00' },
+];
+
+function calcTotal(qty: number): number {
+  let total = 0;
+  for (const t of GRAD_TIERS) {
+    if (qty < t.from) break;
+    total += (Math.min(qty, t.to) - t.from + 1) * t.rate;
+  }
+  return total;
+}
+
 export default function ProLanding() {
   const navigate = useNavigate();
   const session = getProSession();
@@ -126,7 +145,7 @@ export default function ProLanding() {
     setBuyLoading(true);
     setBuyError(null);
     try {
-      const { url } = await createProCheckoutByQty(recommendedPack.qty, session.token);
+      const { url } = await createProCheckoutByQty(sliderQty, session.token);
       window.location.href = url;
     } catch (err) {
       setBuyError(err instanceof Error ? err.message : 'Erreur de paiement');
@@ -134,24 +153,10 @@ export default function ProLanding() {
     }
   }
 
-  // Packs discrets — totaux strictement croissants (pas de paradoxe prix)
-  // 60 < 75 < 150 < 250 < 400 < 450 < 500 ✓
-  const PACKS = [
-    { name: 'Découverte', qty: 10,  totalHT: 60,  pricePerErp: 6   },
-    { name: 'Pro',        qty: 15,  totalHT: 75,  pricePerErp: 5   },
-    { name: 'Pro+',       qty: 50,  totalHT: 150, pricePerErp: 3   },
-    { name: 'Expert',     qty: 100, totalHT: 250, pricePerErp: 2.5 },
-    { name: 'Premium',    qty: 200, totalHT: 400, pricePerErp: 2   },
-    { name: 'Élite',      qty: 300, totalHT: 450, pricePerErp: 1.5 },
-    { name: 'Ultime',     qty: 500, totalHT: 500, pricePerErp: 1   },
-  ];
-
-  // Recommande le plus petit pack couvrant le volume choisi
-  function getRecommendedPack(qty: number) {
-    return PACKS.find(p => p.qty >= qty) ?? PACKS[PACKS.length - 1];
-  }
-
-  const recommendedPack = getRecommendedPack(sliderQty);
+  // Totaux pour le simulateur
+  const totalHT = Math.round(calcTotal(sliderQty));
+  const totalTTC = Math.round(totalHT * 1.2);
+  const avgDisplay = (calcTotal(sliderQty) / sliderQty).toFixed(2).replace('.', ',');
 
   // ── FAQ state ─────────────────────────────────────────────────────────────
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -263,33 +268,49 @@ export default function ProLanding() {
                     onChange={e => setSliderQty(Number(e.target.value))}
                     className="w-full cursor-pointer accent-amber-400"
                   />
-                  <div className="flex justify-between text-[10px] text-white/65 mt-1">
-                    <span>1 ERP</span>
-                    <span>500 ERPs</span>
+                  {/* Marqueurs de paliers */}
+                  <div className="relative h-7 mt-1.5">
+                    {[
+                      { pct: 0,    price: '3€',    label: '1' },
+                      { pct: 9.8,  price: '2,5€',  label: '51' },
+                      { pct: 19.8, price: '2€',    label: '101' },
+                      { pct: 39.9, price: '1,5€',  label: '201' },
+                      { pct: 59.9, price: '1€',    label: '301' },
+                    ].map(({ pct, price, label }) => (
+                      <div key={label} className="absolute flex flex-col items-center" style={{ left: `${pct}%` }}>
+                        <div className="w-px h-1.5 bg-white/25" />
+                        <span className="text-[8px] text-amber-400/80 font-semibold mt-0.5 whitespace-nowrap">{price}</span>
+                        <span className="text-[7px] text-white/35 mt-0.5 whitespace-nowrap">{label}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
                 {/* Result */}
                 <div className="border-t border-white/10 px-5 py-5 bg-amber-400/8">
-                  <p className="text-white/80 text-xs mb-4">
-                    Pack <span className="text-white font-semibold">{recommendedPack.name}</span>
-                    {' '}· {recommendedPack.qty} ERPs
-                  </p>
-                  <div className="flex items-end justify-between">
+                  <div className="flex items-end justify-between mb-4">
                     <div>
-                      <p className="text-amber-400 font-extrabold text-4xl leading-none">{recommendedPack.pricePerErp}€</p>
-                      <p className="text-white/85 text-xs mt-1">HT / ERP</p>
+                      <p className="text-amber-400 font-extrabold text-4xl leading-none">{avgDisplay}€</p>
+                      <p className="text-white/85 text-xs mt-1">HT / ERP en moyenne</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-white font-bold text-xl">{recommendedPack.totalHT} € HT</p>
-                      <p className="text-white/75 text-xs mt-0.5">soit {Math.round(recommendedPack.totalHT * 1.2)} € TTC</p>
+                      <p className="text-white font-bold text-xl">{totalHT} € HT</p>
+                      <p className="text-white/75 text-xs mt-0.5">soit {totalTTC} € TTC</p>
                     </div>
                   </div>
-                  {recommendedPack.qty > sliderQty && (
-                    <p className="text-white/65 text-[11px] mt-3">
-                      +{recommendedPack.qty - sliderQty} ERPs en réserve — sans date limite.
-                    </p>
-                  )}
+                  {/* Détail des tranches actives */}
+                  <div className="grid grid-cols-5 gap-1">
+                    {GRAD_TIERS.map(t => {
+                      const active = sliderQty >= t.from;
+                      const partial = active && sliderQty < t.to;
+                      return (
+                        <div key={t.from} className={`rounded px-1 py-1.5 text-center transition-colors ${partial ? 'bg-amber-400/25 border border-amber-400/30' : active ? 'bg-amber-400/15' : 'bg-white/5'}`}>
+                          <p className={`text-[9px] font-bold leading-none ${active ? 'text-amber-400' : 'text-white/20'}`}>{t.rateFmt}€</p>
+                          <p className={`text-[7px] mt-1 leading-none ${active ? 'text-white/45' : 'text-white/15'}`}>{t.label}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 {/* CTA achat */}
@@ -302,8 +323,8 @@ export default function ProLanding() {
                     {buyLoading
                       ? <Loader2 className="h-4 w-4 animate-spin" />
                       : session
-                        ? `Acheter ${recommendedPack.qty} ERPs — ${recommendedPack.totalHT} € HT`
-                        : `Commencer — ${recommendedPack.totalHT} € HT`
+                        ? `Acheter ${sliderQty} ERPs — ${totalHT} € HT`
+                        : `Commencer — ${totalHT} € HT`
                     }
                   </button>
                   {buyError && <p className="text-red-300 text-xs text-center">{buyError}</p>}

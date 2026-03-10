@@ -13,19 +13,22 @@ import {
 } from '../services/pro.service';
 import type { ProAccount } from '../services/pro.service';
 
-// Packs discrets — totaux strictement croissants (60<75<150<250<400<450<500)
-const ERP_PACKS = [
-  { qty: 10,  totalHT: 60,  pricePerErp: 6   },
-  { qty: 15,  totalHT: 75,  pricePerErp: 5   },
-  { qty: 50,  totalHT: 150, pricePerErp: 3   },
-  { qty: 100, totalHT: 250, pricePerErp: 2.5 },
-  { qty: 200, totalHT: 400, pricePerErp: 2   },
-  { qty: 300, totalHT: 450, pricePerErp: 1.5 },
-  { qty: 500, totalHT: 500, pricePerErp: 1   },
+// Tarification graduée — total toujours strictement croissant avec le volume
+const GRAD_TIERS = [
+  { from: 1,   to: 50,  rate: 3.0,  label: '1–50',    rateFmt: '3,00' },
+  { from: 51,  to: 100, rate: 2.5,  label: '51–100',  rateFmt: '2,50' },
+  { from: 101, to: 200, rate: 2.0,  label: '101–200', rateFmt: '2,00' },
+  { from: 201, to: 300, rate: 1.5,  label: '201–300', rateFmt: '1,50' },
+  { from: 301, to: 500, rate: 1.0,  label: '301–500', rateFmt: '1,00' },
 ];
 
-function getErpPack(sliderVal: number) {
-  return ERP_PACKS.find(p => p.qty >= sliderVal) ?? ERP_PACKS.at(-1)!;
+function calcTotal(qty: number): number {
+  let total = 0;
+  for (const t of GRAD_TIERS) {
+    if (qty < t.from) break;
+    total += (Math.min(qty, t.to) - t.from + 1) * t.rate;
+  }
+  return total;
 }
 
 const LEAD_TIERS = [
@@ -117,7 +120,7 @@ export default function ProDashboard() {
     setPackError(null);
     setPackLoading('buy');
     try {
-      const { url } = await createProCheckoutByQty(getErpPack(buyQty).qty, session.token);
+      const { url } = await createProCheckoutByQty(buyQty, session.token);
       window.location.href = url;
     } catch (err) {
       setPackError(err instanceof Error ? err.message : 'Erreur de paiement');
@@ -276,8 +279,9 @@ export default function ProDashboard() {
 
             {/* Pack selector — slider */}
             {showPacks && (() => {
-              const pack = getErpPack(buyQty);
-              const reserve = pack.qty - buyQty;
+              const totalHT = Math.round(calcTotal(buyQty));
+              const totalTTC = Math.round(totalHT * 1.2);
+              const avgDisplay = (calcTotal(buyQty) / buyQty).toFixed(2).replace('.', ',');
               return (
                 <div className="bg-white border border-border rounded-xl p-5 space-y-4">
                   <h3 className="font-semibold text-gray-900 text-sm">Combien d'ERPs voulez-vous acheter ?</h3>
@@ -286,35 +290,59 @@ export default function ProDashboard() {
                   {/* Slider */}
                   <div>
                     <div className="flex justify-between items-baseline mb-2">
-                      <p className="text-xs text-gray-500">Volume souhaité</p>
+                      <p className="text-xs text-gray-500">Volume</p>
                       <p className="text-navy-900 font-extrabold text-2xl">{buyQty} ERPs</p>
                     </div>
                     <input
                       type="range"
-                      min={5}
+                      min={1}
                       max={500}
                       value={buyQty}
                       onChange={e => setBuyQty(Number(e.target.value))}
                       className="w-full cursor-pointer accent-navy-900"
                     />
-                    <div className="flex justify-between text-[10px] text-gray-400 mt-1">
-                      <span>5 ERPs</span>
-                      <span>500 ERPs</span>
+                    {/* Marqueurs de paliers */}
+                    <div className="relative h-7 mt-1.5">
+                      {[
+                        { pct: 0,    price: '3€',    label: '1' },
+                        { pct: 9.8,  price: '2,5€',  label: '51' },
+                        { pct: 19.8, price: '2€',    label: '101' },
+                        { pct: 39.9, price: '1,5€',  label: '201' },
+                        { pct: 59.9, price: '1€',    label: '301' },
+                      ].map(({ pct, price, label }) => (
+                        <div key={label} className="absolute flex flex-col items-center" style={{ left: `${pct}%` }}>
+                          <div className="w-px h-1.5 bg-gray-300" />
+                          <span className="text-[8px] text-navy-900/70 font-semibold mt-0.5 whitespace-nowrap">{price}</span>
+                          <span className="text-[7px] text-gray-400 mt-0.5 whitespace-nowrap">{label}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
 
                   {/* Résultat */}
-                  <div className="bg-slate-50 rounded-xl px-5 py-4 flex items-end justify-between">
-                    <div>
-                      <p className="text-2xl font-extrabold text-navy-900">{pack.pricePerErp} €</p>
-                      <p className="text-xs text-gray-500 mt-0.5">HT / ERP</p>
+                  <div className="bg-slate-50 rounded-xl px-5 py-4 space-y-3">
+                    <div className="flex items-end justify-between">
+                      <div>
+                        <p className="text-2xl font-extrabold text-navy-900">{avgDisplay} €</p>
+                        <p className="text-xs text-gray-500 mt-0.5">HT / ERP en moyenne</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-lg font-bold text-gray-900">{totalHT} € HT</p>
+                        <p className="text-xs text-gray-400 mt-0.5">{totalTTC} € TTC</p>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-lg font-bold text-gray-900">{pack.totalHT} € HT</p>
-                      <p className="text-xs text-gray-400 mt-0.5">{Math.round(pack.totalHT * 1.2)} € TTC</p>
-                      {reserve > 0 && (
-                        <p className="text-[10px] text-amber-600 mt-0.5">+{reserve} ERPs en réserve</p>
-                      )}
+                    {/* Détail des tranches */}
+                    <div className="grid grid-cols-5 gap-1">
+                      {GRAD_TIERS.map(t => {
+                        const active = buyQty >= t.from;
+                        const partial = active && buyQty < t.to;
+                        return (
+                          <div key={t.from} className={`rounded px-1 py-1.5 text-center transition-colors ${partial ? 'bg-navy-900/15 border border-navy-900/20' : active ? 'bg-navy-900/8' : 'bg-gray-100'}`}>
+                            <p className={`text-[9px] font-bold leading-none ${active ? 'text-navy-900' : 'text-gray-300'}`}>{t.rateFmt}€</p>
+                            <p className={`text-[7px] mt-1 leading-none ${active ? 'text-gray-500' : 'text-gray-300'}`}>{t.label}</p>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
 
@@ -326,7 +354,7 @@ export default function ProDashboard() {
                   >
                     {packLoading === 'buy'
                       ? <Loader2 className="h-4 w-4 animate-spin" />
-                      : `Acheter ${pack.qty} ERPs — ${pack.totalHT} € HT`
+                      : `Acheter ${buyQty} ERPs — ${totalHT} € HT`
                     }
                   </button>
                   <p className="text-[10px] text-gray-400 text-center">Paiement sécurisé par Stripe · Facture automatique</p>

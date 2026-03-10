@@ -5,20 +5,36 @@
 import Stripe from 'stripe';
 import { kv } from '@vercel/kv';
 
-// Packs discrets — totaux strictement croissants, pas de paradoxe prix
-// qty × price = total HT : 60 < 75 < 150 < 250 < 400 < 450 < 500 ✓
-const PRICING_TIERS = [
-  { upTo: 10,       pricePerUnitCents: 600 }, // 10  × 6.00€ = 60€  HT
-  { upTo: 15,       pricePerUnitCents: 500 }, // 15  × 5.00€ = 75€  HT
-  { upTo: 50,       pricePerUnitCents: 300 }, // 50  × 3.00€ = 150€ HT
-  { upTo: 100,      pricePerUnitCents: 250 }, // 100 × 2.50€ = 250€ HT
-  { upTo: 200,      pricePerUnitCents: 200 }, // 200 × 2.00€ = 400€ HT
-  { upTo: 300,      pricePerUnitCents: 150 }, // 300 × 1.50€ = 450€ HT
-  { upTo: Infinity, pricePerUnitCents: 100 }, // 500 × 1.00€ = 500€ HT
+// Tarification graduée — chaque tranche est facturée à son propre taux.
+// Le total est TOUJOURS strictement croissant avec le volume, sans exception.
+// Exemple : 51 ERPs = 150 + 2,50 = 152,50€ > 50 ERPs = 150€ ✓
+const GRAD_TIERS = [
+  { from: 1,   to: 50,  rateCents: 300 }, // 3,00 € HT / ERP
+  { from: 51,  to: 100, rateCents: 250 }, // 2,50 € HT / ERP
+  { from: 101, to: 200, rateCents: 200 }, // 2,00 € HT / ERP
+  { from: 201, to: 300, rateCents: 150 }, // 1,50 € HT / ERP
+  { from: 301, to: 500, rateCents: 100 }, // 1,00 € HT / ERP
 ];
 
-function getPricePerUnit(qty) {
-  return (PRICING_TIERS.find(t => qty <= t.upTo) ?? PRICING_TIERS.at(-1)).pricePerUnitCents;
+// Calcule le total HT en centimes pour une quantité donnée (tarification graduée)
+function calcTotalCents(qty) {
+  let total = 0;
+  for (const t of GRAD_TIERS) {
+    if (qty < t.from) break;
+    total += (Math.min(qty, t.to) - t.from + 1) * t.rateCents;
+  }
+  return total;
+}
+
+// Construit la description détaillée des tranches pour la facture Stripe
+function buildDescription(qty) {
+  const lines = [];
+  for (const t of GRAD_TIERS) {
+    if (qty < t.from) break;
+    const inTier = Math.min(qty, t.to) - t.from + 1;
+    lines.push(`${t.from}–${Math.min(qty, t.to)} ERPs × ${(t.rateCents / 100).toFixed(2).replace('.', ',')}€`);
+  }
+  return lines.join(' | ');
 }
 
 async function verifyProToken(token) {
@@ -96,8 +112,9 @@ export default async function handler(req, res) {
     }
   } catch { /* non bloquant */ }
 
-  const pricePerUnitCents = getPricePerUnit(parsedQty);
-  const priceHtEur = (pricePerUnitCents / 100).toFixed(2).replace('.', ',');
+  // Tarification graduée — montant total HT calculé tranche par tranche
+  const totalCents = calcTotalCents(parsedQty);
+  const description = buildDescription(parsedQty);
 
   // Taux de TVA 20% — créé une seule fois dans Stripe, réutilisé ensuite
   const taxRateId = await getOrCreateTaxRate(stripe);
@@ -127,14 +144,14 @@ export default async function handler(req, res) {
       line_items: [{
         price_data: {
           currency: 'eur',
-          unit_amount: pricePerUnitCents, // prix unitaire HT par ERP en centimes
-          tax_behavior: 'exclusive',      // TVA ajoutée en sus → facture HT + TVA + TTC
+          unit_amount: totalCents, // total HT gradué en centimes (qty=1 → montant exact)
+          tax_behavior: 'exclusive', // TVA ajoutée en sus → facture HT + TVA + TTC
           product_data: {
-            name: `ERPs Pro — EDL&DIAGNOSTIC`,
-            description: `${parsedQty} ERPs · ${priceHtEur} € HT / ERP`,
+            name: `${parsedQty} ERPs Pro — EDL&DIAGNOSTIC`,
+            description, // détail des tranches ex: "1–50 ERPs × 3,00€ | 51–80 ERPs × 2,50€"
           },
         },
-        quantity: parsedQty,
+        quantity: 1, // montant total pré-calculé côté serveur
         ...(taxRateId ? { tax_rates: [taxRateId] } : {}),
       }],
       metadata: {
