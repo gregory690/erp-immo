@@ -251,12 +251,12 @@ export default function ProLanding() {
 
               <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-100">
 
-                {/* Slider — fond navy */}
-                <div className="bg-navy-900 px-5 pt-6 pb-5">
-                  <p className="text-white/60 text-[10px] uppercase tracking-widest font-bold mb-4">Simulez votre tarif</p>
+                {/* Slider */}
+                <div className="bg-white px-5 pt-6 pb-5">
+                  <p className="text-gray-400 text-[10px] uppercase tracking-widest font-bold mb-4">Simulez votre tarif</p>
                   <div className="flex items-baseline justify-between mb-3">
-                    <p className="text-white font-semibold text-sm">Combien d'ERPs par an ?</p>
-                    <p className="text-amber-400 font-extrabold text-2xl leading-none">{sliderQty}</p>
+                    <p className="text-navy-900 font-semibold text-sm">Combien d'ERPs par an ?</p>
+                    <p className="text-navy-900 font-extrabold text-2xl leading-none">{sliderQty}</p>
                   </div>
                   <input
                     type="range"
@@ -264,7 +264,7 @@ export default function ProLanding() {
                     max={500}
                     value={sliderQty}
                     onChange={e => setSliderQty(Number(e.target.value))}
-                    className="w-full cursor-pointer accent-amber-400"
+                    className="w-full cursor-pointer accent-navy-900"
                   />
                   <div className="relative h-5 mt-1.5">
                     {[
@@ -276,8 +276,8 @@ export default function ProLanding() {
                       { pct: 60.1, label: '301' },
                     ].map(({ pct, label }) => (
                       <div key={label} className="absolute flex flex-col items-center" style={{ left: `${pct}%` }}>
-                        <div className="w-px h-1.5 bg-white/20" />
-                        <span className="text-[7px] text-white/40 mt-0.5 whitespace-nowrap">{label}</span>
+                        <div className="w-px h-1.5 bg-gray-200" />
+                        <span className="text-[7px] text-gray-400 mt-0.5 whitespace-nowrap">{label}</span>
                       </div>
                     ))}
                   </div>
@@ -298,21 +298,21 @@ export default function ProLanding() {
                   </div>
                 </div>
 
-                {/* CTA — fond navy */}
-                <div className="bg-navy-900 px-5 py-4 space-y-2">
+                {/* CTA */}
+                <div className="bg-white px-5 py-4 space-y-2 border-t border-gray-100">
                   <button
                     onClick={handleBuy}
                     disabled={buyLoading}
-                    className="w-full bg-amber-400 text-navy-900 font-bold text-sm py-3 rounded-xl hover:bg-amber-300 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+                    className="w-full bg-navy-900 text-white font-bold text-sm py-3 rounded-xl hover:bg-navy-800 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
                   >
                     {buyLoading
                       ? <Loader2 className="h-4 w-4 animate-spin" />
                       : `Acheter ${sliderQty} ERPs · ${totalHT} € HT`
                     }
                   </button>
-                  {buyError && <p className="text-red-300 text-xs text-center">{buyError}</p>}
+                  {buyError && <p className="text-red-500 text-xs text-center">{buyError}</p>}
                   {!session && (
-                    <p className="text-white/60 text-[10px] text-center">Connexion par lien email · Sans mot de passe</p>
+                    <p className="text-gray-500 text-[10px] text-center">Connexion par lien email · Sans mot de passe</p>
                   )}
                 </div>
 
