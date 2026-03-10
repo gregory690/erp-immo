@@ -55,12 +55,12 @@ const CAP_OPTIONS = ['5 missions / mois', '10 missions / mois', '20 missions / m
 // Tarification graduée — chaque tranche facturée à son taux propre.
 // Le total est TOUJOURS strictement croissant avec le volume.
 const GRAD_TIERS = [
-  { from: 1,   to: 9,   rate: 7.0,  label: '1–9',     rateFmt: '7,00' },
-  { from: 10,  to: 50,  rate: 3.0,  label: '10–50',   rateFmt: '3,00' },
-  { from: 51,  to: 100, rate: 2.5,  label: '51–100',  rateFmt: '2,50' },
-  { from: 101, to: 200, rate: 2.0,  label: '101–200', rateFmt: '2,00' },
-  { from: 201, to: 300, rate: 1.5,  label: '201–300', rateFmt: '1,50' },
-  { from: 301, to: 500, rate: 1.0,  label: '301–500', rateFmt: '1,00' },
+  { from: 1,   to: 9,   rate: 7.0  },
+  { from: 10,  to: 50,  rate: 3.0  },
+  { from: 51,  to: 100, rate: 2.5  },
+  { from: 101, to: 200, rate: 2.0  },
+  { from: 201, to: 300, rate: 1.5  },
+  { from: 301, to: 500, rate: 1.0  },
 ];
 
 function calcTotal(qty: number): number {
