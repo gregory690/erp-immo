@@ -125,11 +125,22 @@ export default function ProLanding() {
     };
   }, []);
 
+  // ── Collapsible marketplace section ───────────────────────────────────────
+  const [showLeads, setShowLeads] = useState(false);
+
   // ── Scroll to hash anchor (ex: /pro#leads depuis le dashboard) ───────────
   useEffect(() => {
-    if (window.location.hash) {
-      const el = document.querySelector(window.location.hash);
-      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    if (window.location.hash === '#leads') {
+      setShowLeads(true);
+      setTimeout(() => {
+        const el = document.getElementById('leads');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 150);
+    } else if (window.location.hash === '#hero') {
+      setTimeout(() => {
+        const el = document.getElementById('hero');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
     }
   }, []);
 
@@ -191,7 +202,7 @@ export default function ProLanding() {
     <div className="min-h-screen bg-white">
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="bg-white border-b border-gray-100 px-4 py-16 sm:py-24">
+      <section id="hero" className="bg-white border-b border-gray-100 px-4 py-16 sm:py-24">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
@@ -479,9 +490,25 @@ export default function ProLanding() {
       </section>
 
       {/* ── Marketplace Leads ─────────────────────────────────────────────── */}
-      <section id="leads" className="px-4 py-16 sm:py-20 bg-white border-t border-gray-100">
+      <section id="leads" className="bg-white border-t border-gray-100">
         <div className="max-w-4xl mx-auto">
 
+          {/* Header cliquable */}
+          <button
+            onClick={() => setShowLeads(v => !v)}
+            className="w-full flex items-center justify-between px-4 py-5 text-left hover:bg-slate-50 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
+              <div>
+                <p className="text-sm font-bold text-navy-900">Marketplace diagnostics — Recevez des leads dans votre zone</p>
+                <p className="text-xs text-amber-600 font-medium">Lancement en cours · Places limitées par département</p>
+              </div>
+            </div>
+            <ChevronDown className={`h-4 w-4 text-gray-400 shrink-0 transition-transform ${showLeads ? 'rotate-180' : ''}`} />
+          </button>
+
+          {showLeads && <div className="px-4 pb-16 pt-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
             {/* Left — pitch */}
@@ -611,6 +638,7 @@ export default function ProLanding() {
             </div>
 
           </div>
+          </div>}
         </div>
       </section>
 

@@ -718,7 +718,7 @@ export default function Home() {
               <button onClick={() => navigate('/ressources')} className="hover:text-white underline transition-colors">Guide ERP</button>
               <button onClick={() => navigate('/faq')} className="hover:text-white underline transition-colors">FAQ</button>
               <button onClick={() => navigate('/exemple')} className="hover:text-white underline transition-colors">Exemple de document ERP</button>
-              <button onClick={() => navigate('/pro')} className="hover:text-white transition-colors font-semibold text-amber-400 hover:text-amber-300">Offre Pro</button>
+              <button onClick={() => navigate('/pro#hero')} className="hover:text-white transition-colors font-semibold text-amber-400 hover:text-amber-300">Offre Pro</button>
               <button onClick={() => navigate('/mentions-legales')} className="hover:text-white underline transition-colors">Mentions légales</button>
               <button onClick={() => navigate('/cgu')} className="hover:text-white underline transition-colors">CGU / CGV</button>
               <button onClick={() => navigate('/confidentialite')} className="hover:text-white underline transition-colors">Politique de confidentialité</button>
