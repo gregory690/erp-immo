@@ -6,10 +6,12 @@ import { ERPPreview } from '../components/report/ERPPreview';
 import { getERPHistory } from '../hooks/useRiskCalculation';
 import { sendERPByEmail, fetchERPByReference } from '../services/email.service';
 import { formatERPReference } from '../utils/erp-validator';
+import { getProSession } from '../services/pro.service';
 import type { ERPDocument } from '../types/erp.types';
 
 export default function Preview() {
   const navigate = useNavigate();
+  const isPro = !!getProSession();
   const [searchParams] = useSearchParams();
   const [erp, setErp] = useState<ERPDocument | null>(null);
   const [loading, setLoading] = useState(true);
@@ -244,8 +246,8 @@ export default function Preview() {
           </div>
 
           <div className="text-center">
-            <Button variant="outline" className="text-gray-600" onClick={() => navigate('/generer')}>
-              Générer un nouvel ERP
+            <Button variant="outline" className="text-gray-600" onClick={() => navigate(isPro ? '/pro/dashboard' : '/generer')}>
+              {isPro ? 'Retour au dashboard' : 'Générer un nouvel ERP'}
             </Button>
           </div>
 
@@ -260,11 +262,11 @@ export default function Preview() {
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
           {!paymentSuccess && (
             <button
-              onClick={() => navigate('/generer')}
+              onClick={() => navigate(isPro ? '/pro/dashboard' : '/generer')}
               className="flex items-center gap-2 text-sm text-gray-600 hover:text-navy-900 transition-colors"
             >
               <ChevronLeft className="h-4 w-4" />
-              Retour
+              {isPro ? 'Mon dashboard' : 'Retour'}
             </button>
           )}
           {paymentSuccess && <div className="w-16" />}
@@ -386,7 +388,7 @@ export default function Preview() {
           </div>
         )}
 
-        <ERPPreview document={erp} onNew={() => navigate('/generer')} emailSent={emailSent} autoprint={autoPrint} />
+        <ERPPreview document={erp} onNew={() => navigate(isPro ? '/pro/dashboard' : '/generer')} emailSent={emailSent} autoprint={autoPrint} />
       </div>
     </div>
   );
