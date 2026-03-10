@@ -476,7 +476,7 @@ export default function ProDashboard() {
             </div>
             <p className="font-bold text-white text-sm">Recevez des demandes clients dans votre zone</p>
             <p className="text-xs text-white/50 leading-relaxed">
-              Notre marketplace de leads vous envoie des contacts qualifiés — particuliers et agences — selon votre secteur et votre cap mensuel.
+              Recevez des demandes de particuliers et d'agences dans votre secteur — vous choisissez votre zone et le nombre de contacts par mois.
             </p>
           </div>
           <button

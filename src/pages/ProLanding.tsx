@@ -54,12 +54,12 @@ const FAQS = [
     a: "Oui, c'est justement le principe. Pas d'abonnement, pas d'engagement. Vous achetez un pack de crédits une fois, vous les utilisez quand vous en avez besoin. Une facture vous est envoyée automatiquement après chaque achat.",
   },
   {
-    q: "Comment fonctionne la marketplace de leads diagnostics ?",
-    a: "La marketplace met en relation des diagnostiqueurs avec des particuliers ou professionnels qui recherchent activement un diagnostiqueur dans leur zone. Vous définissez votre secteur géographique et votre cap mensuel — vous n'achetez que les leads qui correspondent à votre capacité. Le système est automatique : dès qu'un lead qualifié est disponible dans votre zone, il vous est proposé.",
+    q: "Comment fonctionne la marketplace de contacts diagnostics ?",
+    a: "La marketplace met en relation des diagnostiqueurs avec des particuliers ou professionnels qui recherchent activement un diagnostiqueur dans leur zone. Vous définissez votre secteur géographique et le nombre de contacts que vous souhaitez recevoir par mois — vous ne payez que les contacts reçus dans votre volume défini. Le système est automatique : dès qu'une demande qualifiée est disponible dans votre zone, elle vous est transmise.",
   },
 ];
 
-const CAP_OPTIONS = ['5 leads / mois', '10 leads / mois', '20 leads / mois', '50 leads / mois', 'Plus de 50'];
+const CAP_OPTIONS = ['5 contacts / mois', '10 contacts / mois', '20 contacts / mois', '50 contacts / mois', 'Plus de 50'];
 
 export default function ProLanding() {
   const navigate = useNavigate();
@@ -112,6 +112,14 @@ export default function ProLanding() {
       const s = document.getElementById('pro-jsonld');
       if (s) s.remove();
     };
+  }, []);
+
+  // ── Scroll to hash anchor (ex: /pro#leads depuis le dashboard) ───────────
+  useEffect(() => {
+    if (window.location.hash) {
+      const el = document.querySelector(window.location.hash);
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    }
   }, []);
 
   // ── FAQ state ─────────────────────────────────────────────────────────────
@@ -326,7 +334,7 @@ export default function ProLanding() {
       </section>
 
       {/* ── Marketplace Leads ─────────────────────────────────────────────── */}
-      <section className="px-4 py-16 sm:py-20 bg-white border-t border-gray-100">
+      <section id="leads" className="px-4 py-16 sm:py-20 bg-white border-t border-gray-100">
         <div className="max-w-4xl mx-auto">
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -342,7 +350,7 @@ export default function ProLanding() {
                 Recevez des demandes de clients directement dans votre zone
               </h2>
               <p className="text-gray-500 text-sm leading-relaxed mb-8">
-                Notre marketplace met en relation des diagnostiqueurs avec des particuliers et agences qui cherchent activement un professionnel. Vous définissez votre secteur et votre cap mensuel — nous vous envoyons les leads en automatique.
+                Notre marketplace met en relation des diagnostiqueurs avec des particuliers et agences qui cherchent activement un professionnel. Vous définissez votre secteur et le nombre de contacts souhaités par mois — nous vous transmettrons les demandes en automatique.
               </p>
 
               <ul className="space-y-4">
@@ -356,8 +364,8 @@ export default function ProLanding() {
                     desc: 'Vous payez uniquement les leads reçus. Pas d\'engagement, pas de forfait mensuel.',
                   },
                   {
-                    title: 'Capping configurable',
-                    desc: 'Définissez un plafond mensuel de leads selon votre capacité. Le système s\'arrête automatiquement.',
+                    title: 'Volume de contacts ajustable',
+                    desc: "Indiquez combien de demandes vous souhaitez recevoir par mois. Le système s'arrête automatiquement dès que votre volume est atteint.",
                   },
                 ].map(({ title, desc }) => (
                   <li key={title} className="flex gap-3">
@@ -421,7 +429,7 @@ export default function ProLanding() {
 
                     <div>
                       <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                        Leads souhaités / mois
+                        Contacts souhaités par mois
                       </label>
                       <select
                         required
@@ -429,7 +437,7 @@ export default function ProLanding() {
                         onChange={e => setWCap(e.target.value)}
                         className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-navy-900/30 bg-white"
                       >
-                        <option value="">Sélectionnez un cap</option>
+                        <option value="">Sélectionnez un volume</option>
                         {CAP_OPTIONS.map(o => (
                           <option key={o} value={o}>{o}</option>
                         ))}
