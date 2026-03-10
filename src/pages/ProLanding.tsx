@@ -5,14 +5,14 @@ import { Button } from '../components/ui/button';
 import { getProSession } from '../services/pro.service';
 
 const PACK_FEATURES_BASE = [
-  'Crédits sans expiration',
+  'ERPs sans date limite d\'utilisation',
   'PDF conforme arrêté 27/09/2022',
   'Données officielles Géorisques & IGN',
-  'Historique & re-téléchargement',
+  'Historique et retéléchargement',
 ];
 
 const PACK_15_EXTRAS = ['Facture automatique par email', 'Support par email'];
-const PACK_50_EXTRAS = ['Meilleur prix / ERP', 'Facture automatique par email', 'Support prioritaire'];
+const PACK_50_EXTRAS = ['Meilleur tarif au document', 'Facture automatique par email', 'Support prioritaire'];
 
 const REVIEWS = [
   {
@@ -156,38 +156,40 @@ export default function ProLanding() {
     <div className="min-h-screen bg-white">
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="bg-navy-900 px-4 py-16 sm:py-24">
-        <div className="max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 border border-white/20 rounded-full px-3 py-1 mb-8">
+      <section className="bg-navy-900 px-4 py-16 sm:py-24 relative overflow-hidden">
+        {/* Fond subtil */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(251,191,36,0.08)_0%,_transparent_60%)] pointer-events-none" />
+        <div className="max-w-4xl mx-auto relative">
+          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-3 py-1 mb-8">
             <Building2 className="h-3.5 w-3.5 text-amber-400" />
-            <span className="text-xs font-medium text-white/70">Espace partenaire EDL&amp;DIAGNOSTIC</span>
+            <span className="text-xs font-semibold text-white/80">Espace professionnel EDL&amp;DIAGNOSTIC</span>
           </div>
           <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-[1.1] max-w-2xl">
-            Le logiciel ERP des diagnostiqueurs immobiliers
+            L'ERP en 2 minutes,<br className="hidden sm:block" /> conforme et accepté partout
           </h1>
-          <p className="text-white/50 text-base mt-5 max-w-lg leading-relaxed">
-            Générez vos États des Risques et Pollutions en moins de 2 minutes. Données officielles Géorisques, conformité arrêté 2022, crédits sans expiration.
+          <p className="text-white/75 text-base mt-5 max-w-xl leading-relaxed">
+            Saisissez l'adresse du bien — le document réglementaire complet est généré instantanément à partir des sources officielles Géorisques et IGN. Conforme à l'arrêté du 27/09/2022, accepté par les notaires et agences.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Button
               size="lg"
               onClick={handleCTA}
-              className="bg-amber-400 text-navy-900 hover:bg-amber-300 font-bold h-11 px-7 rounded-lg"
+              className="bg-amber-400 text-navy-900 hover:bg-amber-300 font-bold h-12 px-8 rounded-lg text-base"
             >
               {session ? 'Mon espace pro' : "Accéder à l'espace pro"}
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
-            <span className="text-white/55 text-xs">Connexion par lien email · Sans mot de passe</span>
+            <span className="text-white/60 text-sm">Connexion par lien email · Sans abonnement</span>
           </div>
-          <div className="mt-12 pt-8 border-t border-white/10 flex flex-wrap gap-8">
+          <div className="mt-12 pt-8 border-t border-white/15 grid grid-cols-3 gap-6 max-w-lg">
             {[
               { value: '< 2 min', label: 'par ERP généré' },
-              { value: '100 %', label: 'données officielles État' },
-              { value: 'Aucune', label: 'expiration des crédits' },
+              { value: '100 %', label: 'sources État officielles' },
+              { value: '0', label: 'expiration de vos ERPs' },
             ].map(stat => (
               <div key={stat.label}>
-                <p className="text-2xl font-extrabold text-white">{stat.value}</p>
-                <p className="text-xs text-white/55 mt-0.5">{stat.label}</p>
+                <p className="text-2xl sm:text-3xl font-extrabold text-amber-400">{stat.value}</p>
+                <p className="text-xs text-white/65 mt-1 leading-snug">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -195,26 +197,27 @@ export default function ProLanding() {
       </section>
 
       {/* ── Pricing ──────────────────────────────────────────────────────── */}
-      <section className="px-4 py-16 sm:py-20 bg-white">
+      <section className="px-4 py-16 sm:py-20 bg-slate-50 border-t border-gray-100">
         <div className="max-w-4xl mx-auto">
           <div className="mb-10">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-500 mb-2">Tarifs ERP Pro</p>
-            <h2 className="text-2xl sm:text-3xl font-bold text-navy-900">Choisissez votre volume</h2>
-            <p className="text-sm text-gray-500 mt-2">Crédits valables à vie · Facture automatique · Paiement sécurisé Stripe</p>
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-500 mb-2">Tarifs</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-navy-900">Achetez vos ERPs à l'unité</h2>
+            <p className="text-sm text-gray-500 mt-2">Sans abonnement · ERPs sans date limite · Facture automatique par email</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start">
 
             {/* Pack Découverte */}
-            <div className="border border-gray-200 rounded-xl p-6 flex flex-col">
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-5">Découverte</p>
+            <div className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col">
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 mb-5">Découverte</p>
               <p className="text-3xl font-extrabold text-navy-900">
-                60 €<span className="text-sm font-normal text-gray-400 ml-1.5">HT</span>
+                60 €<span className="text-sm font-normal text-gray-500 ml-1.5">HT</span>
               </p>
-              <p className="text-xs text-gray-400 mt-1.5 mb-7">72 € TTC · 6 € HT / ERP · 10 crédits</p>
+              <p className="text-sm text-gray-500 mt-1 mb-1">10 ERPs · 6 € HT / ERP</p>
+              <p className="text-xs text-gray-400 mb-7">72 € TTC</p>
               <ul className="space-y-3 flex-1 mb-7">
                 {PACK_FEATURES_BASE.map(f => (
-                  <li key={f} className="flex items-start gap-2.5 text-sm text-gray-600">
+                  <li key={f} className="flex items-start gap-2.5 text-sm text-gray-700">
                     <Check className="h-4 w-4 text-navy-900 mt-0.5 shrink-0" />
                     {f}
                   </li>
@@ -223,22 +226,23 @@ export default function ProLanding() {
               <Button
                 onClick={handleCTA}
                 variant="outline"
-                className="w-full border-gray-200 text-navy-900 hover:bg-navy-900 hover:text-white font-semibold rounded-lg transition-colors"
+                className="w-full border-gray-300 text-navy-900 hover:bg-navy-900 hover:text-white font-semibold rounded-lg transition-colors"
               >
                 Commencer
               </Button>
             </div>
 
             {/* Pack Pro */}
-            <div className="border border-gray-200 rounded-xl p-6 flex flex-col">
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-5">Pro</p>
+            <div className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col">
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 mb-5">Pro</p>
               <p className="text-3xl font-extrabold text-navy-900">
-                75 €<span className="text-sm font-normal text-gray-400 ml-1.5">HT</span>
+                75 €<span className="text-sm font-normal text-gray-500 ml-1.5">HT</span>
               </p>
-              <p className="text-xs text-gray-400 mt-1.5 mb-7">90 € TTC · 5 € HT / ERP · 15 crédits</p>
+              <p className="text-sm text-gray-500 mt-1 mb-1">15 ERPs · 5 € HT / ERP</p>
+              <p className="text-xs text-gray-400 mb-7">90 € TTC</p>
               <ul className="space-y-3 flex-1 mb-7">
                 {[...PACK_FEATURES_BASE, ...PACK_15_EXTRAS].map(f => (
-                  <li key={f} className="flex items-start gap-2.5 text-sm text-gray-600">
+                  <li key={f} className="flex items-start gap-2.5 text-sm text-gray-700">
                     <Check className="h-4 w-4 text-navy-900 mt-0.5 shrink-0" />
                     {f}
                   </li>
@@ -247,26 +251,26 @@ export default function ProLanding() {
               <Button
                 onClick={handleCTA}
                 variant="outline"
-                className="w-full border-gray-200 text-navy-900 hover:bg-navy-900 hover:text-white font-semibold rounded-lg transition-colors"
+                className="w-full border-gray-300 text-navy-900 hover:bg-navy-900 hover:text-white font-semibold rounded-lg transition-colors"
               >
-                Choisir ce pack
+                Choisir
               </Button>
             </div>
 
             {/* Pack Pro+ */}
             <div className="bg-navy-900 rounded-xl p-6 flex flex-col relative">
-              <span className="absolute -top-3 left-5 inline-flex items-center gap-1.5 bg-red-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full">
-                <span className="animate-bounce inline-block">🔥</span>
-                Meilleur rapport
+              <span className="absolute -top-3 left-5 inline-flex items-center gap-1.5 bg-amber-400 text-navy-900 text-[10px] font-bold px-2.5 py-1 rounded-full">
+                Meilleur prix / ERP
               </span>
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-white/35 mb-5">Pro+</p>
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-white/60 mb-5">Pro+</p>
               <p className="text-3xl font-extrabold text-white">
-                150 €<span className="text-sm font-normal text-white/40 ml-1.5">HT</span>
+                150 €<span className="text-sm font-normal text-white/60 ml-1.5">HT</span>
               </p>
-              <p className="text-xs text-white/35 mt-1.5 mb-7">180 € TTC · 3 € HT / ERP · 50 crédits</p>
+              <p className="text-sm text-white/80 mt-1 mb-1">50 ERPs · 3 € HT / ERP</p>
+              <p className="text-xs text-white/55 mb-7">180 € TTC</p>
               <ul className="space-y-3 flex-1 mb-7">
                 {[...PACK_FEATURES_BASE, ...PACK_50_EXTRAS].map(f => (
-                  <li key={f} className="flex items-start gap-2.5 text-sm text-white/70">
+                  <li key={f} className="flex items-start gap-2.5 text-sm text-white/85">
                     <Check className="h-4 w-4 text-amber-400 mt-0.5 shrink-0" />
                     {f}
                   </li>
@@ -276,7 +280,7 @@ export default function ProLanding() {
                 onClick={handleCTA}
                 className="w-full bg-amber-400 text-navy-900 hover:bg-amber-300 font-bold rounded-lg"
               >
-                Choisir ce pack
+                Choisir
               </Button>
             </div>
 
@@ -288,7 +292,7 @@ export default function ProLanding() {
               onClick={() => { window.location.href = 'mailto:pro@edletdiagnostic.fr?subject=Offre%20sur%20mesure%20ERP'; }}
               className="underline hover:text-gray-600"
             >
-              Volume &gt; 50 ERPs ? Contactez-nous
+              Plus de 50 ERPs / mois ? Contactez-nous
             </button>
           </p>
         </div>
