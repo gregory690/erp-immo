@@ -306,7 +306,7 @@ export default function ProLanding() {
                       return (
                         <div
                           key={t.from}
-                          onClick={e => { e.stopPropagation(); setSliderQty(t.from); }}
+                          onClick={e => { e.stopPropagation(); setSliderQty(t.to); }}
                           className={`rounded px-1 py-1.5 text-center transition-colors cursor-pointer hover:opacity-80 ${partial ? 'bg-amber-400/25 border border-amber-400/30' : active ? 'bg-amber-400/15' : 'bg-white/5'}`}
                         >
                           <p className={`text-[9px] font-bold leading-none ${active ? 'text-amber-400' : 'text-white/20'}`}>{t.rateFmt}€</p>

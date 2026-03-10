@@ -339,7 +339,7 @@ export default function ProDashboard() {
                         return (
                           <div
                             key={t.from}
-                            onClick={e => { e.stopPropagation(); setBuyQty(t.from); }}
+                            onClick={e => { e.stopPropagation(); setBuyQty(t.to); }}
                             className={`rounded px-1 py-1.5 text-center transition-colors cursor-pointer hover:opacity-80 ${partial ? 'bg-navy-900/15 border border-navy-900/20' : active ? 'bg-navy-900/8' : 'bg-gray-100'}`}
                           >
                             <p className={`text-[9px] font-bold leading-none ${active ? 'text-navy-900' : 'text-gray-300'}`}>{t.rateFmt}€</p>
