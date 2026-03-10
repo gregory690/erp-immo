@@ -32,18 +32,6 @@ function calcTotal(qty: number): number {
   return total;
 }
 
-const LEAD_TIERS = [
-  { max: 10,  pricePerLead: 25 },
-  { max: 30,  pricePerLead: 20 },
-  { max: 100, pricePerLead: 15 },
-  { max: 250, pricePerLead: 12 },
-  { max: 500, pricePerLead: 10 },
-];
-
-function getLeadPricing(qty: number) {
-  const tier = LEAD_TIERS.find(t => qty <= t.max) ?? LEAD_TIERS[LEAD_TIERS.length - 1];
-  return { pricePerLead: tier.pricePerLead, totalHT: qty * tier.pricePerLead };
-}
 
 function formatDate(d: string | null): string {
   if (!d) return 'Date inconnue';
@@ -74,7 +62,7 @@ export default function ProDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [buyQty, setBuyQty] = useState(15);
   const [leadQty, setLeadQty] = useState(20);
-  const [leadContactQty, setLeadContactQty] = useState(501);
+  const [leadDept, setLeadDept] = useState('');
   const [showSuccessOverlay, setShowSuccessOverlay] = useState(
     () => new URLSearchParams(window.location.search).get('pack_success') === '1'
   );
@@ -632,7 +620,7 @@ export default function ProDashboard() {
 
           <div className="px-5 py-5 space-y-5">
             <p className="text-xs text-gray-500 leading-relaxed">
-              Recevez des demandes qualifiées dans votre secteur — particuliers vendeurs, agences, notaires. Sélectionnez votre volume mensuel.
+              Recevez des demandes qualifiées dans votre secteur — particuliers vendeurs, agences, notaires. Indiquez votre volume et votre zone.
             </p>
 
             {/* Slider leads */}
@@ -655,52 +643,31 @@ export default function ProDashboard() {
               </div>
             </div>
 
-            {/* Résultat pricing */}
-            {(() => {
-              const { pricePerLead, totalHT } = getLeadPricing(leadQty);
-              return (
-                <div className="bg-slate-50 rounded-xl px-5 py-4 flex items-end justify-between">
-                  <div>
-                    <p className="text-2xl font-extrabold text-navy-900">{pricePerLead} €</p>
-                    <p className="text-xs text-gray-500 mt-0.5">HT / lead</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-lg font-bold text-gray-900">{totalHT} € HT</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{Math.round(totalHT * 1.2)} € TTC / mois</p>
-                  </div>
-                </div>
-              );
-            })()}
+            {/* Département */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                Département(s) d'intervention
+              </label>
+              <input
+                type="text"
+                value={leadDept}
+                onChange={e => setLeadDept(e.target.value)}
+                placeholder="Ex : 69 · Rhône, 01 · Ain, 38 · Isère"
+                className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-navy-900/20 focus:border-navy-900/30 bg-white placeholder:text-gray-400"
+              />
+            </div>
 
             {/* CTA réservation */}
             <a
-              href={`mailto:pro@edletdiagnostic.fr?subject=R%C3%A9servation%20leads%20diagnostics%20%E2%80%94%20${leadQty}%20leads%2Fmois&body=Bonjour%2C%0A%0AJe%20souhaite%20r%C3%A9server%20${leadQty}%20leads%20par%20mois.%0A%0ACompte%20pro%20%3A%20${encodeURIComponent(session?.email ?? '')}%0ATarif%20estim%C3%A9%20%3A%20${getLeadPricing(leadQty).totalHT}%20%E2%82%AC%20HT%2Fmois`}
+              href={`mailto:pro@edletdiagnostic.fr?subject=R%C3%A9servation%20leads%20diagnostics%20%E2%80%94%20${leadQty}%20leads%2Fmois&body=Bonjour%2C%0A%0AJe%20souhaite%20r%C3%A9server%20${leadQty}%20leads%20par%20mois.%0A%0ACompte%20pro%20%3A%20${encodeURIComponent(session?.email ?? '')}%0AD%C3%A9partements%20%3A%20${encodeURIComponent(leadDept || 'non renseigné')}`}
               className="block w-full bg-navy-900 text-white text-sm font-semibold py-2.5 px-4 rounded-lg text-center hover:bg-navy-800 transition-colors"
             >
               Réserver {leadQty} leads / mois
             </a>
 
-            {/* Contact > 500 */}
-            <div className="border border-gray-200 rounded-xl px-4 py-4 space-y-3">
-              <p className="text-xs font-semibold text-gray-700">Besoin de plus de 500 leads / mois ?</p>
-              <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  min={501}
-                  value={leadContactQty}
-                  onChange={e => setLeadContactQty(Number(e.target.value))}
-                  className="w-28 border border-gray-200 rounded-lg px-3 py-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-navy-900/20"
-                  placeholder="Volume"
-                />
-                <span className="text-xs text-gray-400">leads / mois</span>
-                <a
-                  href={`mailto:pro@edletdiagnostic.fr?subject=Offre%20sur%20mesure%20leads%20%E2%80%94%20${leadContactQty}%20leads%2Fmois&body=Bonjour%2C%0A%0AJe%20suis%20int%C3%A9ress%C3%A9%20par%20un%20volume%20de%20${leadContactQty}%20leads%2Fmois.%0A%0ACompte%20pro%20%3A%20${encodeURIComponent(session?.email ?? '')}`}
-                  className="ml-auto text-xs font-semibold text-navy-900 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-lg transition-colors whitespace-nowrap"
-                >
-                  Contacter l'équipe →
-                </a>
-              </div>
-            </div>
+            <p className="text-[11px] text-gray-400 text-center">
+              Sans engagement · Tarification sur devis · Réponse sous 24h
+            </p>
 
           </div>
         </div>
