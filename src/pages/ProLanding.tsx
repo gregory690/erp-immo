@@ -17,17 +17,17 @@ const PACK_50_EXTRAS = ['Meilleur prix / ERP', 'Facture automatique par email', 
 const REVIEWS = [
   {
     name: 'Marc Durand',
-    role: 'Diagnostiqueur indépendant — Nantes',
+    role: 'Diagnostiqueur indépendant, Nantes',
     text: "J'ai envoyé le premier ERP directement à l'étude sans rien dire. Aucun retour, aucune question. Depuis, je l'utilise pour tous mes ERP de la semaine.",
   },
   {
     name: 'Isabelle Tessier',
-    role: 'Diagnostiqueuse — Toulouse',
+    role: 'Diagnostiqueuse, Toulouse',
     text: "J'avais des doutes sur la fiabilité des données. J'ai comparé avec ce que je produisais manuellement depuis Géorisques — résultat identique, en 2 minutes au lieu de 20. Je me suis posé la question une seule fois.",
   },
   {
     name: 'Laurent Perrin',
-    role: 'Diagnostiqueur — Marseille',
+    role: 'Diagnostiqueur, Marseille',
     text: "J'avais déjà un logiciel en abonnement que j'utilisais 3 mois sur 12. Là j'achète des crédits quand j'en ai besoin, rien de plus. Pour un indépendant à volume variable, c'est la seule formule qui a du sens.",
   },
 ];
