@@ -14,7 +14,7 @@ const REVIEWS = [
   {
     name: 'Isabelle Tessier',
     role: 'Diagnostiqueuse, Toulouse',
-    text: "J'avais des doutes sur la fiabilité des données. J'ai comparé avec ce que je produisais manuellement depuis Géorisques — résultat identique, en 2 minutes au lieu de 20. Je me suis posé la question une seule fois.",
+    text: "J'avais des doutes sur la fiabilité des données. J'ai comparé avec ce que je produisais manuellement depuis Géorisques : résultat identique, en 2 minutes au lieu de 20. Je me suis posé la question une seule fois.",
   },
   {
     name: 'Laurent Perrin',
@@ -38,7 +38,7 @@ const FAQS = [
   },
   {
     q: "Mes crédits ont-ils une date d'expiration ?",
-    a: "Oui — chaque pack est valable 12 mois à compter de la date d'achat. Vous pouvez utiliser vos crédits à votre rythme pendant toute cette période. L'échéance est visible dans votre espace pro, sous « Mes achats ».",
+    a: "Oui, chaque pack est valable 12 mois à compter de la date d'achat. Vous pouvez utiliser vos crédits à votre rythme pendant toute cette période. L'échéance est visible dans votre espace pro, sous « Mes achats ».",
   },
   {
     q: "Puis-je acheter des crédits sans abonnement mensuel ?",
@@ -46,7 +46,7 @@ const FAQS = [
   },
   {
     q: "Comment fonctionne la marketplace de contacts diagnostics ?",
-    a: "La marketplace met en relation des diagnostiqueurs avec des particuliers ou professionnels qui recherchent activement un professionnel dans leur zone. Vous définissez votre secteur géographique et le nombre de missions que vous souhaitez recevoir par mois — vous ne payez que les demandes reçues. Le système est automatique : dès qu'une mission qualifiée est disponible dans votre secteur, elle vous est transmise.",
+    a: "La marketplace met en relation des diagnostiqueurs avec des particuliers ou professionnels qui recherchent activement un professionnel dans leur zone. Vous définissez votre secteur géographique et le nombre de missions que vous souhaitez recevoir par mois. Vous ne payez que les demandes reçues. Le système est automatique : dès qu'une mission qualifiée est disponible dans votre secteur, elle vous est transmise.",
   },
 ];
 
@@ -216,7 +216,7 @@ export default function ProLanding() {
                   {
                     icon: <Banknote className="h-5 w-5 text-amber-500 shrink-0" />,
                     title: 'À partir de 1,72 € HT le document',
-                    desc: "Tarif dégressif selon le volume — de 7 € HT à l'unité jusqu'à 1,72 € HT en moyenne. Pas d'abonnement.",
+                    desc: "Tarif dégressif selon le volume : de 7 € HT à l'unité jusqu'à 1,72 € HT en moyenne. Pas d'abonnement.",
                   },
                   {
                     icon: <BadgeCheck className="h-5 w-5 text-amber-500 shrink-0" />,
@@ -249,14 +249,14 @@ export default function ProLanding() {
             {/* ── Colonne droite — Simulateur de tarif ── */}
             <div className="space-y-4">
 
-              <div className="bg-white rounded-2xl overflow-hidden shadow-2xl">
+              <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-100">
 
-                {/* Header + slider */}
-                <div className="px-5 pt-6 pb-5">
-                  <p className="text-gray-400 text-[10px] uppercase tracking-widest font-bold mb-4">Simulez votre tarif</p>
+                {/* Slider — fond navy */}
+                <div className="bg-navy-900 px-5 pt-6 pb-5">
+                  <p className="text-white/60 text-[10px] uppercase tracking-widest font-bold mb-4">Simulez votre tarif</p>
                   <div className="flex items-baseline justify-between mb-3">
-                    <p className="text-navy-900 font-semibold text-sm">De combien d'ERPs avez-vous besoin ?</p>
-                    <p className="text-navy-900 font-extrabold text-2xl leading-none">{sliderQty}</p>
+                    <p className="text-white font-semibold text-sm">Combien d'ERPs par an ?</p>
+                    <p className="text-amber-400 font-extrabold text-2xl leading-none">{sliderQty}</p>
                   </div>
                   <input
                     type="range"
@@ -264,9 +264,8 @@ export default function ProLanding() {
                     max={500}
                     value={sliderQty}
                     onChange={e => setSliderQty(Number(e.target.value))}
-                    className="w-full cursor-pointer accent-navy-900"
+                    className="w-full cursor-pointer accent-amber-400"
                   />
-                  {/* Marqueurs — points de changement de taux */}
                   <div className="relative h-5 mt-1.5">
                     {[
                       { pct: 0,    label: '1' },
@@ -277,56 +276,56 @@ export default function ProLanding() {
                       { pct: 60.1, label: '301' },
                     ].map(({ pct, label }) => (
                       <div key={label} className="absolute flex flex-col items-center" style={{ left: `${pct}%` }}>
-                        <div className="w-px h-1.5 bg-gray-200" />
-                        <span className="text-[7px] text-gray-400 mt-0.5 whitespace-nowrap">{label}</span>
+                        <div className="w-px h-1.5 bg-white/20" />
+                        <span className="text-[7px] text-white/40 mt-0.5 whitespace-nowrap">{label}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Résultat — fond navy contrasté */}
-                <div className="bg-navy-900 px-5 py-5">
-                  <div className="flex items-end justify-between mb-4">
+                {/* Résultat — fond blanc */}
+                <div className="bg-white px-5 py-5 border-b border-gray-100">
+                  <div className="flex items-end justify-between">
                     <div>
-                      <p className="text-amber-400 font-extrabold text-4xl leading-none">{avgDisplay} €</p>
-                      <p className="text-white/60 text-xs mt-1.5">HT / ERP en moyenne</p>
+                      <p className="text-amber-500 font-extrabold text-4xl leading-none">{avgDisplay} €</p>
+                      <p className="text-gray-500 text-xs mt-1.5">HT / ERP en moyenne</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-white font-bold text-xl">{totalHT} € HT</p>
-                      <p className="text-white/55 text-xs mt-0.5">soit {totalTTC} € TTC</p>
-                      <p className="text-white/65 text-[10px] mt-0.5">Valable 12 mois</p>
+                      <p className="text-navy-900 font-bold text-xl">{totalHT} € HT</p>
+                      <p className="text-gray-500 text-xs mt-0.5">soit {totalTTC} € TTC</p>
+                      <p className="text-gray-400 text-[10px] mt-0.5">Valable 12 mois</p>
                     </div>
                   </div>
                 </div>
 
-                {/* CTA */}
-                <div className="px-5 py-4 space-y-2">
+                {/* CTA — fond navy */}
+                <div className="bg-navy-900 px-5 py-4 space-y-2">
                   <button
                     onClick={handleBuy}
                     disabled={buyLoading}
-                    className="w-full bg-navy-900 text-white font-bold text-sm py-3 rounded-xl hover:bg-navy-800 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+                    className="w-full bg-amber-400 text-navy-900 font-bold text-sm py-3 rounded-xl hover:bg-amber-300 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
                   >
                     {buyLoading
                       ? <Loader2 className="h-4 w-4 animate-spin" />
-                      : `Acheter ${sliderQty} ERPs — ${totalHT} € HT`
+                      : `Acheter ${sliderQty} ERPs · ${totalHT} € HT`
                     }
                   </button>
-                  {buyError && <p className="text-red-500 text-xs text-center">{buyError}</p>}
+                  {buyError && <p className="text-red-300 text-xs text-center">{buyError}</p>}
                   {!session && (
-                    <p className="text-gray-500 text-[10px] text-center">Connexion par lien email · Sans mot de passe</p>
+                    <p className="text-white/60 text-[10px] text-center">Connexion par lien email · Sans mot de passe</p>
                   )}
                 </div>
 
-                {/* Garanties */}
-                <div className="bg-slate-50 px-5 py-4 border-t border-gray-100 space-y-2.5">
+                {/* Garanties — fond blanc */}
+                <div className="bg-white px-5 py-4 space-y-2.5">
                   {[
-                    'Sans abonnement — aucune charge fixe',
+                    'Sans abonnement · aucune charge fixe',
                     "Crédits valables 12 mois à compter de l'achat",
                     'Facture envoyée automatiquement',
                   ].map(g => (
                     <div key={g} className="flex items-center gap-2.5">
-                      <Check className="h-3.5 w-3.5 text-navy-900 shrink-0" />
-                      <p className="text-xs text-gray-600">{g}</p>
+                      <Check className="h-3.5 w-3.5 text-amber-500 shrink-0" />
+                      <p className="text-xs text-gray-700">{g}</p>
                     </div>
                   ))}
                 </div>
@@ -357,7 +356,7 @@ export default function ProLanding() {
               {
                 num: '01',
                 title: 'Créez votre espace pro',
-                desc: "Email uniquement — un lien de connexion vous est envoyé instantanément. Aucun mot de passe à retenir.",
+                desc: "Email uniquement. Un lien de connexion vous est envoyé instantanément. Aucun mot de passe à retenir.",
               },
               {
                 num: '02',
@@ -367,7 +366,7 @@ export default function ProLanding() {
               {
                 num: '03',
                 title: 'Générez à la demande',
-                desc: "Saisissez l'adresse depuis votre dashboard — le PDF conforme est prêt en moins de 2 minutes.",
+                desc: "Saisissez l'adresse depuis votre dashboard. Le PDF conforme est prêt en moins de 2 minutes.",
               },
             ].map(step => (
               <div key={step.num} className="flex gap-7 py-6">
@@ -489,21 +488,21 @@ export default function ProLanding() {
             <div>
               <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-full px-3 py-1 mb-6">
                 <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-                <span className="text-xs font-semibold text-amber-700">Lancement bientôt — places limitées par zone</span>
+                <span className="text-xs font-semibold text-amber-700">Lancement bientôt · places limitées par zone</span>
               </div>
 
               <h2 className="text-2xl sm:text-3xl font-bold text-navy-900 leading-tight mb-4">
                 Recevez des demandes de clients directement dans votre zone
               </h2>
               <p className="text-gray-500 text-sm leading-relaxed mb-8">
-                Notre marketplace met en relation des diagnostiqueurs avec des particuliers et agences qui cherchent activement un professionnel. Vous définissez votre secteur et le nombre de missions souhaitées par mois — nous vous transmettrons les demandes en automatique.
+                Notre marketplace met en relation des diagnostiqueurs avec des particuliers et agences qui cherchent activement un professionnel. Vous définissez votre secteur et le nombre de missions souhaitées par mois. Nous vous transmettrons les demandes en automatique.
               </p>
 
               <ul className="space-y-4">
                 {[
                   {
                     title: 'Leads qualifiés dans votre secteur',
-                    desc: 'Particuliers vendeurs, agences, notaires — contacts vérifiés avec adresse du bien et type de diagnostic.',
+                    desc: 'Particuliers vendeurs, agences, notaires. Contacts vérifiés avec adresse du bien et type de diagnostic.',
                   },
                   {
                     title: "Achat à l'unité, sans abonnement",
