@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check, ArrowRight, Building2, ChevronDown, Clock, Banknote, BadgeCheck, FileText, Download } from 'lucide-react';
+import { Check, ArrowRight, Building2, ChevronDown, Clock, Banknote, BadgeCheck, X } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { getProSession } from '../services/pro.service';
 
@@ -212,63 +212,69 @@ export default function ProLanding() {
               </div>
             </div>
 
-            {/* ── Colonne droite — aperçu produit ── */}
-            <div className="hidden lg:block">
-              <div className="bg-white/8 border border-white/12 rounded-2xl p-5 space-y-3">
+            {/* ── Colonne droite — Avant / Après ── */}
+            <div className="hidden lg:block space-y-3">
 
-                {/* Header card */}
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">ERP en cours de génération</span>
-                  <span className="flex items-center gap-1.5 text-xs text-green-400 font-semibold">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                    Traitement en cours
-                  </span>
-                </div>
+              <p className="text-white/40 text-[11px] uppercase tracking-widest text-center font-semibold">Votre quotidien, avant et après</p>
 
-                {/* Adresse */}
-                <div className="bg-white/10 rounded-xl px-4 py-3">
-                  <p className="text-white/45 text-[10px] uppercase tracking-wider mb-0.5">Bien concerné</p>
-                  <p className="text-white font-semibold text-sm">24 rue de la Paix, 75001 Paris</p>
-                </div>
+              {/* Comparison card */}
+              <div className="rounded-2xl overflow-hidden border border-white/10">
 
-                {/* Métriques */}
-                <div className="grid grid-cols-3 gap-2">
-                  {[
-                    { value: '1:47', label: 'Durée totale', color: 'text-amber-400' },
-                    { value: '3 €', label: 'Coût HT', color: 'text-amber-400' },
-                    { value: '✓', label: 'Conforme 2022', color: 'text-green-400' },
-                  ].map(m => (
-                    <div key={m.label} className="bg-white/10 rounded-xl p-3 text-center">
-                      <p className={`text-xl font-extrabold ${m.color}`}>{m.value}</p>
-                      <p className="text-white/50 text-[10px] mt-0.5">{m.label}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Risques détectés */}
-                <div className="bg-white/10 rounded-xl px-4 py-3">
-                  <p className="text-white/45 text-[10px] uppercase tracking-wider mb-2">Risques analysés</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {['PPRN', 'Séisme zone 2', 'Retrait-gonflement argiles', 'Radon niv. 2', 'AZI'].map(r => (
-                      <span key={r} className="text-[10px] bg-white/15 text-white/75 px-2 py-0.5 rounded-full">{r}</span>
+                {/* Avant */}
+                <div className="bg-white/5 px-5 py-5 border-b border-white/10">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="w-2 h-2 rounded-full bg-red-400 shrink-0" />
+                    <p className="text-xs font-bold text-white/45 uppercase tracking-wider">Méthode actuelle</p>
+                  </div>
+                  <div className="space-y-3">
+                    {[
+                      '15 à 20 min par ERP sur les sites officiels',
+                      '5+ sources à croiser manuellement',
+                      'Risque d\'oubli ou de données périmées',
+                      'PDF à mettre en forme soi-même',
+                    ].map(item => (
+                      <div key={item} className="flex items-start gap-2.5">
+                        <X className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
+                        <p className="text-sm text-white/50 leading-snug">{item}</p>
+                      </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Fichier généré */}
-                <div className="bg-white/10 rounded-xl px-4 py-3 flex items-center gap-3">
-                  <div className="w-9 h-9 bg-amber-400/15 rounded-lg flex items-center justify-center shrink-0">
-                    <FileText className="h-4.5 w-4.5 text-amber-400" />
+                {/* Après */}
+                <div className="bg-amber-400/8 px-5 py-5">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
+                    <p className="text-xs font-bold text-amber-400 uppercase tracking-wider">Avec EDL&amp;DIAGNOSTIC Pro</p>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-white text-xs font-semibold truncate">ERP_24_Rue_de_la_Paix_75001.pdf</p>
-                    <p className="text-white/40 text-[10px]">Prêt à transmettre · 245 Ko</p>
+                  <div className="space-y-3">
+                    {[
+                      'ERP complet en moins de 2 minutes',
+                      'Toutes les sources officielles agrégées automatiquement',
+                      'Zéro risque d\'oubli — conformité garantie',
+                      'PDF professionnel prêt à transmettre',
+                    ].map(item => (
+                      <div key={item} className="flex items-start gap-2.5">
+                        <Check className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+                        <p className="text-sm text-white/85 leading-snug">{item}</p>
+                      </div>
+                    ))}
                   </div>
-                  <Download className="h-4 w-4 text-white/40 shrink-0" />
                 </div>
-
-                <p className="text-white/30 text-[10px] text-center pt-1">Données réelles · Sources Géorisques & IGN · Arrêté 27/09/2022</p>
               </div>
+
+              {/* Stat bilan */}
+              <div className="bg-white/8 border border-white/10 rounded-xl px-5 py-4 flex items-center justify-between">
+                <div>
+                  <p className="text-white/50 text-xs">Pour 20 ERPs / mois</p>
+                  <p className="text-white/30 text-[10px] mt-0.5">soit l'activité d'un indépendant moyen</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-amber-400 font-extrabold text-lg leading-none">+ 6 h</p>
+                  <p className="text-white/50 text-xs mt-0.5">retrouvées chaque mois</p>
+                </div>
+              </div>
+
             </div>
 
           </div>
