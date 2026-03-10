@@ -242,7 +242,7 @@ export default function ProLanding() {
                   {session ? 'Mon espace pro' : "Accéder à l'espace pro"}
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
-                <span className="text-gray-400 text-sm">Sans abonnement · Connexion par lien email</span>
+                <span className="text-gray-600 text-sm">Sans abonnement · Connexion par lien email</span>
               </div>
             </div>
 
@@ -253,7 +253,7 @@ export default function ProLanding() {
 
                 {/* Header + slider */}
                 <div className="px-5 pt-6 pb-5">
-                  <p className="text-navy-900/40 text-[10px] uppercase tracking-widest font-bold mb-4">Simulez votre tarif</p>
+                  <p className="text-gray-400 text-[10px] uppercase tracking-widest font-bold mb-4">Simulez votre tarif</p>
                   <div className="flex items-baseline justify-between mb-3">
                     <p className="text-navy-900 font-semibold text-sm">De combien d'ERPs avez-vous besoin ?</p>
                     <p className="text-navy-900 font-extrabold text-2xl leading-none">{sliderQty}</p>
@@ -294,7 +294,7 @@ export default function ProLanding() {
                     <div className="text-right">
                       <p className="text-white font-bold text-xl">{totalHT} € HT</p>
                       <p className="text-white/55 text-xs mt-0.5">soit {totalTTC} € TTC</p>
-                      <p className="text-white/35 text-[10px] mt-0.5">Valable 12 mois</p>
+                      <p className="text-white/65 text-[10px] mt-0.5">Valable 12 mois</p>
                     </div>
                   </div>
                   {/* Cases de palier — montant de la tranche en gros, taux en petit */}
@@ -343,7 +343,7 @@ export default function ProLanding() {
                   </button>
                   {buyError && <p className="text-red-500 text-xs text-center">{buyError}</p>}
                   {!session && (
-                    <p className="text-gray-400 text-[10px] text-center">Connexion par lien email · Sans mot de passe</p>
+                    <p className="text-gray-500 text-[10px] text-center">Connexion par lien email · Sans mot de passe</p>
                   )}
                 </div>
 
@@ -379,7 +379,7 @@ export default function ProLanding() {
       <section className="px-4 py-14 sm:py-16 bg-slate-50 border-t border-gray-100">
         <div className="max-w-3xl mx-auto">
           <div className="mb-10">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-500 mb-2">En 3 étapes</p>
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-600 mb-2">En 3 étapes</p>
             <h2 className="text-2xl font-bold text-navy-900">Opérationnel en moins de 5 minutes</h2>
           </div>
           <div className="divide-y divide-gray-200">
@@ -443,7 +443,7 @@ export default function ProLanding() {
       <section className="px-4 py-14 sm:py-16 bg-white border-t border-gray-100">
         <div className="max-w-3xl mx-auto">
           <div className="mb-10">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-500 mb-2">FAQ</p>
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-600 mb-2">FAQ</p>
             <h2 className="text-2xl font-bold text-navy-900">Questions fréquentes</h2>
           </div>
           <div className="divide-y divide-gray-100">
@@ -471,7 +471,7 @@ export default function ProLanding() {
       <section className="px-4 py-14 sm:py-16 bg-slate-50 border-t border-gray-100">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-500 mb-2">Retours partenaires</p>
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-600 mb-2">Retours partenaires</p>
             <h2 className="text-2xl font-bold text-navy-900">Ce qu'en disent les pros</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -485,7 +485,7 @@ export default function ProLanding() {
                 <p className="text-sm text-gray-700 leading-relaxed">"{text}"</p>
                 <div>
                   <p className="font-semibold text-gray-900 text-sm">{name}</p>
-                  <p className="text-xs text-gray-400">{role}</p>
+                  <p className="text-xs text-gray-500">{role}</p>
                 </div>
               </div>
             ))}
@@ -497,7 +497,7 @@ export default function ProLanding() {
       <section className="bg-navy-900 px-4 py-14 sm:py-16">
         <div className="max-w-xl mx-auto text-center space-y-5">
           <h2 className="text-2xl sm:text-3xl font-bold text-white">Prêt à rejoindre l'espace pro ?</h2>
-          <p className="text-white/40 text-sm">Connexion instantanée par lien email. Aucun mot de passe.</p>
+          <p className="text-white/70 text-sm">Connexion instantanée par lien email. Aucun mot de passe.</p>
           <Button
             size="lg"
             onClick={handleCTA}
@@ -633,7 +633,7 @@ export default function ProLanding() {
                       {wStatus !== 'loading' && <ArrowRight className="h-4 w-4 ml-2" />}
                     </Button>
 
-                    <p className="text-[11px] text-gray-400 text-center">
+                    <p className="text-[11px] text-gray-500 text-center">
                       Sans engagement · Aucune carte bancaire requise
                     </p>
                   </form>
@@ -649,14 +649,14 @@ export default function ProLanding() {
       <footer className="bg-navy-900 border-t border-white/10 px-4 py-6">
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <span className="text-sm font-bold text-white">EDL&amp;DIAGNOSTIC · Espace Pro</span>
-          <div className="flex flex-wrap justify-center gap-x-5 gap-y-1 text-xs text-white/45">
+          <div className="flex flex-wrap justify-center gap-x-5 gap-y-1 text-xs text-white/65">
             <button onClick={() => navigate('/mentions-legales')} className="hover:text-white transition-colors">Mentions légales</button>
             <button onClick={() => navigate('/confidentialite')} className="hover:text-white transition-colors">Confidentialité</button>
             <button onClick={() => navigate('/cgu')} className="hover:text-white transition-colors">CGV</button>
             <button onClick={() => navigate('/')} className="hover:text-white transition-colors">Accès grand public</button>
           </div>
         </div>
-        <p className="text-[11px] text-white/35 text-center mt-4">
+        <p className="text-[11px] text-white/60 text-center mt-4">
           Données Géorisques, BRGM, IGN · Conformité arrêté 27/09/2022 · Paiement sécurisé Stripe
         </p>
       </footer>
