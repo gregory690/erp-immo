@@ -119,9 +119,12 @@ export default function ProDashboard() {
       {/* Header */}
       <header className="bg-white border-b border-border sticky top-0 z-40">
         <div className="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
-          <span className="font-bold text-navy-900 text-sm">
+          <button
+            onClick={() => navigate('/pro')}
+            className="font-bold text-navy-900 text-sm hover:opacity-70 transition-opacity text-left"
+          >
             <span className="hidden sm:inline">EDL&amp;DIAGNOSTIC · </span>Espace Pro
-          </span>
+          </button>
           <div className="flex items-center gap-3">
             <span className="text-xs text-gray-400 hidden sm:block">{session.email}</span>
             <button
