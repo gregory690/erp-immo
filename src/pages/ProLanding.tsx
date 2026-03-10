@@ -298,13 +298,17 @@ export default function ProLanding() {
                       <p className="text-white/75 text-xs mt-0.5">soit {totalTTC} € TTC</p>
                     </div>
                   </div>
-                  {/* Détail des tranches actives */}
+                  {/* Détail des tranches — cliquer pour sélectionner */}
                   <div className="grid grid-cols-5 gap-1">
                     {GRAD_TIERS.map(t => {
                       const active = sliderQty >= t.from;
                       const partial = active && sliderQty < t.to;
                       return (
-                        <div key={t.from} className={`rounded px-1 py-1.5 text-center transition-colors ${partial ? 'bg-amber-400/25 border border-amber-400/30' : active ? 'bg-amber-400/15' : 'bg-white/5'}`}>
+                        <div
+                          key={t.from}
+                          onClick={e => { e.stopPropagation(); setSliderQty(t.from); }}
+                          className={`rounded px-1 py-1.5 text-center transition-colors cursor-pointer hover:opacity-80 ${partial ? 'bg-amber-400/25 border border-amber-400/30' : active ? 'bg-amber-400/15' : 'bg-white/5'}`}
+                        >
                           <p className={`text-[9px] font-bold leading-none ${active ? 'text-amber-400' : 'text-white/20'}`}>{t.rateFmt}€</p>
                           <p className={`text-[7px] mt-1 leading-none ${active ? 'text-white/45' : 'text-white/15'}`}>{t.label}</p>
                         </div>

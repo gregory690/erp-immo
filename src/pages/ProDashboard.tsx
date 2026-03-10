@@ -337,7 +337,11 @@ export default function ProDashboard() {
                         const active = buyQty >= t.from;
                         const partial = active && buyQty < t.to;
                         return (
-                          <div key={t.from} className={`rounded px-1 py-1.5 text-center transition-colors ${partial ? 'bg-navy-900/15 border border-navy-900/20' : active ? 'bg-navy-900/8' : 'bg-gray-100'}`}>
+                          <div
+                            key={t.from}
+                            onClick={e => { e.stopPropagation(); setBuyQty(t.from); }}
+                            className={`rounded px-1 py-1.5 text-center transition-colors cursor-pointer hover:opacity-80 ${partial ? 'bg-navy-900/15 border border-navy-900/20' : active ? 'bg-navy-900/8' : 'bg-gray-100'}`}
+                          >
                             <p className={`text-[9px] font-bold leading-none ${active ? 'text-navy-900' : 'text-gray-300'}`}>{t.rateFmt}€</p>
                             <p className={`text-[7px] mt-1 leading-none ${active ? 'text-gray-500' : 'text-gray-300'}`}>{t.label}</p>
                           </div>
