@@ -55,7 +55,8 @@ const CAP_OPTIONS = ['5 missions / mois', '10 missions / mois', '20 missions / m
 // Tarification graduée — chaque tranche facturée à son taux propre.
 // Le total est TOUJOURS strictement croissant avec le volume.
 const GRAD_TIERS = [
-  { from: 1,   to: 50,  rate: 3.0,  label: '1–50',    rateFmt: '3,00' },
+  { from: 1,   to: 9,   rate: 7.0,  label: '1–9',     rateFmt: '7,00' },
+  { from: 10,  to: 50,  rate: 3.0,  label: '10–50',   rateFmt: '3,00' },
   { from: 51,  to: 100, rate: 2.5,  label: '51–100',  rateFmt: '2,50' },
   { from: 101, to: 200, rate: 2.0,  label: '101–200', rateFmt: '2,00' },
   { from: 201, to: 300, rate: 1.5,  label: '201–300', rateFmt: '1,50' },
@@ -215,8 +216,8 @@ export default function ProLanding() {
                   },
                   {
                     icon: <Banknote className="h-5 w-5 text-amber-400 shrink-0" />,
-                    title: 'À partir de 3 € HT le document',
-                    desc: "Pas d'abonnement. Vous achetez des ERPs quand vous en avez besoin, rien de plus.",
+                    title: 'À partir de 1,65 € HT le document',
+                    desc: "Tarif dégressif selon le volume — de 7 € HT (à l'unité) jusqu'à 1 € HT. Pas d'abonnement.",
                   },
                   {
                     icon: <BadgeCheck className="h-5 w-5 text-amber-400 shrink-0" />,
@@ -269,11 +270,12 @@ export default function ProLanding() {
                   {/* Marqueurs de paliers */}
                   <div className="relative h-7 mt-1.5">
                     {[
-                      { pct: 0,    price: '3€',    label: '1' },
-                      { pct: 9.8,  price: '2,5€',  label: '51' },
-                      { pct: 19.8, price: '2€',    label: '101' },
-                      { pct: 39.9, price: '1,5€',  label: '201' },
-                      { pct: 59.9, price: '1€',    label: '301' },
+                      { pct: 0,    price: '7€',    label: '1' },
+                      { pct: 1.8,  price: '3€',    label: '10' },
+                      { pct: 10.0, price: '2,5€',  label: '51' },
+                      { pct: 20.0, price: '2€',    label: '101' },
+                      { pct: 40.1, price: '1,5€',  label: '201' },
+                      { pct: 60.1, price: '1€',    label: '301' },
                     ].map(({ pct, price, label }) => (
                       <div key={label} className="absolute flex flex-col items-center" style={{ left: `${pct}%` }}>
                         <div className="w-px h-1.5 bg-white/25" />
@@ -298,7 +300,7 @@ export default function ProLanding() {
                     </div>
                   </div>
                   {/* Détail des tranches — cliquer pour sélectionner */}
-                  <div className="grid grid-cols-5 gap-1">
+                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-1">
                     {GRAD_TIERS.map(t => {
                       const active = sliderQty >= t.from;
                       const partial = active && sliderQty < t.to;

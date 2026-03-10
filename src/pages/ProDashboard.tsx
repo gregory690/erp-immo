@@ -15,7 +15,8 @@ import type { ProAccount } from '../services/pro.service';
 
 // Tarification graduée — total toujours strictement croissant avec le volume
 const GRAD_TIERS = [
-  { from: 1,   to: 50,  rate: 3.0,  label: '1–50',    rateFmt: '3,00' },
+  { from: 1,   to: 9,   rate: 7.0,  label: '1–9',     rateFmt: '7,00' },
+  { from: 10,  to: 50,  rate: 3.0,  label: '10–50',   rateFmt: '3,00' },
   { from: 51,  to: 100, rate: 2.5,  label: '51–100',  rateFmt: '2,50' },
   { from: 101, to: 200, rate: 2.0,  label: '101–200', rateFmt: '2,00' },
   { from: 201, to: 300, rate: 1.5,  label: '201–300', rateFmt: '1,50' },
@@ -307,11 +308,12 @@ export default function ProDashboard() {
                     {/* Marqueurs de paliers */}
                     <div className="relative h-7 mt-1.5">
                       {[
-                        { pct: 0,    price: '3€',    label: '1' },
-                        { pct: 9.8,  price: '2,5€',  label: '51' },
-                        { pct: 19.8, price: '2€',    label: '101' },
-                        { pct: 39.9, price: '1,5€',  label: '201' },
-                        { pct: 59.9, price: '1€',    label: '301' },
+                        { pct: 0,    price: '7€',    label: '1' },
+                        { pct: 1.8,  price: '3€',    label: '10' },
+                        { pct: 10.0, price: '2,5€',  label: '51' },
+                        { pct: 20.0, price: '2€',    label: '101' },
+                        { pct: 40.1, price: '1,5€',  label: '201' },
+                        { pct: 60.1, price: '1€',    label: '301' },
                       ].map(({ pct, price, label }) => (
                         <div key={label} className="absolute flex flex-col items-center" style={{ left: `${pct}%` }}>
                           <div className="w-px h-1.5 bg-gray-300" />
@@ -335,7 +337,7 @@ export default function ProDashboard() {
                       </div>
                     </div>
                     {/* Détail des tranches */}
-                    <div className="grid grid-cols-5 gap-1">
+                    <div className="grid grid-cols-3 sm:grid-cols-6 gap-1">
                       {GRAD_TIERS.map(t => {
                         const active = buyQty >= t.from;
                         const partial = active && buyQty < t.to;

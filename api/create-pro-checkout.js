@@ -7,9 +7,10 @@ import { kv } from '@vercel/kv';
 
 // Tarification graduée — chaque tranche est facturée à son propre taux.
 // Le total est TOUJOURS strictement croissant avec le volume, sans exception.
-// Exemple : 51 ERPs = 150 + 2,50 = 152,50€ > 50 ERPs = 150€ ✓
+// Exemple : 51 ERPs = 63 + 123 + 2,50 = ... > 50 ERPs ✓
 const GRAD_TIERS = [
-  { from: 1,   to: 50,  rateCents: 300 }, // 3,00 € HT / ERP
+  { from: 1,   to: 9,   rateCents: 700 }, // 7,00 € HT / ERP  (< 10 ERPs)
+  { from: 10,  to: 50,  rateCents: 300 }, // 3,00 € HT / ERP
   { from: 51,  to: 100, rateCents: 250 }, // 2,50 € HT / ERP
   { from: 101, to: 200, rateCents: 200 }, // 2,00 € HT / ERP
   { from: 201, to: 300, rateCents: 150 }, // 1,50 € HT / ERP
