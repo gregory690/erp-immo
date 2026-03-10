@@ -248,16 +248,16 @@ export default function ProLanding() {
             </div>
 
             {/* ── Colonne droite — Simulateur de tarif ── */}
-            <div className="space-y-3">
+            <div className="space-y-4">
 
-              <div className="rounded-2xl overflow-hidden border border-white/10">
+              <div className="bg-white rounded-2xl overflow-hidden shadow-2xl">
 
                 {/* Header + slider */}
-                <div className="bg-white/5 px-5 pt-5 pb-4">
-                  <p className="text-white/75 text-[11px] uppercase tracking-widest font-semibold mb-3">Simulez votre tarif</p>
+                <div className="px-5 pt-6 pb-5">
+                  <p className="text-navy-900/40 text-[10px] uppercase tracking-widest font-bold mb-4">Simulez votre tarif</p>
                   <div className="flex items-baseline justify-between mb-3">
-                    <p className="text-white font-semibold text-sm">De combien d'ERPs avez-vous besoin ?</p>
-                    <p className="text-amber-400 font-extrabold text-2xl leading-none">{sliderQty}</p>
+                    <p className="text-navy-900 font-semibold text-sm">De combien d'ERPs avez-vous besoin ?</p>
+                    <p className="text-navy-900 font-extrabold text-2xl leading-none">{sliderQty}</p>
                   </div>
                   <input
                     type="range"
@@ -265,9 +265,9 @@ export default function ProLanding() {
                     max={500}
                     value={sliderQty}
                     onChange={e => setSliderQty(Number(e.target.value))}
-                    className="w-full cursor-pointer accent-amber-400"
+                    className="w-full cursor-pointer accent-navy-900"
                   />
-                  {/* Marqueurs de paliers — points de changement de taux */}
+                  {/* Marqueurs — points de changement de taux */}
                   <div className="relative h-5 mt-1.5">
                     {[
                       { pct: 0,    label: '1' },
@@ -278,27 +278,27 @@ export default function ProLanding() {
                       { pct: 60.1, label: '301' },
                     ].map(({ pct, label }) => (
                       <div key={label} className="absolute flex flex-col items-center" style={{ left: `${pct}%` }}>
-                        <div className="w-px h-1.5 bg-white/25" />
-                        <span className="text-[7px] text-white/35 mt-0.5 whitespace-nowrap">{label}</span>
+                        <div className="w-px h-1.5 bg-gray-200" />
+                        <span className="text-[7px] text-gray-400 mt-0.5 whitespace-nowrap">{label}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Result */}
-                <div className="border-t border-white/10 px-5 py-5 bg-amber-400/8">
+                {/* Résultat — fond navy contrasté */}
+                <div className="bg-navy-900 px-5 py-5">
                   <div className="flex items-end justify-between mb-4">
                     <div>
-                      <p className="text-amber-400 font-extrabold text-4xl leading-none">{avgDisplay}€</p>
-                      <p className="text-white/85 text-xs mt-1">HT / ERP en moyenne</p>
+                      <p className="text-amber-400 font-extrabold text-4xl leading-none">{avgDisplay} €</p>
+                      <p className="text-white/60 text-xs mt-1.5">HT / ERP en moyenne</p>
                     </div>
                     <div className="text-right">
                       <p className="text-white font-bold text-xl">{totalHT} € HT</p>
-                      <p className="text-white/75 text-xs mt-0.5">soit {totalTTC} € TTC</p>
-                      <p className="text-white/40 text-[10px] mt-0.5">Valable 12 mois</p>
+                      <p className="text-white/55 text-xs mt-0.5">soit {totalTTC} € TTC</p>
+                      <p className="text-white/35 text-[10px] mt-0.5">Valable 12 mois</p>
                     </div>
                   </div>
-                  {/* Détail des tranches — cliquer pour sélectionner */}
+                  {/* Cases de palier — montant de la tranche en gros, taux en petit */}
                   <div className="grid grid-cols-3 sm:grid-cols-6 gap-1">
                     {GRAD_TIERS.map(t => {
                       const active = sliderQty >= t.from;
@@ -309,11 +309,20 @@ export default function ProLanding() {
                         <div
                           key={t.from}
                           onClick={e => { e.stopPropagation(); setSliderQty(t.to); }}
-                          className={`rounded px-1 py-1.5 text-center transition-colors cursor-pointer hover:opacity-80 ${partial ? 'bg-amber-400/25 border border-amber-400/30' : active ? 'bg-amber-400/15' : 'bg-white/5'}`}
+                          className={`rounded px-1 py-2 text-center transition-colors cursor-pointer
+                            ${partial ? 'bg-amber-400/25 border border-amber-400/40 hover:bg-amber-400/35'
+                                      : active ? 'bg-white/12 hover:bg-white/20'
+                                      : 'bg-white/5 hover:bg-white/10'}`}
                         >
-                          <p className={`text-[9px] font-bold leading-none ${active ? 'text-amber-400' : 'text-white/20'}`}>{t.rateFmt}€</p>
-                          <p className={`text-[7px] mt-1 leading-none ${active ? 'text-amber-400/70' : 'text-white/15'}`}>
-                            {active ? `${contribution} €` : t.label}
+                          {/* Montant de la tranche (contribution) — info principale */}
+                          <p className={`text-[10px] font-bold leading-none
+                            ${partial ? 'text-amber-400' : active ? 'text-white' : 'text-white/25'}`}>
+                            {active ? `${contribution} €` : t.rateFmt + ' €'}
+                          </p>
+                          {/* Taux marginal — info secondaire */}
+                          <p className={`text-[7px] mt-1 leading-none
+                            ${active ? 'text-white/45' : 'text-white/18'}`}>
+                            {active ? `${t.rateFmt} €/u` : t.label}
                           </p>
                         </div>
                       );
@@ -321,34 +330,34 @@ export default function ProLanding() {
                   </div>
                 </div>
 
-                {/* CTA achat */}
-                <div className="px-5 py-4 border-t border-white/10 space-y-2">
+                {/* CTA */}
+                <div className="px-5 py-4 space-y-2">
                   <button
                     onClick={handleBuy}
                     disabled={buyLoading}
-                    className="w-full bg-amber-400 text-navy-900 font-bold text-sm py-3 rounded-xl hover:bg-amber-300 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+                    className="w-full bg-navy-900 text-white font-bold text-sm py-3 rounded-xl hover:bg-navy-800 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
                   >
                     {buyLoading
                       ? <Loader2 className="h-4 w-4 animate-spin" />
                       : `Acheter ${sliderQty} ERPs — ${totalHT} € HT`
                     }
                   </button>
-                  {buyError && <p className="text-red-300 text-xs text-center">{buyError}</p>}
+                  {buyError && <p className="text-red-500 text-xs text-center">{buyError}</p>}
                   {!session && (
-                    <p className="text-white/55 text-[10px] text-center">Connexion par lien email · Sans mot de passe</p>
+                    <p className="text-gray-400 text-[10px] text-center">Connexion par lien email · Sans mot de passe</p>
                   )}
                 </div>
 
-                {/* Guarantees */}
-                <div className="bg-white/5 px-5 py-4 border-t border-white/10 space-y-2">
+                {/* Garanties */}
+                <div className="bg-slate-50 px-5 py-4 border-t border-gray-100 space-y-2.5">
                   {[
                     'Sans abonnement — aucune charge fixe',
-                    'Crédits valables 12 mois à compter de l\'achat',
+                    "Crédits valables 12 mois à compter de l'achat",
                     'Facture envoyée automatiquement',
                   ].map(g => (
                     <div key={g} className="flex items-center gap-2.5">
-                      <Check className="h-3.5 w-3.5 text-amber-400 shrink-0" />
-                      <p className="text-xs text-white/90">{g}</p>
+                      <Check className="h-3.5 w-3.5 text-navy-900 shrink-0" />
+                      <p className="text-xs text-gray-600">{g}</p>
                     </div>
                   ))}
                 </div>
@@ -356,9 +365,9 @@ export default function ProLanding() {
               </div>
 
               {/* Trust note */}
-              <div className="bg-white/8 border border-white/10 rounded-xl px-5 py-3.5 flex items-center gap-3">
+              <div className="flex items-center gap-2.5 px-1">
                 <BadgeCheck className="h-4 w-4 text-amber-400 shrink-0" />
-                <p className="text-white/80 text-xs">Données officielles Géorisques & IGN · Conformité arrêté 27/09/2022</p>
+                <p className="text-white/55 text-xs">Données officielles Géorisques & IGN · Conformité arrêté 27/09/2022</p>
               </div>
 
             </div>
