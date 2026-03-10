@@ -55,11 +55,11 @@ const FAQS = [
   },
   {
     q: "Comment fonctionne la marketplace de contacts diagnostics ?",
-    a: "La marketplace met en relation des diagnostiqueurs avec des particuliers ou professionnels qui recherchent activement un diagnostiqueur dans leur zone. Vous définissez votre secteur géographique et le nombre de contacts que vous souhaitez recevoir par mois — vous ne payez que les contacts reçus dans votre volume défini. Le système est automatique : dès qu'une demande qualifiée est disponible dans votre zone, elle vous est transmise.",
+    a: "La marketplace met en relation des diagnostiqueurs avec des particuliers ou professionnels qui recherchent activement un professionnel dans leur zone. Vous définissez votre secteur géographique et le nombre de missions que vous souhaitez recevoir par mois — vous ne payez que les demandes reçues. Le système est automatique : dès qu'une mission qualifiée est disponible dans votre secteur, elle vous est transmise.",
   },
 ];
 
-const CAP_OPTIONS = ['5 contacts / mois', '10 contacts / mois', '20 contacts / mois', '50 contacts / mois', 'Plus de 50'];
+const CAP_OPTIONS = ['5 missions / mois', '10 missions / mois', '20 missions / mois', '50 missions / mois', 'Plus de 50'];
 
 export default function ProLanding() {
   const navigate = useNavigate();
@@ -177,7 +177,7 @@ export default function ProLanding() {
               {session ? 'Mon espace pro' : "Accéder à l'espace pro"}
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
-            <span className="text-white/30 text-xs">Connexion par lien email · Sans mot de passe</span>
+            <span className="text-white/55 text-xs">Connexion par lien email · Sans mot de passe</span>
           </div>
           <div className="mt-12 pt-8 border-t border-white/10 flex flex-wrap gap-8">
             {[
@@ -187,7 +187,7 @@ export default function ProLanding() {
             ].map(stat => (
               <div key={stat.label}>
                 <p className="text-2xl font-extrabold text-white">{stat.value}</p>
-                <p className="text-xs text-white/35 mt-0.5">{stat.label}</p>
+                <p className="text-xs text-white/55 mt-0.5">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -350,7 +350,7 @@ export default function ProLanding() {
                 Recevez des demandes de clients directement dans votre zone
               </h2>
               <p className="text-gray-500 text-sm leading-relaxed mb-8">
-                Notre marketplace met en relation des diagnostiqueurs avec des particuliers et agences qui cherchent activement un professionnel. Vous définissez votre secteur et le nombre de contacts souhaités par mois — nous vous transmettrons les demandes en automatique.
+                Notre marketplace met en relation des diagnostiqueurs avec des particuliers et agences qui cherchent activement un professionnel. Vous définissez votre secteur et le nombre de missions souhaitées par mois — nous vous transmettrons les demandes en automatique.
               </p>
 
               <ul className="space-y-4">
@@ -364,8 +364,8 @@ export default function ProLanding() {
                     desc: 'Vous payez uniquement les leads reçus. Pas d\'engagement, pas de forfait mensuel.',
                   },
                   {
-                    title: 'Volume de contacts ajustable',
-                    desc: "Indiquez combien de demandes vous souhaitez recevoir par mois. Le système s'arrête automatiquement dès que votre volume est atteint.",
+                    title: 'Nombre de missions ajustable',
+                    desc: "Indiquez combien de demandes vous souhaitez recevoir par mois. Le système s'arrête automatiquement dès que ce nombre est atteint.",
                   },
                 ].map(({ title, desc }) => (
                   <li key={title} className="flex gap-3">
@@ -429,7 +429,7 @@ export default function ProLanding() {
 
                     <div>
                       <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                        Contacts souhaités par mois
+                        Missions souhaitées par mois
                       </label>
                       <select
                         required
@@ -437,7 +437,7 @@ export default function ProLanding() {
                         onChange={e => setWCap(e.target.value)}
                         className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-navy-900/30 bg-white"
                       >
-                        <option value="">Sélectionnez un volume</option>
+                        <option value="">Choisissez un nombre</option>
                         {CAP_OPTIONS.map(o => (
                           <option key={o} value={o}>{o}</option>
                         ))}
@@ -568,14 +568,14 @@ export default function ProLanding() {
       <footer className="bg-navy-900 border-t border-white/10 px-4 py-6">
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <span className="text-sm font-bold text-white">EDL&amp;DIAGNOSTIC · Espace Pro</span>
-          <div className="flex flex-wrap justify-center gap-x-5 gap-y-1 text-xs text-gray-500">
+          <div className="flex flex-wrap justify-center gap-x-5 gap-y-1 text-xs text-white/45">
             <button onClick={() => navigate('/mentions-legales')} className="hover:text-white transition-colors">Mentions légales</button>
             <button onClick={() => navigate('/confidentialite')} className="hover:text-white transition-colors">Confidentialité</button>
             <button onClick={() => navigate('/cgu')} className="hover:text-white transition-colors">CGV</button>
             <button onClick={() => navigate('/')} className="hover:text-white transition-colors">Accès grand public</button>
           </div>
         </div>
-        <p className="text-[11px] text-gray-600 text-center mt-4">
+        <p className="text-[11px] text-white/35 text-center mt-4">
           Données Géorisques, BRGM, IGN · Conformité arrêté 27/09/2022 · Paiement sécurisé Stripe
         </p>
       </footer>
