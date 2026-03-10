@@ -191,42 +191,35 @@ export default function ProLanding() {
     <div className="min-h-screen bg-white">
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden">
-        {/* Split bg: left navy, right white (desktop only) */}
-        <div className="absolute inset-0 flex pointer-events-none">
-          <div className="w-full lg:w-1/2 bg-navy-900 relative">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(251,191,36,0.1)_0%,_transparent_55%)]" />
-          </div>
-          <div className="hidden lg:block lg:w-1/2 bg-white" />
-        </div>
-        <div className="max-w-5xl mx-auto relative px-4 py-16 sm:py-24">
+      <section className="bg-white border-b border-gray-100 px-4 py-16 sm:py-24">
+        <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
             {/* ── Colonne gauche — texte ── */}
             <div>
-              <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-3 py-1 mb-8">
-                <Building2 className="h-3.5 w-3.5 text-amber-400" />
-                <span className="text-xs font-semibold text-white/80">Espace professionnel EDL&amp;DIAGNOSTIC</span>
+              <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-full px-3 py-1 mb-8">
+                <Building2 className="h-3.5 w-3.5 text-amber-500" />
+                <span className="text-xs font-semibold text-amber-700">Espace professionnel EDL&amp;DIAGNOSTIC</span>
               </div>
-              <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-[1.1]">
+              <h1 className="text-4xl sm:text-5xl font-extrabold text-navy-900 tracking-tight leading-[1.1]">
                 Gagnez du temps.<br />
                 Réduisez vos coûts.<br />
-                <span className="text-amber-400">Restez conformes.</span>
+                <span className="text-amber-500">Restez conformes.</span>
               </h1>
               <ul className="mt-8 space-y-4">
                 {[
                   {
-                    icon: <Clock className="h-5 w-5 text-amber-400 shrink-0" />,
+                    icon: <Clock className="h-5 w-5 text-amber-500 shrink-0" />,
                     title: 'ERP généré en moins de 2 minutes',
                     desc: "Arrêtez de passer 20 minutes sur les sites officiels. Adresse saisie → PDF prêt.",
                   },
                   {
-                    icon: <Banknote className="h-5 w-5 text-amber-400 shrink-0" />,
+                    icon: <Banknote className="h-5 w-5 text-amber-500 shrink-0" />,
                     title: 'À partir de 1,65 € HT le document',
                     desc: "Tarif dégressif selon le volume — de 7 € HT (à l'unité) jusqu'à 1 € HT. Pas d'abonnement.",
                   },
                   {
-                    icon: <BadgeCheck className="h-5 w-5 text-amber-400 shrink-0" />,
+                    icon: <BadgeCheck className="h-5 w-5 text-amber-500 shrink-0" />,
                     title: 'Accepté sans réserve par les notaires',
                     desc: "Sources Géorisques & IGN officielles. Conforme à l'arrêté du 27/09/2022.",
                   },
@@ -234,8 +227,8 @@ export default function ProLanding() {
                   <li key={title} className="flex items-start gap-3">
                     <span className="mt-0.5">{icon}</span>
                     <div>
-                      <p className="font-semibold text-white text-sm">{title}</p>
-                      <p className="text-white/60 text-xs mt-0.5 leading-relaxed">{desc}</p>
+                      <p className="font-semibold text-navy-900 text-sm">{title}</p>
+                      <p className="text-gray-500 text-xs mt-0.5 leading-relaxed">{desc}</p>
                     </div>
                   </li>
                 ))}
@@ -244,12 +237,12 @@ export default function ProLanding() {
                 <Button
                   size="lg"
                   onClick={handleCTA}
-                  className="bg-amber-400 text-navy-900 hover:bg-amber-300 font-bold h-12 px-8 rounded-lg text-base"
+                  className="bg-navy-900 text-white hover:bg-navy-900/90 font-bold h-12 px-8 rounded-lg text-base"
                 >
                   {session ? 'Mon espace pro' : "Accéder à l'espace pro"}
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
-                <span className="text-white/55 text-sm">Sans abonnement · Connexion par lien email</span>
+                <span className="text-gray-400 text-sm">Sans abonnement · Connexion par lien email</span>
               </div>
             </div>
 
