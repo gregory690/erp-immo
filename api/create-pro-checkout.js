@@ -5,15 +5,16 @@
 import Stripe from 'stripe';
 import { kv } from '@vercel/kv';
 
-// Paliers dégressifs identiques au simulateur frontend
+// Packs discrets — totaux strictement croissants, pas de paradoxe prix
+// qty × price = total HT : 60 < 75 < 150 < 250 < 400 < 450 < 500 ✓
 const PRICING_TIERS = [
-  { upTo: 10,       pricePerUnitCents: 600 }, // 6.00 € HT/ERP
-  { upTo: 15,       pricePerUnitCents: 500 }, // 5.00 €
-  { upTo: 210,      pricePerUnitCents: 300 }, // 3.00 €
-  { upTo: 280,      pricePerUnitCents: 250 }, // 2.50 €
-  { upTo: 350,      pricePerUnitCents: 200 }, // 2.00 €
-  { upTo: 430,      pricePerUnitCents: 150 }, // 1.50 €
-  { upTo: Infinity, pricePerUnitCents: 100 }, // 1.00 €
+  { upTo: 10,       pricePerUnitCents: 600 }, // 10  × 6.00€ = 60€  HT
+  { upTo: 15,       pricePerUnitCents: 500 }, // 15  × 5.00€ = 75€  HT
+  { upTo: 50,       pricePerUnitCents: 300 }, // 50  × 3.00€ = 150€ HT
+  { upTo: 100,      pricePerUnitCents: 250 }, // 100 × 2.50€ = 250€ HT
+  { upTo: 200,      pricePerUnitCents: 200 }, // 200 × 2.00€ = 400€ HT
+  { upTo: 300,      pricePerUnitCents: 150 }, // 300 × 1.50€ = 450€ HT
+  { upTo: Infinity, pricePerUnitCents: 100 }, // 500 × 1.00€ = 500€ HT
 ];
 
 function getPricePerUnit(qty) {

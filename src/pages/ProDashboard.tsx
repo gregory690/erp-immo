@@ -13,19 +13,19 @@ import {
 } from '../services/pro.service';
 import type { ProAccount } from '../services/pro.service';
 
-const ERP_PRICING_TIERS = [
-  { upTo: 10,       pricePerErp: 6   },
-  { upTo: 15,       pricePerErp: 5   },
-  { upTo: 210,      pricePerErp: 3   },
-  { upTo: 280,      pricePerErp: 2.5 },
-  { upTo: 350,      pricePerErp: 2   },
-  { upTo: 430,      pricePerErp: 1.5 },
-  { upTo: Infinity, pricePerErp: 1   },
+// Packs discrets — totaux strictement croissants (60<75<150<250<400<450<500)
+const ERP_PACKS = [
+  { qty: 10,  totalHT: 60,  pricePerErp: 6   },
+  { qty: 15,  totalHT: 75,  pricePerErp: 5   },
+  { qty: 50,  totalHT: 150, pricePerErp: 3   },
+  { qty: 100, totalHT: 250, pricePerErp: 2.5 },
+  { qty: 200, totalHT: 400, pricePerErp: 2   },
+  { qty: 300, totalHT: 450, pricePerErp: 1.5 },
+  { qty: 500, totalHT: 500, pricePerErp: 1   },
 ];
 
-function getErpPricing(qty: number) {
-  const tier = ERP_PRICING_TIERS.find(t => qty <= t.upTo) ?? ERP_PRICING_TIERS.at(-1)!;
-  return { pricePerErp: tier.pricePerErp, totalHT: Math.round(qty * tier.pricePerErp) };
+function getErpPack(sliderVal: number) {
+  return ERP_PACKS.find(p => p.qty >= sliderVal) ?? ERP_PACKS.at(-1)!;
 }
 
 const LEAD_TIERS = [
@@ -117,7 +117,7 @@ export default function ProDashboard() {
     setPackError(null);
     setPackLoading('buy');
     try {
-      const { url } = await createProCheckoutByQty(buyQty, session.token);
+      const { url } = await createProCheckoutByQty(getErpPack(buyQty).qty, session.token);
       window.location.href = url;
     } catch (err) {
       setPackError(err instanceof Error ? err.message : 'Erreur de paiement');
@@ -276,7 +276,8 @@ export default function ProDashboard() {
 
             {/* Pack selector — slider */}
             {showPacks && (() => {
-              const { pricePerErp, totalHT } = getErpPricing(buyQty);
+              const pack = getErpPack(buyQty);
+              const reserve = pack.qty - buyQty;
               return (
                 <div className="bg-white border border-border rounded-xl p-5 space-y-4">
                   <h3 className="font-semibold text-gray-900 text-sm">Combien d'ERPs voulez-vous acheter ?</h3>
@@ -285,7 +286,7 @@ export default function ProDashboard() {
                   {/* Slider */}
                   <div>
                     <div className="flex justify-between items-baseline mb-2">
-                      <p className="text-xs text-gray-500">Volume</p>
+                      <p className="text-xs text-gray-500">Volume souhaité</p>
                       <p className="text-navy-900 font-extrabold text-2xl">{buyQty} ERPs</p>
                     </div>
                     <input
@@ -305,12 +306,15 @@ export default function ProDashboard() {
                   {/* Résultat */}
                   <div className="bg-slate-50 rounded-xl px-5 py-4 flex items-end justify-between">
                     <div>
-                      <p className="text-2xl font-extrabold text-navy-900">{pricePerErp} €</p>
+                      <p className="text-2xl font-extrabold text-navy-900">{pack.pricePerErp} €</p>
                       <p className="text-xs text-gray-500 mt-0.5">HT / ERP</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-lg font-bold text-gray-900">{totalHT} € HT</p>
-                      <p className="text-xs text-gray-400 mt-0.5">{Math.round(totalHT * 1.2)} € TTC</p>
+                      <p className="text-lg font-bold text-gray-900">{pack.totalHT} € HT</p>
+                      <p className="text-xs text-gray-400 mt-0.5">{Math.round(pack.totalHT * 1.2)} € TTC</p>
+                      {reserve > 0 && (
+                        <p className="text-[10px] text-amber-600 mt-0.5">+{reserve} ERPs en réserve</p>
+                      )}
                     </div>
                   </div>
 
@@ -322,7 +326,7 @@ export default function ProDashboard() {
                   >
                     {packLoading === 'buy'
                       ? <Loader2 className="h-4 w-4 animate-spin" />
-                      : `Acheter ${buyQty} ERPs — ${totalHT} € HT`
+                      : `Acheter ${pack.qty} ERPs — ${pack.totalHT} € HT`
                     }
                   </button>
                   <p className="text-[10px] text-gray-400 text-center">Paiement sécurisé par Stripe · Facture automatique</p>

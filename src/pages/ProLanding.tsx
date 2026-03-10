@@ -126,7 +126,7 @@ export default function ProLanding() {
     setBuyLoading(true);
     setBuyError(null);
     try {
-      const { url } = await createProCheckoutByQty(sliderQty, session.token);
+      const { url } = await createProCheckoutByQty(recommendedPack.qty, session.token);
       window.location.href = url;
     } catch (err) {
       setBuyError(err instanceof Error ? err.message : 'Erreur de paiement');
@@ -134,24 +134,21 @@ export default function ProLanding() {
     }
   }
 
+  // Packs discrets — totaux strictement croissants (pas de paradoxe prix)
+  // 60 < 75 < 150 < 250 < 400 < 450 < 500 ✓
   const PACKS = [
-    { name: 'Découverte', pricePerErp: 6   },
-    { name: 'Pro',        pricePerErp: 5   },
-    { name: 'Pro+',       pricePerErp: 3   },
-    { name: 'Expert',     pricePerErp: 2.5 },
-    { name: 'Premium',    pricePerErp: 2   },
-    { name: 'Élite',      pricePerErp: 1.5 },
-    { name: 'Ultime',     pricePerErp: 1   },
+    { name: 'Découverte', qty: 10,  totalHT: 60,  pricePerErp: 6   },
+    { name: 'Pro',        qty: 15,  totalHT: 75,  pricePerErp: 5   },
+    { name: 'Pro+',       qty: 50,  totalHT: 150, pricePerErp: 3   },
+    { name: 'Expert',     qty: 100, totalHT: 250, pricePerErp: 2.5 },
+    { name: 'Premium',    qty: 200, totalHT: 400, pricePerErp: 2   },
+    { name: 'Élite',      qty: 300, totalHT: 450, pricePerErp: 1.5 },
+    { name: 'Ultime',     qty: 500, totalHT: 500, pricePerErp: 1   },
   ];
 
+  // Recommande le plus petit pack couvrant le volume choisi
   function getRecommendedPack(qty: number) {
-    if (qty <= 10)  return PACKS[0];
-    if (qty <= 15)  return PACKS[1];
-    if (qty <= 210) return PACKS[2]; // reste à 3 € jusqu'à 210 ERPs
-    if (qty <= 280) return PACKS[3];
-    if (qty <= 350) return PACKS[4];
-    if (qty <= 430) return PACKS[5];
-    return PACKS[6];
+    return PACKS.find(p => p.qty >= qty) ?? PACKS[PACKS.length - 1];
   }
 
   const recommendedPack = getRecommendedPack(sliderQty);
@@ -275,7 +272,8 @@ export default function ProLanding() {
                 {/* Result */}
                 <div className="border-t border-white/10 px-5 py-5 bg-amber-400/8">
                   <p className="text-white/80 text-xs mb-4">
-                    Palier : <span className="text-white font-semibold">{recommendedPack.name}</span>
+                    Pack <span className="text-white font-semibold">{recommendedPack.name}</span>
+                    {' '}· {recommendedPack.qty} ERPs
                   </p>
                   <div className="flex items-end justify-between">
                     <div>
@@ -283,10 +281,15 @@ export default function ProLanding() {
                       <p className="text-white/85 text-xs mt-1">HT / ERP</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-white font-bold text-xl">{Math.round(sliderQty * recommendedPack.pricePerErp)} € HT</p>
-                      <p className="text-white/75 text-xs mt-0.5">soit {Math.round(sliderQty * recommendedPack.pricePerErp * 1.2)} € TTC</p>
+                      <p className="text-white font-bold text-xl">{recommendedPack.totalHT} € HT</p>
+                      <p className="text-white/75 text-xs mt-0.5">soit {Math.round(recommendedPack.totalHT * 1.2)} € TTC</p>
                     </div>
                   </div>
+                  {recommendedPack.qty > sliderQty && (
+                    <p className="text-white/65 text-[11px] mt-3">
+                      +{recommendedPack.qty - sliderQty} ERPs en réserve — sans date limite.
+                    </p>
+                  )}
                 </div>
 
                 {/* CTA achat */}
@@ -299,8 +302,8 @@ export default function ProLanding() {
                     {buyLoading
                       ? <Loader2 className="h-4 w-4 animate-spin" />
                       : session
-                        ? `Acheter ${sliderQty} ERPs — ${Math.round(sliderQty * recommendedPack.pricePerErp)} € HT`
-                        : `Commencer — ${Math.round(sliderQty * recommendedPack.pricePerErp)} € HT`
+                        ? `Acheter ${recommendedPack.qty} ERPs — ${recommendedPack.totalHT} € HT`
+                        : `Commencer — ${recommendedPack.totalHT} € HT`
                     }
                   </button>
                   {buyError && <p className="text-red-300 text-xs text-center">{buyError}</p>}
