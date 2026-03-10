@@ -221,7 +221,7 @@ export default function Generate() {
       <header className="bg-white border-b border-border sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate(isPro ? '/pro/dashboard' : '/')}
             className="flex items-center gap-2 text-sm text-gray-600 hover:text-navy-900 transition-colors"
           >
             <ChevronLeft className="h-4 w-4" />
