@@ -320,7 +320,7 @@ export default function ProLanding() {
               },
             ].map(step => (
               <div key={step.num} className="flex gap-7 py-6">
-                <span className="text-3xl font-black text-gray-100 shrink-0 w-10 text-right leading-none pt-0.5">
+                <span className="text-3xl font-black text-navy-900/25 shrink-0 w-10 text-right leading-none pt-0.5">
                   {step.num}
                 </span>
                 <div>
