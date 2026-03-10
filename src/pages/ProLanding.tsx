@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check, ArrowRight, Building2, ChevronDown, Clock, Banknote, BadgeCheck } from 'lucide-react';
+import { Check, ArrowRight, Building2, ChevronDown, Clock, Banknote, BadgeCheck, Loader2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { getProSession } from '../services/pro.service';
+import { getProSession, createProCheckoutByQty } from '../services/pro.service';
 
 
 const REVIEWS = [
@@ -115,6 +115,24 @@ export default function ProLanding() {
 
   // ── Slider simulateur ─────────────────────────────────────────────────────
   const [sliderQty, setSliderQty] = useState(20);
+  const [buyLoading, setBuyLoading] = useState(false);
+  const [buyError, setBuyError] = useState<string | null>(null);
+
+  async function handleBuy() {
+    if (!session) {
+      navigate('/pro/login');
+      return;
+    }
+    setBuyLoading(true);
+    setBuyError(null);
+    try {
+      const { url } = await createProCheckoutByQty(sliderQty, session.token);
+      window.location.href = url;
+    } catch (err) {
+      setBuyError(err instanceof Error ? err.message : 'Erreur de paiement');
+      setBuyLoading(false);
+    }
+  }
 
   const PACKS = [
     { name: 'Découverte', pricePerErp: 6   },
@@ -269,6 +287,26 @@ export default function ProLanding() {
                       <p className="text-white/75 text-xs mt-0.5">soit {Math.round(sliderQty * recommendedPack.pricePerErp * 1.2)} € TTC</p>
                     </div>
                   </div>
+                </div>
+
+                {/* CTA achat */}
+                <div className="px-5 py-4 border-t border-white/10 space-y-2">
+                  <button
+                    onClick={handleBuy}
+                    disabled={buyLoading}
+                    className="w-full bg-amber-400 text-navy-900 font-bold text-sm py-3 rounded-xl hover:bg-amber-300 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+                  >
+                    {buyLoading
+                      ? <Loader2 className="h-4 w-4 animate-spin" />
+                      : session
+                        ? `Acheter ${sliderQty} ERPs — ${Math.round(sliderQty * recommendedPack.pricePerErp)} € HT`
+                        : `Commencer — ${Math.round(sliderQty * recommendedPack.pricePerErp)} € HT`
+                    }
+                  </button>
+                  {buyError && <p className="text-red-300 text-xs text-center">{buyError}</p>}
+                  {!session && (
+                    <p className="text-white/55 text-[10px] text-center">Connexion par lien email · Sans mot de passe</p>
+                  )}
                 </div>
 
                 {/* Guarantees */}

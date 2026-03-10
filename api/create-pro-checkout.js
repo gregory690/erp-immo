@@ -1,17 +1,24 @@
 // Vercel Function — create-pro-checkout
 // Crée une Stripe Checkout Session pour l'achat de crédits pro.
-// Pack Découverte 10 ERPs : 60 € HT → 72 € TTC
-// Pack Pro 15 ERPs        : 75 € HT → 90 € TTC
-// Pack Pro+ 50 ERPs       : 150 € HT → 180 € TTC
-// Les montants sont passés en HT + TVA 20% exclusive → facture conforme HT/TVA/TTC
+// Tarif dégressif selon volume — calculé dynamiquement côté serveur.
+// Les montants sont en HT + TVA 20% exclusive → facture conforme HT/TVA/TTC
 import Stripe from 'stripe';
 import { kv } from '@vercel/kv';
 
-const PACKS = {
-  pack_10: { qty: 10, htAmount: 6000,  label: 'Pack Découverte — 10 ERPs' },
-  pack_15: { qty: 15, htAmount: 7500,  label: 'Pack Pro — 15 ERPs' },
-  pack_50: { qty: 50, htAmount: 15000, label: 'Pack Pro+ — 50 ERPs' },
-};
+// Paliers dégressifs identiques au simulateur frontend
+const PRICING_TIERS = [
+  { upTo: 10,       pricePerUnitCents: 600 }, // 6.00 € HT/ERP
+  { upTo: 15,       pricePerUnitCents: 500 }, // 5.00 €
+  { upTo: 210,      pricePerUnitCents: 300 }, // 3.00 €
+  { upTo: 280,      pricePerUnitCents: 250 }, // 2.50 €
+  { upTo: 350,      pricePerUnitCents: 200 }, // 2.00 €
+  { upTo: 430,      pricePerUnitCents: 150 }, // 1.50 €
+  { upTo: Infinity, pricePerUnitCents: 100 }, // 1.00 €
+];
+
+function getPricePerUnit(qty) {
+  return (PRICING_TIERS.find(t => qty <= t.upTo) ?? PRICING_TIERS.at(-1)).pricePerUnitCents;
+}
 
 async function verifyProToken(token) {
   if (!token) return null;
@@ -54,10 +61,11 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { pack, token } = req.body || {};
+  const { qty, token } = req.body || {};
 
-  if (!pack || !PACKS[pack]) {
-    return res.status(400).json({ error: 'Pack invalide. Valeurs acceptées : pack_10, pack_15, pack_50' });
+  const parsedQty = parseInt(qty, 10);
+  if (!parsedQty || parsedQty < 1 || parsedQty > 10000) {
+    return res.status(400).json({ error: 'Quantité invalide (1–10 000 ERPs)' });
   }
 
   const email = await verifyProToken(token);
@@ -87,7 +95,8 @@ export default async function handler(req, res) {
     }
   } catch { /* non bloquant */ }
 
-  const { qty, htAmount, label } = PACKS[pack];
+  const pricePerUnitCents = getPricePerUnit(parsedQty);
+  const priceHtEur = (pricePerUnitCents / 100).toFixed(2).replace('.', ',');
 
   // Taux de TVA 20% — créé une seule fois dans Stripe, réutilisé ensuite
   const taxRateId = await getOrCreateTaxRate(stripe);
@@ -96,11 +105,8 @@ export default async function handler(req, res) {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       customer_email: email,
-      // Crée un Customer Stripe → requis pour invoice_creation
       customer_creation: 'always',
-      // Collecte l'adresse de facturation (nécessaire pour facture fiscale)
       billing_address_collection: 'required',
-      // Champs B2B toujours visibles (raison sociale obligatoire, TVA optionnelle)
       custom_fields: [
         {
           key: 'company',
@@ -115,28 +121,25 @@ export default async function handler(req, res) {
           optional: true,
         },
       ],
-      // Validation Stripe du numéro de TVA acheteur
       tax_id_collection: { enabled: true },
-      // Génère automatiquement une facture Stripe avec décomposition HT / TVA / TTC
-      // (configurer les infos vendeur dans Stripe Dashboard → Settings → Business)
       invoice_creation: { enabled: true },
       line_items: [{
         price_data: {
           currency: 'eur',
-          unit_amount: htAmount,       // montant HT en centimes
-          tax_behavior: 'exclusive',   // TVA ajoutée en sus → facture HT + TVA + TTC
+          unit_amount: pricePerUnitCents, // prix unitaire HT par ERP en centimes
+          tax_behavior: 'exclusive',      // TVA ajoutée en sus → facture HT + TVA + TTC
           product_data: {
-            name: label,
-            description: `${qty} crédits ERP · EDL&DIAGNOSTIC Pro`,
+            name: `ERPs Pro — EDL&DIAGNOSTIC`,
+            description: `${parsedQty} ERPs · ${priceHtEur} € HT / ERP`,
           },
         },
-        quantity: 1,
+        quantity: parsedQty,
         ...(taxRateId ? { tax_rates: [taxRateId] } : {}),
       }],
       metadata: {
         type: 'pro_pack',
         pro_email: email,
-        pack_qty: String(qty),
+        pack_qty: String(parsedQty),
       },
       success_url: `${baseUrl}/pro/dashboard?pack_success=1`,
       cancel_url: `${baseUrl}/pro/dashboard`,

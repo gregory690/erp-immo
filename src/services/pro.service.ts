@@ -102,10 +102,18 @@ export async function createProCheckout(
   pack: 'pack_10' | 'pack_15' | 'pack_50',
   token: string
 ): Promise<{ url: string }> {
+  const qtyMap = { pack_10: 10, pack_15: 15, pack_50: 50 };
+  return createProCheckoutByQty(qtyMap[pack], token);
+}
+
+export async function createProCheckoutByQty(
+  qty: number,
+  token: string
+): Promise<{ url: string }> {
   const res = await fetch('/api/create-pro-checkout', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ pack, token }),
+    body: JSON.stringify({ qty, token }),
   });
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));

@@ -9,15 +9,24 @@ import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import {
   getProSession, clearProSession,
-  getProAccount, createProCheckout,
+  getProAccount, createProCheckoutByQty,
 } from '../services/pro.service';
 import type { ProAccount } from '../services/pro.service';
 
-const PACKS = [
-  { id: 'pack_10' as const, label: 'Découverte — 10 ERPs', priceHt: '60 €', priceTtc: '72 €', perUnit: '6 € HT / ERP', qty: 10 },
-  { id: 'pack_15' as const, label: 'Pro — 15 ERPs',        priceHt: '75 €', priceTtc: '90 €', perUnit: '5 € HT / ERP', qty: 15 },
-  { id: 'pack_50' as const, label: 'Pro+ — 50 ERPs',       priceHt: '150 €', priceTtc: '180 €', perUnit: '3 € HT / ERP', qty: 50, recommended: true },
+const ERP_PRICING_TIERS = [
+  { upTo: 10,       pricePerErp: 6   },
+  { upTo: 15,       pricePerErp: 5   },
+  { upTo: 210,      pricePerErp: 3   },
+  { upTo: 280,      pricePerErp: 2.5 },
+  { upTo: 350,      pricePerErp: 2   },
+  { upTo: 430,      pricePerErp: 1.5 },
+  { upTo: Infinity, pricePerErp: 1   },
 ];
+
+function getErpPricing(qty: number) {
+  const tier = ERP_PRICING_TIERS.find(t => qty <= t.upTo) ?? ERP_PRICING_TIERS.at(-1)!;
+  return { pricePerErp: tier.pricePerErp, totalHT: Math.round(qty * tier.pricePerErp) };
+}
 
 const LEAD_TIERS = [
   { max: 10,  pricePerLead: 25 },
@@ -59,6 +68,7 @@ export default function ProDashboard() {
   const [showPacks, setShowPacks] = useState(false);
   const [showPurchases, setShowPurchases] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [buyQty, setBuyQty] = useState(15);
   const [leadQty, setLeadQty] = useState(20);
   const [leadContactQty, setLeadContactQty] = useState(501);
 
@@ -102,12 +112,12 @@ export default function ProDashboard() {
     }
   }
 
-  async function handleBuyPack(packId: 'pack_10' | 'pack_15' | 'pack_50') {
+  async function handleBuyQty() {
     if (!session) return;
     setPackError(null);
-    setPackLoading(packId);
+    setPackLoading('buy');
     try {
-      const { url } = await createProCheckout(packId, session.token);
+      const { url } = await createProCheckoutByQty(buyQty, session.token);
       window.location.href = url;
     } catch (err) {
       setPackError(err instanceof Error ? err.message : 'Erreur de paiement');
@@ -264,52 +274,61 @@ export default function ProDashboard() {
               </div>
             )}
 
-            {/* Pack selector */}
-            {showPacks && (
-              <div className="bg-white border border-border rounded-xl p-5 space-y-4">
-                <h3 className="font-semibold text-gray-900 text-sm">Choisissez votre pack</h3>
-                {packError && (
-                  <p className="text-xs text-red-600">{packError}</p>
-                )}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {PACKS.map(pack => (
-                    <button
-                      key={pack.id}
-                      onClick={() => handleBuyPack(pack.id)}
-                      disabled={!!packLoading}
-                      className={`relative border-2 rounded-xl p-4 text-left transition-all hover:border-navy-900 ${
-                        pack.recommended ? 'border-navy-900' : 'border-gray-200'
-                      }`}
-                    >
-                      {pack.recommended && (
-                        <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-navy-900 text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full whitespace-nowrap">
-                          Meilleur rapport
-                        </span>
-                      )}
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <p className="font-semibold text-gray-900 text-sm">{pack.label}</p>
-                          <p className="text-xs text-gray-400">{pack.perUnit}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-xl font-extrabold text-navy-900">
-                            {pack.priceHt}
-                            <span className="text-xs font-normal text-gray-400 ml-1">HT</span>
-                          </p>
-                          <p className="text-[10px] text-gray-400">{pack.priceTtc} TTC</p>
-                        </div>
-                      </div>
-                      {packLoading === pack.id && (
-                        <div className="absolute inset-0 bg-white/70 rounded-xl flex items-center justify-center">
-                          <Loader2 className="h-5 w-5 animate-spin text-navy-900" />
-                        </div>
-                      )}
-                    </button>
-                  ))}
+            {/* Pack selector — slider */}
+            {showPacks && (() => {
+              const { pricePerErp, totalHT } = getErpPricing(buyQty);
+              return (
+                <div className="bg-white border border-border rounded-xl p-5 space-y-4">
+                  <h3 className="font-semibold text-gray-900 text-sm">Combien d'ERPs voulez-vous acheter ?</h3>
+                  {packError && <p className="text-xs text-red-600">{packError}</p>}
+
+                  {/* Slider */}
+                  <div>
+                    <div className="flex justify-between items-baseline mb-2">
+                      <p className="text-xs text-gray-500">Volume</p>
+                      <p className="text-navy-900 font-extrabold text-2xl">{buyQty} ERPs</p>
+                    </div>
+                    <input
+                      type="range"
+                      min={5}
+                      max={500}
+                      value={buyQty}
+                      onChange={e => setBuyQty(Number(e.target.value))}
+                      className="w-full cursor-pointer accent-navy-900"
+                    />
+                    <div className="flex justify-between text-[10px] text-gray-400 mt-1">
+                      <span>5 ERPs</span>
+                      <span>500 ERPs</span>
+                    </div>
+                  </div>
+
+                  {/* Résultat */}
+                  <div className="bg-slate-50 rounded-xl px-5 py-4 flex items-end justify-between">
+                    <div>
+                      <p className="text-2xl font-extrabold text-navy-900">{pricePerErp} €</p>
+                      <p className="text-xs text-gray-500 mt-0.5">HT / ERP</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-lg font-bold text-gray-900">{totalHT} € HT</p>
+                      <p className="text-xs text-gray-400 mt-0.5">{Math.round(totalHT * 1.2)} € TTC</p>
+                    </div>
+                  </div>
+
+                  {/* Bouton achat */}
+                  <button
+                    onClick={handleBuyQty}
+                    disabled={!!packLoading}
+                    className="w-full bg-navy-900 text-white font-bold py-2.5 rounded-lg hover:bg-navy-800 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+                  >
+                    {packLoading === 'buy'
+                      ? <Loader2 className="h-4 w-4 animate-spin" />
+                      : `Acheter ${buyQty} ERPs — ${totalHT} € HT`
+                    }
+                  </button>
+                  <p className="text-[10px] text-gray-400 text-center">Paiement sécurisé par Stripe · Facture automatique</p>
                 </div>
-                <p className="text-[10px] text-gray-400 text-center">Paiement sécurisé par Stripe</p>
-              </div>
-            )}
+              );
+            })()}
 
             {/* Mes achats */}
             {account.packs.length > 0 && (
