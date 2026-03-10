@@ -267,19 +267,18 @@ export default function ProLanding() {
                     onChange={e => setSliderQty(Number(e.target.value))}
                     className="w-full cursor-pointer accent-amber-400"
                   />
-                  {/* Marqueurs de paliers */}
-                  <div className="relative h-7 mt-1.5">
+                  {/* Marqueurs de paliers — points de changement de taux */}
+                  <div className="relative h-5 mt-1.5">
                     {[
-                      { pct: 0,    price: '7€',    label: '1' },
-                      { pct: 1.8,  price: '3€',    label: '10' },
-                      { pct: 10.0, price: '2,5€',  label: '51' },
-                      { pct: 20.0, price: '2€',    label: '101' },
-                      { pct: 40.1, price: '1,5€',  label: '201' },
-                      { pct: 60.1, price: '1€',    label: '301' },
-                    ].map(({ pct, price, label }) => (
+                      { pct: 0,    label: '1' },
+                      { pct: 1.8,  label: '10' },
+                      { pct: 10.0, label: '51' },
+                      { pct: 20.0, label: '101' },
+                      { pct: 40.1, label: '201' },
+                      { pct: 60.1, label: '301' },
+                    ].map(({ pct, label }) => (
                       <div key={label} className="absolute flex flex-col items-center" style={{ left: `${pct}%` }}>
                         <div className="w-px h-1.5 bg-white/25" />
-                        <span className="text-[8px] text-amber-400/80 font-semibold mt-0.5 whitespace-nowrap">{price}</span>
                         <span className="text-[7px] text-white/35 mt-0.5 whitespace-nowrap">{label}</span>
                       </div>
                     ))}
