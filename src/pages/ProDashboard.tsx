@@ -230,23 +230,23 @@ export default function ProDashboard() {
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <Zap className={`h-5 w-5 ${account.credits > 0 ? 'text-amber-400' : 'text-gray-500'}`} />
-                    <span className={`text-xs font-semibold uppercase tracking-wider ${account.credits > 0 ? 'text-white/60' : 'text-gray-500'}`}>
+                    <span className={`text-xs font-semibold uppercase tracking-wider ${account.credits > 0 ? 'text-white' : 'text-gray-500'}`}>
                       Crédits disponibles
                     </span>
                   </div>
                   <p className={`text-3xl sm:text-4xl font-extrabold ${account.credits > 0 ? 'text-white' : 'text-gray-600'}`}>
                     {account.credits}
-                    <span className={`text-base font-normal ml-2 ${account.credits > 0 ? 'text-white/50' : 'text-gray-400'}`}>
+                    <span className={`text-base font-normal ml-2 ${account.credits > 0 ? 'text-white' : 'text-gray-400'}`}>
                       ERP{account.credits !== 1 ? 's' : ''}
                     </span>
                   </p>
                   {account.used > 0 && (
-                    <p className={`text-xs ${account.credits > 0 ? 'text-white/40' : 'text-gray-400'}`}>
+                    <p className={`text-xs ${account.credits > 0 ? 'text-white/70' : 'text-gray-400'}`}>
                       {account.used} utilisé{account.used > 1 ? 's' : ''}
                     </p>
                   )}
                   {account.credits > 0 && (
-                    <p className="text-[10px] text-white/30 mt-1">Valables 12 mois à compter de chaque achat</p>
+                    <p className="text-[10px] text-white/60 mt-1">Valables 12 mois à compter de chaque achat</p>
                   )}
                 </div>
                 <div className="flex flex-col gap-2">
