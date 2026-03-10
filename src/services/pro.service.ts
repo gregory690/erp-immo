@@ -19,6 +19,7 @@ export interface ProERP {
 export interface ProPack {
   qty: number;
   date: string;
+  expires_at?: string | null; // date d'expiration ISO (null pour anciens achats)
   stripe_id: string;
   amount_ttc: number | null;
   currency: string;

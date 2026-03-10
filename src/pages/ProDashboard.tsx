@@ -238,6 +238,9 @@ export default function ProDashboard() {
                       {account.used} utilisé{account.used > 1 ? 's' : ''}
                     </p>
                   )}
+                  {account.credits > 0 && (
+                    <p className="text-[10px] text-white/30 mt-1">Valables 12 mois à compter de chaque achat</p>
+                  )}
                 </div>
                 <div className="flex flex-col gap-2">
                   {account.credits > 0 && (
@@ -361,7 +364,7 @@ export default function ProDashboard() {
                       : `Acheter ${buyQty} ERPs — ${totalHT} € HT`
                     }
                   </button>
-                  <p className="text-[10px] text-gray-400 text-center">Paiement sécurisé par Stripe · Facture automatique</p>
+                  <p className="text-[10px] text-gray-400 text-center">Paiement sécurisé par Stripe · Facture automatique · Crédits valables 12 mois</p>
                 </div>
               );
             })()}
@@ -392,6 +395,11 @@ export default function ProDashboard() {
                           <p className="text-xs text-gray-400">
                             {formatDate(pack.date)} · {formatAmount(pack.amount_ttc)} TTC
                           </p>
+                          {pack.expires_at && (
+                            <p className="text-[10px] text-gray-400">
+                              Expire le {new Date(pack.expires_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })}
+                            </p>
+                          )}
                         </div>
                         <a
                           href={pack.invoice_url || `/pro/facture?id=${encodeURIComponent(pack.stripe_id)}`}

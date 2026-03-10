@@ -124,11 +124,15 @@ export default async function handler(req, res) {
           }
         }
 
+        const purchaseDate = new Date();
+        const expiresAt = new Date(purchaseDate.getTime() + 365 * 24 * 60 * 60 * 1000).toISOString();
+
         current.credits += packQty;
         current.packs = [
           {
             qty: packQty,
-            date: new Date().toISOString(),
+            date: purchaseDate.toISOString(),
+            expires_at: expiresAt,
             stripe_id: sessionId,
             amount_ttc: session.amount_total ?? null,
             currency: session.currency ?? 'eur',

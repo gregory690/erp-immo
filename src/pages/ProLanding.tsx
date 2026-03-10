@@ -38,7 +38,7 @@ const FAQS = [
   },
   {
     q: "Mes crédits ont-ils une date d'expiration ?",
-    a: "Non. Vos crédits sont valables sans limite de durée. Achetez quand votre activité le demande, utilisez-les à votre rythme.",
+    a: "Oui — chaque pack est valable 12 mois à compter de la date d'achat. Vous pouvez utiliser vos crédits à votre rythme pendant toute cette période. L'échéance est visible dans votre espace pro, sous « Mes achats ».",
   },
   {
     q: "Puis-je acheter des crédits sans abonnement mensuel ?",
@@ -88,7 +88,7 @@ export default function ProLanding() {
       document.head.appendChild(meta);
     }
     meta.content =
-      "Générez vos États des Risques et Pollutions en moins de 2 minutes. Logiciel ERP professionnel pour diagnostiqueurs immobiliers — données officielles Géorisques, conformité arrêté 2022, crédits sans expiration.";
+      "Générez vos États des Risques et Pollutions en moins de 2 minutes. Logiciel ERP professionnel pour diagnostiqueurs immobiliers — données officielles Géorisques, conformité arrêté 2022, crédits valables 12 mois.";
 
     const script = document.createElement('script');
     script.type = 'application/ld+json';
@@ -255,7 +255,7 @@ export default function ProLanding() {
                 <div className="bg-white/5 px-5 pt-5 pb-4">
                   <p className="text-white/75 text-[11px] uppercase tracking-widest font-semibold mb-3">Simulez votre tarif</p>
                   <div className="flex items-baseline justify-between mb-3">
-                    <p className="text-white font-semibold text-sm">Combien d'ERPs par mois ?</p>
+                    <p className="text-white font-semibold text-sm">De combien d'ERPs avez-vous besoin ?</p>
                     <p className="text-amber-400 font-extrabold text-2xl leading-none">{sliderQty}</p>
                   </div>
                   <input
@@ -294,6 +294,7 @@ export default function ProLanding() {
                     <div className="text-right">
                       <p className="text-white font-bold text-xl">{totalHT} € HT</p>
                       <p className="text-white/75 text-xs mt-0.5">soit {totalTTC} € TTC</p>
+                      <p className="text-white/40 text-[10px] mt-0.5">Valable 12 mois</p>
                     </div>
                   </div>
                   {/* Détail des tranches — cliquer pour sélectionner */}
@@ -337,7 +338,7 @@ export default function ProLanding() {
                 <div className="bg-white/5 px-5 py-4 border-t border-white/10 space-y-2">
                   {[
                     'Sans abonnement — aucune charge fixe',
-                    'ERPs valables sans date limite',
+                    'Crédits valables 12 mois à compter de l\'achat',
                     'Facture envoyée automatiquement',
                   ].map(g => (
                     <div key={g} className="flex items-center gap-2.5">
@@ -549,8 +550,8 @@ export default function ProLanding() {
               desc: "APIs Géorisques, BRGM et IGN. Documents acceptés par les notaires et agences immobilières.",
             },
             {
-              title: 'Crédits sans expiration',
-              desc: "Achetez quand ça vous convient. Vos crédits restent disponibles sans aucune limite de temps.",
+              title: 'Crédits valables 12 mois',
+              desc: "Achetez quand ça vous convient. Vos crédits sont valables pendant 12 mois à compter de chaque achat.",
             },
           ].map(({ title, desc }) => (
             <div key={title} className="space-y-2">
