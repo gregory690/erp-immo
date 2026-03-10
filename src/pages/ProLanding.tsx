@@ -215,8 +215,8 @@ export default function ProLanding() {
                   },
                   {
                     icon: <Banknote className="h-5 w-5 text-amber-500 shrink-0" />,
-                    title: 'À partir de 1,65 € HT le document',
-                    desc: "Tarif dégressif selon le volume — de 7 € HT (à l'unité) jusqu'à 1 € HT. Pas d'abonnement.",
+                    title: 'À partir de 1,72 € HT le document',
+                    desc: "Tarif dégressif selon le volume — de 7 € HT à l'unité jusqu'à 1,72 € HT en moyenne. Pas d'abonnement.",
                   },
                   {
                     icon: <BadgeCheck className="h-5 w-5 text-amber-500 shrink-0" />,
@@ -296,36 +296,6 @@ export default function ProLanding() {
                       <p className="text-white/55 text-xs mt-0.5">soit {totalTTC} € TTC</p>
                       <p className="text-white/65 text-[10px] mt-0.5">Valable 12 mois</p>
                     </div>
-                  </div>
-                  {/* Cases de palier — montant de la tranche en gros, taux en petit */}
-                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-1">
-                    {GRAD_TIERS.map(t => {
-                      const active = sliderQty >= t.from;
-                      const partial = active && sliderQty < t.to;
-                      const inTier = active ? Math.min(sliderQty, t.to) - t.from + 1 : 0;
-                      const contribution = inTier > 0 ? Math.round(inTier * t.rate) : 0;
-                      return (
-                        <div
-                          key={t.from}
-                          onClick={e => { e.stopPropagation(); setSliderQty(t.to); }}
-                          className={`rounded px-1 py-2 text-center transition-colors cursor-pointer
-                            ${partial ? 'bg-amber-400/25 border border-amber-400/40 hover:bg-amber-400/35'
-                                      : active ? 'bg-white/12 hover:bg-white/20'
-                                      : 'bg-white/5 hover:bg-white/10'}`}
-                        >
-                          {/* Montant de la tranche (contribution) — info principale */}
-                          <p className={`text-[10px] font-bold leading-none
-                            ${partial ? 'text-amber-400' : active ? 'text-white' : 'text-white/25'}`}>
-                            {active ? `${contribution} €` : t.rateFmt + ' €'}
-                          </p>
-                          {/* Taux marginal — info secondaire */}
-                          <p className={`text-[7px] mt-1 leading-none
-                            ${active ? 'text-white/45' : 'text-white/18'}`}>
-                            {active ? `${t.rateFmt} €/u` : t.label}
-                          </p>
-                        </div>
-                      );
-                    })}
                   </div>
                 </div>
 
