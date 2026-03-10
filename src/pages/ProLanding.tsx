@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check, ArrowRight, Building2, ChevronDown } from 'lucide-react';
+import { Check, ArrowRight, Building2, ChevronDown, Clock, Banknote, BadgeCheck, FileText, Download } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { getProSession } from '../services/pro.service';
 
@@ -157,41 +157,120 @@ export default function ProLanding() {
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="bg-navy-900 px-4 py-16 sm:py-24 relative overflow-hidden">
-        {/* Fond subtil */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(251,191,36,0.08)_0%,_transparent_60%)] pointer-events-none" />
-        <div className="max-w-4xl mx-auto relative">
-          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-3 py-1 mb-8">
-            <Building2 className="h-3.5 w-3.5 text-amber-400" />
-            <span className="text-xs font-semibold text-white/80">Espace professionnel EDL&amp;DIAGNOSTIC</span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-[1.1] max-w-2xl">
-            L'ERP en 2 minutes,<br className="hidden sm:block" /> conforme et accepté partout
-          </h1>
-          <p className="text-white/75 text-base mt-5 max-w-xl leading-relaxed">
-            Saisissez l'adresse du bien — le document réglementaire complet est généré instantanément à partir des sources officielles Géorisques et IGN. Conforme à l'arrêté du 27/09/2022, accepté par les notaires et agences.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center gap-4">
-            <Button
-              size="lg"
-              onClick={handleCTA}
-              className="bg-amber-400 text-navy-900 hover:bg-amber-300 font-bold h-12 px-8 rounded-lg text-base"
-            >
-              {session ? 'Mon espace pro' : "Accéder à l'espace pro"}
-              <ArrowRight className="h-4 w-4 ml-2" />
-            </Button>
-            <span className="text-white/60 text-sm">Connexion par lien email · Sans abonnement</span>
-          </div>
-          <div className="mt-12 pt-8 border-t border-white/15 grid grid-cols-3 gap-6 max-w-lg">
-            {[
-              { value: '< 2 min', label: 'par ERP généré' },
-              { value: '100 %', label: 'sources État officielles' },
-              { value: '0', label: 'expiration de vos ERPs' },
-            ].map(stat => (
-              <div key={stat.label}>
-                <p className="text-2xl sm:text-3xl font-extrabold text-amber-400">{stat.value}</p>
-                <p className="text-xs text-white/65 mt-1 leading-snug">{stat.label}</p>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(251,191,36,0.1)_0%,_transparent_55%)] pointer-events-none" />
+        <div className="max-w-5xl mx-auto relative">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+            {/* ── Colonne gauche — texte ── */}
+            <div>
+              <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-3 py-1 mb-8">
+                <Building2 className="h-3.5 w-3.5 text-amber-400" />
+                <span className="text-xs font-semibold text-white/80">Espace professionnel EDL&amp;DIAGNOSTIC</span>
               </div>
-            ))}
+              <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-[1.1]">
+                Gagnez du temps.<br />
+                Réduisez vos coûts.<br />
+                <span className="text-amber-400">Restez conformes.</span>
+              </h1>
+              <ul className="mt-8 space-y-4">
+                {[
+                  {
+                    icon: <Clock className="h-5 w-5 text-amber-400 shrink-0" />,
+                    title: 'ERP généré en moins de 2 minutes',
+                    desc: "Arrêtez de passer 20 minutes sur les sites officiels. Adresse saisie → PDF prêt.",
+                  },
+                  {
+                    icon: <Banknote className="h-5 w-5 text-amber-400 shrink-0" />,
+                    title: 'À partir de 3 € HT le document',
+                    desc: "Pas d'abonnement. Vous achetez des ERPs quand vous en avez besoin, rien de plus.",
+                  },
+                  {
+                    icon: <BadgeCheck className="h-5 w-5 text-amber-400 shrink-0" />,
+                    title: 'Accepté sans réserve par les notaires',
+                    desc: "Sources Géorisques & IGN officielles. Conforme à l'arrêté du 27/09/2022.",
+                  },
+                ].map(({ icon, title, desc }) => (
+                  <li key={title} className="flex items-start gap-3">
+                    <span className="mt-0.5">{icon}</span>
+                    <div>
+                      <p className="font-semibold text-white text-sm">{title}</p>
+                      <p className="text-white/60 text-xs mt-0.5 leading-relaxed">{desc}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-10 flex flex-wrap items-center gap-4">
+                <Button
+                  size="lg"
+                  onClick={handleCTA}
+                  className="bg-amber-400 text-navy-900 hover:bg-amber-300 font-bold h-12 px-8 rounded-lg text-base"
+                >
+                  {session ? 'Mon espace pro' : "Accéder à l'espace pro"}
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+                <span className="text-white/55 text-sm">Sans abonnement · Connexion par lien email</span>
+              </div>
+            </div>
+
+            {/* ── Colonne droite — aperçu produit ── */}
+            <div className="hidden lg:block">
+              <div className="bg-white/8 border border-white/12 rounded-2xl p-5 space-y-3">
+
+                {/* Header card */}
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">ERP en cours de génération</span>
+                  <span className="flex items-center gap-1.5 text-xs text-green-400 font-semibold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                    Traitement en cours
+                  </span>
+                </div>
+
+                {/* Adresse */}
+                <div className="bg-white/10 rounded-xl px-4 py-3">
+                  <p className="text-white/45 text-[10px] uppercase tracking-wider mb-0.5">Bien concerné</p>
+                  <p className="text-white font-semibold text-sm">24 rue de la Paix, 75001 Paris</p>
+                </div>
+
+                {/* Métriques */}
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { value: '1:47', label: 'Durée totale', color: 'text-amber-400' },
+                    { value: '3 €', label: 'Coût HT', color: 'text-amber-400' },
+                    { value: '✓', label: 'Conforme 2022', color: 'text-green-400' },
+                  ].map(m => (
+                    <div key={m.label} className="bg-white/10 rounded-xl p-3 text-center">
+                      <p className={`text-xl font-extrabold ${m.color}`}>{m.value}</p>
+                      <p className="text-white/50 text-[10px] mt-0.5">{m.label}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Risques détectés */}
+                <div className="bg-white/10 rounded-xl px-4 py-3">
+                  <p className="text-white/45 text-[10px] uppercase tracking-wider mb-2">Risques analysés</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {['PPRN', 'Séisme zone 2', 'Retrait-gonflement argiles', 'Radon niv. 2', 'AZI'].map(r => (
+                      <span key={r} className="text-[10px] bg-white/15 text-white/75 px-2 py-0.5 rounded-full">{r}</span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Fichier généré */}
+                <div className="bg-white/10 rounded-xl px-4 py-3 flex items-center gap-3">
+                  <div className="w-9 h-9 bg-amber-400/15 rounded-lg flex items-center justify-center shrink-0">
+                    <FileText className="h-4.5 w-4.5 text-amber-400" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white text-xs font-semibold truncate">ERP_24_Rue_de_la_Paix_75001.pdf</p>
+                    <p className="text-white/40 text-[10px]">Prêt à transmettre · 245 Ko</p>
+                  </div>
+                  <Download className="h-4 w-4 text-white/40 shrink-0" />
+                </div>
+
+                <p className="text-white/30 text-[10px] text-center pt-1">Données réelles · Sources Géorisques & IGN · Arrêté 27/09/2022</p>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
