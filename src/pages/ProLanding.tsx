@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check, ArrowRight, Building2, ChevronDown, Clock, Banknote, BadgeCheck, Loader2 } from 'lucide-react';
+import { Check, ArrowRight, Building2, ChevronDown, Clock, Banknote, BadgeCheck, Loader2, Menu, X } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { getProSession, createProCheckoutByQty } from '../services/pro.service';
 
@@ -170,6 +170,16 @@ export default function ProLanding() {
 
   // ── FAQ state ─────────────────────────────────────────────────────────────
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  function scrollTo(id: string, openLeads = false) {
+    setMenuOpen(false);
+    if (openLeads) setShowLeads(true);
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, openLeads ? 150 : 50);
+  }
 
   // ── Waitlist state ────────────────────────────────────────────────────────
   const [wEmail, setWEmail] = useState('');
@@ -203,17 +213,59 @@ export default function ProLanding() {
 
       {/* ── Navbar ───────────────────────────────────────────────────────── */}
       <nav className="sticky top-0 z-40 bg-white border-b border-gray-100 shadow-sm px-4 h-14 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        {/* Logo */}
+        <button onClick={() => scrollTo('hero')} className="flex items-center gap-2 shrink-0">
           <span className="font-black text-navy-900 text-base tracking-tight">EDL<span className="text-amber-500">&</span>DIAGNOSTIC</span>
-          <span className="hidden sm:inline-block text-[10px] font-semibold uppercase tracking-widest text-gray-400 ml-1">Espace Pro</span>
-        </div>
-        <button
-          onClick={handleCTA}
-          className="text-xs font-bold text-navy-900 border border-navy-900 rounded-lg px-3 py-1.5 hover:bg-navy-900 hover:text-white transition-colors"
-        >
-          {session ? 'Mon espace' : 'Se connecter'}
+          <span className="hidden sm:inline-block text-[10px] font-semibold uppercase tracking-widest text-gray-400">Pro</span>
         </button>
+
+        {/* Desktop links */}
+        <div className="hidden sm:flex items-center gap-6 text-sm font-medium text-gray-600">
+          <button onClick={() => scrollTo('hero')} className="hover:text-navy-900 transition-colors">Tarifs</button>
+          <button onClick={() => scrollTo('how')} className="hover:text-navy-900 transition-colors">Comment ça marche</button>
+          <button onClick={() => scrollTo('faq')} className="hover:text-navy-900 transition-colors">FAQ</button>
+          <button onClick={() => scrollTo('leads', true)} className="hover:text-navy-900 transition-colors">Marketplace</button>
+        </div>
+
+        {/* CTA + burger */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleCTA}
+            className="text-xs font-bold text-navy-900 border border-navy-900 rounded-lg px-3 py-1.5 hover:bg-navy-900 hover:text-white transition-colors"
+          >
+            {session ? 'Mon espace' : 'Se connecter'}
+          </button>
+          <button
+            onClick={() => setMenuOpen(v => !v)}
+            className="sm:hidden p-1.5 text-gray-500 hover:text-navy-900 transition-colors"
+            aria-label="Menu"
+          >
+            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </nav>
+
+      {/* ── Menu mobile ──────────────────────────────────────────────────── */}
+      {menuOpen && (
+        <div className="sm:hidden sticky top-14 z-30 bg-white border-b border-gray-100 shadow-md">
+          <div className="flex flex-col divide-y divide-gray-100">
+            {[
+              { label: 'Tarifs', id: 'hero' },
+              { label: 'Comment ça marche', id: 'how' },
+              { label: 'FAQ', id: 'faq' },
+              { label: 'Marketplace', id: 'leads', leads: true },
+            ].map(({ label, id, leads }) => (
+              <button
+                key={id}
+                onClick={() => scrollTo(id, leads)}
+                className="px-5 py-3.5 text-left text-sm font-medium text-gray-700 hover:bg-slate-50 transition-colors"
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section id="hero" className="bg-white border-b border-gray-100 px-4 py-10 sm:py-24">
@@ -370,7 +422,7 @@ export default function ProLanding() {
       </section>
 
       {/* ── Comment ça marche ─────────────────────────────────────────────── */}
-      <section className="px-4 py-14 sm:py-16 bg-slate-50 border-t border-gray-100">
+      <section id="how" className="px-4 py-14 sm:py-16 bg-slate-50 border-t border-gray-100">
         <div className="max-w-3xl mx-auto">
           <div className="mb-10">
             <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-600 mb-2">En 3 étapes</p>
@@ -434,7 +486,7 @@ export default function ProLanding() {
       </section>
 
       {/* ── FAQ ──────────────────────────────────────────────────────────── */}
-      <section className="px-4 py-14 sm:py-16 bg-white border-t border-gray-100">
+      <section id="faq" className="px-4 py-14 sm:py-16 bg-white border-t border-gray-100">
         <div className="max-w-3xl mx-auto">
           <div className="mb-10">
             <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-600 mb-2">FAQ</p>
