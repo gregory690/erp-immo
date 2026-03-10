@@ -201,6 +201,20 @@ export default function ProLanding() {
   return (
     <div className="min-h-screen bg-white">
 
+      {/* ── Navbar ───────────────────────────────────────────────────────── */}
+      <nav className="sticky top-0 z-40 bg-white border-b border-gray-100 shadow-sm px-4 h-14 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="font-black text-navy-900 text-base tracking-tight">EDL<span className="text-amber-500">&</span>DIAGNOSTIC</span>
+          <span className="hidden sm:inline-block text-[10px] font-semibold uppercase tracking-widest text-gray-400 ml-1">Espace Pro</span>
+        </div>
+        <button
+          onClick={handleCTA}
+          className="text-xs font-bold text-navy-900 border border-navy-900 rounded-lg px-3 py-1.5 hover:bg-navy-900 hover:text-white transition-colors"
+        >
+          {session ? 'Mon espace' : 'Se connecter'}
+        </button>
+      </nav>
+
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section id="hero" className="bg-white border-b border-gray-100 px-4 py-10 sm:py-24">
         <div className="max-w-5xl mx-auto">
@@ -211,11 +225,6 @@ export default function ProLanding() {
               <div className="hidden sm:inline-flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-full px-3 py-1 mb-8">
                 <Building2 className="h-3.5 w-3.5 text-amber-500" />
                 <span className="text-xs font-semibold text-amber-700">Espace professionnel EDL&amp;DIAGNOSTIC</span>
-              </div>
-              <div className="sm:hidden mb-4">
-                <span className="inline-block bg-navy-900 text-white text-xs font-bold px-3 py-1.5 rounded-full">
-                  Pour les diagnostiqueurs immobiliers
-                </span>
               </div>
               <h1 className="text-4xl sm:text-5xl font-extrabold text-navy-900 tracking-tight leading-[1.1]">
                 Gagnez du temps.<br />
