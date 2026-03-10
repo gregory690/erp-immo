@@ -212,7 +212,11 @@ export default function ProLanding() {
                 <Building2 className="h-3.5 w-3.5 text-amber-500" />
                 <span className="text-xs font-semibold text-amber-700">Espace professionnel EDL&amp;DIAGNOSTIC</span>
               </div>
-              <p className="sm:hidden text-[10px] font-semibold uppercase tracking-widest text-amber-600 mb-3">ERP Pro · Diagnostiqueurs immobiliers</p>
+              <div className="sm:hidden mb-4">
+                <span className="inline-block bg-navy-900 text-white text-xs font-bold px-3 py-1.5 rounded-full">
+                  Pour les diagnostiqueurs immobiliers
+                </span>
+              </div>
               <h1 className="text-4xl sm:text-5xl font-extrabold text-navy-900 tracking-tight leading-[1.1]">
                 Gagnez du temps.<br />
                 Réduisez vos coûts.<br />
