@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check, ArrowRight, Building2, ChevronDown, Clock, Banknote, BadgeCheck, X } from 'lucide-react';
+import { Check, ArrowRight, Building2, ChevronDown, Clock, Banknote, BadgeCheck } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { getProSession } from '../services/pro.service';
 
@@ -212,67 +212,63 @@ export default function ProLanding() {
               </div>
             </div>
 
-            {/* ── Colonne droite — Avant / Après ── */}
+            {/* ── Colonne droite — Tarif transparent ── */}
             <div className="hidden lg:block space-y-3">
 
-              <p className="text-white/40 text-[11px] uppercase tracking-widest text-center font-semibold">Votre quotidien, avant et après</p>
-
-              {/* Comparison card */}
+              {/* Main pricing card */}
               <div className="rounded-2xl overflow-hidden border border-white/10">
 
-                {/* Avant */}
-                <div className="bg-white/5 px-5 py-5 border-b border-white/10">
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="w-2 h-2 rounded-full bg-red-400 shrink-0" />
-                    <p className="text-xs font-bold text-white/45 uppercase tracking-wider">Méthode actuelle</p>
+                {/* Header */}
+                <div className="bg-white/5 px-5 py-4 border-b border-white/10">
+                  <p className="text-white/40 text-[11px] uppercase tracking-widest font-semibold">Tarif transparent</p>
+                  <p className="text-white font-bold text-base mt-1">Payez uniquement ce que vous produisez</p>
+                </div>
+
+                {/* Pricing rows */}
+                <div className="divide-y divide-white/8">
+                  <div className="bg-white/3 px-5 py-4 flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-white/80">10 ERPs</p>
+                      <p className="text-xs text-white/40 mt-0.5">6 € HT / document</p>
+                    </div>
+                    <p className="text-base font-bold text-white/65">60 € HT</p>
                   </div>
-                  <div className="space-y-3">
-                    {[
-                      '15 à 20 min par ERP sur les sites officiels',
-                      '5+ sources à croiser manuellement',
-                      'Risque d\'oubli ou de données périmées',
-                      'PDF à mettre en forme soi-même',
-                    ].map(item => (
-                      <div key={item} className="flex items-start gap-2.5">
-                        <X className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
-                        <p className="text-sm text-white/50 leading-snug">{item}</p>
-                      </div>
-                    ))}
+                  <div className="bg-white/3 px-5 py-4 flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-white/80">15 ERPs</p>
+                      <p className="text-xs text-white/40 mt-0.5">5 € HT / document</p>
+                    </div>
+                    <p className="text-base font-bold text-white/65">75 € HT</p>
+                  </div>
+                  <div className="bg-amber-400/10 px-5 py-4 flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-amber-400">50 ERPs</p>
+                      <p className="text-xs text-amber-400/60 mt-0.5">3 € HT / document — meilleur tarif</p>
+                    </div>
+                    <p className="text-base font-bold text-amber-400">150 € HT</p>
                   </div>
                 </div>
 
-                {/* Après */}
-                <div className="bg-amber-400/8 px-5 py-5">
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
-                    <p className="text-xs font-bold text-amber-400 uppercase tracking-wider">Avec EDL&amp;DIAGNOSTIC Pro</p>
-                  </div>
-                  <div className="space-y-3">
-                    {[
-                      'ERP complet en moins de 2 minutes',
-                      'Toutes les sources officielles agrégées automatiquement',
-                      'Zéro risque d\'oubli — conformité garantie',
-                      'PDF professionnel prêt à transmettre',
-                    ].map(item => (
-                      <div key={item} className="flex items-start gap-2.5">
-                        <Check className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
-                        <p className="text-sm text-white/85 leading-snug">{item}</p>
-                      </div>
-                    ))}
-                  </div>
+                {/* Guarantees */}
+                <div className="bg-white/5 px-5 py-4 space-y-2.5 border-t border-white/10">
+                  {[
+                    'Sans abonnement — aucune charge fixe',
+                    'ERPs valables sans limite de durée',
+                    'Facture envoyée automatiquement',
+                  ].map(g => (
+                    <div key={g} className="flex items-center gap-2.5">
+                      <Check className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+                      <p className="text-sm text-white/70">{g}</p>
+                    </div>
+                  ))}
                 </div>
+
               </div>
 
-              {/* Stat bilan */}
-              <div className="bg-white/8 border border-white/10 rounded-xl px-5 py-4 flex items-center justify-between">
-                <div>
-                  <p className="text-white/50 text-xs">Pour 20 ERPs / mois</p>
-                  <p className="text-white/30 text-[10px] mt-0.5">soit l'activité d'un indépendant moyen</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-amber-400 font-extrabold text-lg leading-none">+ 6 h</p>
-                  <p className="text-white/50 text-xs mt-0.5">retrouvées chaque mois</p>
-                </div>
+              {/* Trust note */}
+              <div className="bg-white/8 border border-white/10 rounded-xl px-5 py-3.5 flex items-center gap-3">
+                <BadgeCheck className="h-4 w-4 text-amber-400 shrink-0" />
+                <p className="text-white/55 text-xs leading-relaxed">Données officielles Géorisques & IGN · Conformité arrêté 27/09/2022</p>
               </div>
 
             </div>
