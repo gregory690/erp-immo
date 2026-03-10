@@ -227,9 +227,9 @@ export default function ProLanding() {
                 <span className="text-xs font-semibold text-amber-700">Espace professionnel EDL&amp;DIAGNOSTIC</span>
               </div>
               <h1 className="text-4xl sm:text-5xl font-extrabold text-navy-900 tracking-tight leading-[1.1]">
-                Gagnez du temps.<br />
-                Réduisez vos coûts.<br />
-                <span className="text-amber-500">Restez conformes.</span>
+                Vos ERP en 2 minutes.<br />
+                Moins chers.<br />
+                <span className="text-amber-500">Conformes.</span>
               </h1>
               <ul className="mt-8 space-y-4">
                 {[
