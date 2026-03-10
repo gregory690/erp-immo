@@ -680,6 +680,16 @@ export default function ProDashboard() {
         </div>
       </div>
 
+      {/* Footer support */}
+      <div className="max-w-2xl mx-auto px-4 pb-8 text-center">
+        <p className="text-xs text-gray-400">
+          Un problème ?{' '}
+          <a href="mailto:contact@edl-diagnostic-erp.fr" className="underline hover:text-gray-600">
+            contact@edl-diagnostic-erp.fr
+          </a>
+        </p>
+      </div>
+
       {/* Success overlay — affiché après un achat Stripe réussi */}
       {showSuccessOverlay && !loading && account && (
         <div
