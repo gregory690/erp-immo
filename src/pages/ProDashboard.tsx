@@ -58,6 +58,16 @@ export default function ProDashboard() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Reset packLoading si le navigateur restaure la page depuis le bfcache
+  // (retour arrière après redirection vers Stripe)
+  useEffect(() => {
+    function handlePageShow(e: PageTransitionEvent) {
+      if (e.persisted) setPackLoading(null);
+    }
+    window.addEventListener('pageshow', handlePageShow);
+    return () => window.removeEventListener('pageshow', handlePageShow);
+  }, []);
+
   async function loadAccount() {
     if (!session) return;
     setLoading(true);
