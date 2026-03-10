@@ -464,6 +464,8 @@ export default function ProDashboard() {
           </>
         )}
 
+      </div>
+
       {/* Marketplace leads */}
       <div className="max-w-3xl mx-auto px-4 pb-8">
         <div className="bg-navy-900 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center gap-4">
