@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, Printer, ArrowLeft, AlertCircle } from 'lucide-react';
+import { Loader2, Printer, ArrowLeft, AlertCircle, ExternalLink } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { getProSession, getProAccount } from '../services/pro.service';
 import type { ProPack } from '../services/pro.service';
@@ -88,6 +88,17 @@ export default function ProInvoice() {
           Retour
         </button>
         <div className="flex-1" />
+        {pack?.invoice_url && (
+          <a
+            href={pack.invoice_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-navy-900 border border-navy-900 rounded-md px-3 py-1.5 hover:bg-navy-900 hover:text-white transition-colors"
+          >
+            <ExternalLink className="h-3.5 w-3.5" />
+            Facture officielle Stripe
+          </a>
+        )}
         <Button
           size="sm"
           className="bg-navy-900 hover:bg-navy-800 gap-1.5"
@@ -163,11 +174,31 @@ export default function ProInvoice() {
             <p className="text-xs text-gray-400 mt-1">Paiement traité par Stripe · {pack.currency?.toUpperCase() ?? 'EUR'}</p>
           </div>
 
+          {/* Facture officielle Stripe */}
+          {pack.invoice_url && (
+            <div className="bg-blue-50 border border-blue-200 rounded px-4 py-3 mb-6 flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold text-blue-900">Facture fiscale disponible</p>
+                <p className="text-xs text-blue-700 mt-0.5">La facture officielle (HT / TVA / TTC) est générée par Stripe.</p>
+              </div>
+              <a
+                href={pack.invoice_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 inline-flex items-center gap-1.5 text-xs font-bold text-blue-900 border border-blue-300 rounded px-3 py-1.5 hover:bg-blue-900 hover:text-white hover:border-blue-900 transition-colors print:hidden"
+              >
+                <ExternalLink className="h-3 w-3" />
+                Ouvrir la facture
+              </a>
+            </div>
+          )}
+
           {/* Mentions */}
           <div className="border-t border-gray-100 pt-6">
             <p className="text-xs text-gray-400 leading-relaxed">
-              Ce document est un reçu de paiement électronique. Il ne constitue pas une facture au sens fiscal du terme.
-              Pour toute question : <span className="text-gray-600">contact@edl-diagnostic-erp.fr</span>
+              {pack.invoice_url
+                ? "Ce document est un résumé de votre achat. La facture fiscale officielle (avec décomposition HT/TVA/TTC) est accessible via le bouton ci-dessus."
+                : "Ce document est un reçu de paiement électronique. Pour toute question : contact@edl-diagnostic-erp.fr"}
             </p>
           </div>
         </div>
