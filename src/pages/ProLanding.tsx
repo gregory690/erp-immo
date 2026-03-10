@@ -409,7 +409,7 @@ export default function ProLanding() {
       </section>
 
       {/* ── 3 points clés ────────────────────────────────────────────────── */}
-      <section className="hidden sm:block px-4 py-14 sm:py-16 bg-slate-50 border-t border-gray-100">
+      <section className="hidden px-4 py-14 sm:py-16 bg-slate-50 border-t border-gray-100">
         <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12">
           {[
             {
@@ -462,7 +462,7 @@ export default function ProLanding() {
       </section>
 
       {/* ── Avis ─────────────────────────────────────────────────────────── */}
-      <section className="hidden sm:block px-4 py-14 sm:py-16 bg-slate-50 border-t border-gray-100">
+      <section className="hidden px-4 py-14 sm:py-16 bg-slate-50 border-t border-gray-100">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
             <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-600 mb-2">Retours partenaires</p>
