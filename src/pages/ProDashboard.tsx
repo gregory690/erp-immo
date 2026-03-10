@@ -341,6 +341,8 @@ export default function ProDashboard() {
                       {GRAD_TIERS.map(t => {
                         const active = buyQty >= t.from;
                         const partial = active && buyQty < t.to;
+                        const inTier = active ? Math.min(buyQty, t.to) - t.from + 1 : 0;
+                        const contribution = inTier > 0 ? Math.round(inTier * t.rate) : 0;
                         return (
                           <div
                             key={t.from}
@@ -348,7 +350,9 @@ export default function ProDashboard() {
                             className={`rounded px-1 py-1.5 text-center transition-colors cursor-pointer hover:opacity-80 ${partial ? 'bg-navy-900/15 border border-navy-900/20' : active ? 'bg-navy-900/8' : 'bg-gray-100'}`}
                           >
                             <p className={`text-[9px] font-bold leading-none ${active ? 'text-navy-900' : 'text-gray-300'}`}>{t.rateFmt}€</p>
-                            <p className={`text-[7px] mt-1 leading-none ${active ? 'text-gray-500' : 'text-gray-300'}`}>{t.label}</p>
+                            <p className={`text-[7px] mt-1 leading-none ${active ? 'text-navy-900/60' : 'text-gray-300'}`}>
+                              {active ? `${contribution} €` : t.label}
+                            </p>
                           </div>
                         );
                       })}

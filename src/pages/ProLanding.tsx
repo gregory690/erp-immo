@@ -304,6 +304,8 @@ export default function ProLanding() {
                     {GRAD_TIERS.map(t => {
                       const active = sliderQty >= t.from;
                       const partial = active && sliderQty < t.to;
+                      const inTier = active ? Math.min(sliderQty, t.to) - t.from + 1 : 0;
+                      const contribution = inTier > 0 ? Math.round(inTier * t.rate) : 0;
                       return (
                         <div
                           key={t.from}
@@ -311,7 +313,9 @@ export default function ProLanding() {
                           className={`rounded px-1 py-1.5 text-center transition-colors cursor-pointer hover:opacity-80 ${partial ? 'bg-amber-400/25 border border-amber-400/30' : active ? 'bg-amber-400/15' : 'bg-white/5'}`}
                         >
                           <p className={`text-[9px] font-bold leading-none ${active ? 'text-amber-400' : 'text-white/20'}`}>{t.rateFmt}€</p>
-                          <p className={`text-[7px] mt-1 leading-none ${active ? 'text-white/45' : 'text-white/15'}`}>{t.label}</p>
+                          <p className={`text-[7px] mt-1 leading-none ${active ? 'text-amber-400/70' : 'text-white/15'}`}>
+                            {active ? `${contribution} €` : t.label}
+                          </p>
                         </div>
                       );
                     })}
