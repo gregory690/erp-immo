@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Zap, Plus, ExternalLink, Loader2, AlertCircle, LogOut,
   CreditCard, Check, ChevronRight, FileText, Search, X,
-  Receipt, ChevronDown, Clock,
+  Receipt, ChevronDown, Clock, BarChart2,
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -75,8 +75,10 @@ export default function ProDashboard() {
   const [buyQty, setBuyQty] = useState(15);
   const [leadQty, setLeadQty] = useState(20);
   const [leadContactQty, setLeadContactQty] = useState(501);
-
-  const packSuccess = new URLSearchParams(window.location.search).get('pack_success') === '1';
+  const [showSuccessOverlay, setShowSuccessOverlay] = useState(
+    () => new URLSearchParams(window.location.search).get('pack_success') === '1'
+  );
+  const [showAnalytics, setShowAnalytics] = useState(false);
 
   useEffect(() => {
     if (!session) {
@@ -151,6 +153,31 @@ export default function ProDashboard() {
     }).length;
   }, [account]);
 
+  const analytics = useMemo(() => {
+    if (!account) return null;
+    const totalBought = account.packs.reduce((s, p) => s + p.qty, 0);
+    const totalSpentCents = account.packs.reduce((s, p) => s + (p.amount_ttc ?? 0), 0);
+    const now = new Date();
+    const months: { label: string; key: string; count: number }[] = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      const label = d.toLocaleDateString('fr-FR', { month: 'short' });
+      months.push({ label, key, count: 0 });
+    }
+    for (const erp of account.erps) {
+      if (!erp.date) continue;
+      const d = new Date(erp.date);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      const m = months.find(mo => mo.key === key);
+      if (m) m.count++;
+    }
+    const maxCount = Math.max(...months.map(m => m.count), 1);
+    const thisMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    const thisMonth = months.find(m => m.key === thisMonthKey)?.count ?? 0;
+    return { totalBought, totalSpentCents, months, maxCount, thisMonth };
+  }, [account]);
+
   if (!session) return null;
 
   return (
@@ -176,15 +203,6 @@ export default function ProDashboard() {
 
       <div className="max-w-3xl mx-auto px-4 py-6 space-y-5">
 
-        {/* Success banner */}
-        {packSuccess && (
-          <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center gap-3">
-            <Check className="h-5 w-5 text-green-600 shrink-0" />
-            <p className="text-sm font-semibold text-green-800">
-              Paiement confirmé — vos crédits ont été ajoutés !
-            </p>
-          </div>
-        )}
 
         {/* Error */}
         {error && (
@@ -421,6 +439,56 @@ export default function ProDashboard() {
               </div>
             )}
 
+            {/* Analytics */}
+            {analytics && account.packs.length > 0 && (
+              <div className="bg-white border border-border rounded-xl overflow-hidden">
+                <button
+                  onClick={() => setShowAnalytics(v => !v)}
+                  className="w-full px-5 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors"
+                >
+                  <div className="flex items-center gap-2">
+                    <BarChart2 className="h-4 w-4 text-gray-400" />
+                    <p className="text-sm font-semibold text-gray-900">Statistiques</p>
+                  </div>
+                  <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${showAnalytics ? 'rotate-180' : ''}`} />
+                </button>
+                {showAnalytics && (
+                  <div className="border-t border-gray-100 px-5 py-4 space-y-4">
+                    <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                      <div className="bg-slate-50 rounded-xl p-3 text-center">
+                        <p className="text-xl sm:text-2xl font-extrabold text-navy-900">{account.used}</p>
+                        <p className="text-[10px] text-gray-500 mt-0.5">ERPs générés</p>
+                      </div>
+                      <div className="bg-slate-50 rounded-xl p-3 text-center">
+                        <p className="text-xl sm:text-2xl font-extrabold text-navy-900">{analytics.thisMonth}</p>
+                        <p className="text-[10px] text-gray-500 mt-0.5">Ce mois-ci</p>
+                      </div>
+                      <div className="bg-slate-50 rounded-xl p-3 text-center">
+                        <p className="text-xl sm:text-2xl font-extrabold text-navy-900">
+                          {analytics.totalSpentCents > 0 ? `${Math.round(analytics.totalSpentCents / 100)} €` : '—'}
+                        </p>
+                        <p className="text-[10px] text-gray-500 mt-0.5">Dépensé TTC</p>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3">Activité récente</p>
+                      <div className="flex items-end gap-1.5 h-14">
+                        {analytics.months.map(m => (
+                          <div key={m.key} className="flex-1 flex flex-col items-center justify-end gap-1">
+                            <div
+                              className={`w-full rounded-sm transition-all ${m.count > 0 ? 'bg-navy-900/70' : 'bg-gray-100'}`}
+                              style={{ height: m.count > 0 ? `${Math.max(Math.round((m.count / analytics.maxCount) * 40), 4)}px` : '2px' }}
+                            />
+                            <span className="text-[8px] text-gray-400 shrink-0">{m.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* ERP List */}
             <div className="bg-white border border-border rounded-xl overflow-hidden">
               <div className="px-5 py-4 border-b border-gray-100 space-y-3">
@@ -639,5 +707,49 @@ export default function ProDashboard() {
       </div>
 
     </div>
+
+    {/* Success overlay — affiché après un achat Stripe réussi */}
+    {showSuccessOverlay && !loading && account && (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4"
+        onClick={() => setShowSuccessOverlay(false)}
+      >
+        <div
+          className="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-8 text-center space-y-5"
+          onClick={e => e.stopPropagation()}
+        >
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+            <Check className="h-8 w-8 text-green-600" />
+          </div>
+          <div className="space-y-2">
+            <p className="text-xl font-extrabold text-gray-900">Paiement confirmé !</p>
+            {account.packs[0] && (
+              <p className="text-3xl font-black text-navy-900">
+                +{account.packs[0].qty}
+                <span className="text-base font-normal text-gray-500 ml-1.5">
+                  crédit{account.packs[0].qty > 1 ? 's' : ''} ERP
+                </span>
+              </p>
+            )}
+            <p className="text-sm text-gray-500">Vos crédits sont disponibles immédiatement.</p>
+          </div>
+          <div className="flex flex-col gap-2 pt-1">
+            <Button
+              onClick={() => { setShowSuccessOverlay(false); navigate('/generer'); }}
+              className="w-full bg-navy-900 hover:bg-navy-800 font-bold"
+            >
+              <Plus className="h-4 w-4 mr-1.5" />
+              Générer un ERP maintenant
+            </Button>
+            <button
+              onClick={() => setShowSuccessOverlay(false)}
+              className="text-sm text-gray-400 hover:text-gray-600 py-1"
+            >
+              Fermer
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
   );
 }

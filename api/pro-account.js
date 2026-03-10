@@ -122,6 +122,30 @@ export default async function handler(req, res) {
         }
       })).catch(() => {});
     }
+
+    // ── Email crédits faibles (non-bloquant) ──────────────────────────────
+    if (credits > 0 && credits <= 3) {
+      const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : 'https://edl-diagnostic-erp.fr';
+      (async () => {
+        try {
+          const lowKey = `pro:notified:low-credits:${email}`;
+          const alreadyNotified = await kv.get(lowKey);
+          if (alreadyNotified) return;
+          await resend.emails.send({
+            from: `EDL&DIAGNOSTIC Pro <${fromEmail}>`,
+            to: email,
+            subject: `⚡ Plus que ${credits} crédit${credits > 1 ? 's' : ''} ERP disponible${credits > 1 ? 's' : ''}`,
+            html: `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"></head><body style="font-family:Arial,sans-serif;background:#f4f4f5;padding:32px 16px;"><div style="max-width:520px;margin:0 auto;background:#fff;border-top:3px solid #f59e0b;padding:32px;"><p style="margin:0 0 6px;font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:2px;">Crédits faibles</p><p style="margin:0 0 20px;font-size:22px;font-weight:800;color:#111827;">Plus que ${credits} crédit${credits > 1 ? 's' : ''} ERP</p><div style="border:1px solid #fbbf24;background:#fffbeb;padding:14px 16px;margin-bottom:20px;"><p style="margin:0;font-size:14px;color:#92400e;">Ne vous retrouvez pas à court au mauvais moment. Rechargez votre compte maintenant.</p></div><p style="margin-top:24px;"><a href="${baseUrl}/pro/dashboard" style="background:#1a3a5c;color:#fff;text-decoration:none;padding:12px 24px;font-size:14px;font-weight:700;display:inline-block;">Acheter des crédits &rarr;</a></p><p style="font-size:11px;color:#9ca3af;margin-top:24px;">EDL&amp;DIAGNOSTIC · <a href="mailto:contact@edl-diagnostic-erp.fr" style="color:#6b7280;">contact@edl-diagnostic-erp.fr</a></p></div></body></html>`,
+          });
+          // TTL 7j — re-notifiera si les crédits sont toujours faibles dans une semaine
+          await kv.set(lowKey, '1', { ex: 60 * 60 * 24 * 7 });
+        } catch (err) {
+          console.error('pro-account: low-credits email error:', err?.message);
+        }
+      })().catch(() => {});
+    }
   }
 
   return res.status(200).json({ email, credits, used, packs, erps });
