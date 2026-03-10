@@ -473,22 +473,6 @@ export default function ProLanding() {
         </div>
       </section>
 
-      {/* ── CTA final ────────────────────────────────────────────────────── */}
-      <section className="bg-navy-900 px-4 py-14 sm:py-16">
-        <div className="max-w-xl mx-auto text-center space-y-5">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white">Prêt à rejoindre l'espace pro ?</h2>
-          <p className="text-white/70 text-sm">Connexion instantanée par lien email. Aucun mot de passe.</p>
-          <Button
-            size="lg"
-            onClick={handleCTA}
-            className="bg-amber-400 text-navy-900 hover:bg-amber-300 font-bold h-11 px-8 rounded-lg"
-          >
-            {session ? 'Accéder à mon espace' : "Créer mon espace pro"}
-            <ArrowRight className="h-4 w-4 ml-2" />
-          </Button>
-        </div>
-      </section>
-
       {/* ── Marketplace Leads ─────────────────────────────────────────────── */}
       <section id="leads" className="bg-white border-t border-gray-100">
         <div className="max-w-4xl mx-auto">
@@ -639,6 +623,22 @@ export default function ProLanding() {
 
           </div>
           </div>}
+        </div>
+      </section>
+
+      {/* ── CTA final ────────────────────────────────────────────────────── */}
+      <section className="bg-navy-900 px-4 py-14 sm:py-16">
+        <div className="max-w-xl mx-auto text-center space-y-5">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white">Prêt à rejoindre l'espace pro ?</h2>
+          <p className="text-white/70 text-sm">Connexion instantanée par lien email. Aucun mot de passe.</p>
+          <Button
+            size="lg"
+            onClick={handleCTA}
+            className="bg-amber-400 text-navy-900 hover:bg-amber-300 font-bold h-11 px-8 rounded-lg"
+          >
+            {session ? 'Accéder à mon espace' : "Créer mon espace pro"}
+            <ArrowRight className="h-4 w-4 ml-2" />
+          </Button>
         </div>
       </section>
 
