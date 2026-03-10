@@ -126,15 +126,21 @@ export default function ProLanding() {
   const [sliderQty, setSliderQty] = useState(20);
 
   const PACKS = [
-    { name: 'Découverte', erps: 10, totalHT: 60, pricePerErp: 6 },
-    { name: 'Pro', erps: 15, totalHT: 75, pricePerErp: 5 },
-    { name: 'Pro+', erps: 50, totalHT: 150, pricePerErp: 3 },
+    { name: 'Découverte', erps: 10,  totalHT: 60,  pricePerErp: 6   },
+    { name: 'Pro',        erps: 15,  totalHT: 75,  pricePerErp: 5   },
+    { name: 'Pro+',       erps: 50,  totalHT: 150, pricePerErp: 3   },
+    { name: 'Expert',     erps: 100, totalHT: 250, pricePerErp: 2.5 },
+    { name: 'Premium',    erps: 150, totalHT: 300, pricePerErp: 2   },
+    { name: 'Élite',      erps: 250, totalHT: 375, pricePerErp: 1.5 },
   ];
 
   function getRecommendedPack(qty: number) {
-    if (qty <= 10) return PACKS[0];
-    if (qty <= 15) return PACKS[1];
-    return PACKS[2];
+    if (qty <= 10)  return PACKS[0];
+    if (qty <= 15)  return PACKS[1];
+    if (qty <= 50)  return PACKS[2];
+    if (qty <= 100) return PACKS[3];
+    if (qty <= 150) return PACKS[4];
+    return PACKS[5];
   }
 
   const recommendedPack = getRecommendedPack(sliderQty);
@@ -236,7 +242,7 @@ export default function ProLanding() {
 
                 {/* Header + slider */}
                 <div className="bg-white/5 px-5 pt-5 pb-4">
-                  <p className="text-white/40 text-[11px] uppercase tracking-widest font-semibold mb-3">Simulez votre tarif</p>
+                  <p className="text-white/60 text-[11px] uppercase tracking-widest font-semibold mb-3">Simulez votre tarif</p>
                   <div className="flex items-baseline justify-between mb-3">
                     <p className="text-white font-semibold text-sm">Combien d'ERPs par mois ?</p>
                     <p className="text-amber-400 font-extrabold text-2xl leading-none">{sliderQty}</p>
@@ -244,35 +250,35 @@ export default function ProLanding() {
                   <input
                     type="range"
                     min={1}
-                    max={60}
+                    max={250}
                     value={sliderQty}
                     onChange={e => setSliderQty(Number(e.target.value))}
                     className="w-full cursor-pointer accent-amber-400"
                   />
-                  <div className="flex justify-between text-[10px] text-white/30 mt-1">
+                  <div className="flex justify-between text-[10px] text-white/50 mt-1">
                     <span>1 ERP</span>
-                    <span>60 ERPs</span>
+                    <span>250 ERPs</span>
                   </div>
                 </div>
 
                 {/* Result */}
                 <div className="border-t border-white/10 px-5 py-5 bg-amber-400/8">
-                  <p className="text-white/45 text-xs mb-4">
+                  <p className="text-white/65 text-xs mb-4">
                     Pack recommandé : <span className="text-white font-semibold">{recommendedPack.name}</span>
                     {' '}· {recommendedPack.erps} ERPs
                   </p>
                   <div className="flex items-end justify-between">
                     <div>
                       <p className="text-amber-400 font-extrabold text-4xl leading-none">{recommendedPack.pricePerErp}€</p>
-                      <p className="text-white/50 text-xs mt-1">HT / ERP</p>
+                      <p className="text-white/70 text-xs mt-1">HT / ERP</p>
                     </div>
                     <div className="text-right">
                       <p className="text-white font-bold text-xl">{recommendedPack.totalHT} € HT</p>
-                      <p className="text-white/40 text-xs mt-0.5">soit {(recommendedPack.totalHT * 1.2).toFixed(0)} € TTC</p>
+                      <p className="text-white/60 text-xs mt-0.5">soit {(recommendedPack.totalHT * 1.2).toFixed(0)} € TTC</p>
                     </div>
                   </div>
                   {recommendedPack.erps > sliderQty && (
-                    <p className="text-white/40 text-[11px] mt-4 leading-relaxed">
+                    <p className="text-white/60 text-[11px] mt-4 leading-relaxed">
                       +{recommendedPack.erps - sliderQty} ERPs en réserve pour les prochains mois — sans date limite.
                     </p>
                   )}
@@ -287,7 +293,7 @@ export default function ProLanding() {
                   ].map(g => (
                     <div key={g} className="flex items-center gap-2.5">
                       <Check className="h-3.5 w-3.5 text-amber-400 shrink-0" />
-                      <p className="text-xs text-white/65">{g}</p>
+                      <p className="text-xs text-white/80">{g}</p>
                     </div>
                   ))}
                 </div>
@@ -297,7 +303,7 @@ export default function ProLanding() {
               {/* Trust note */}
               <div className="bg-white/8 border border-white/10 rounded-xl px-5 py-3.5 flex items-center gap-3">
                 <BadgeCheck className="h-4 w-4 text-amber-400 shrink-0" />
-                <p className="text-white/55 text-xs">Données officielles Géorisques & IGN · Conformité arrêté 27/09/2022</p>
+                <p className="text-white/70 text-xs">Données officielles Géorisques & IGN · Conformité arrêté 27/09/2022</p>
               </div>
 
             </div>
