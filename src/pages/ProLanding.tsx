@@ -202,16 +202,17 @@ export default function ProLanding() {
     <div className="min-h-screen bg-white">
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section id="hero" className="bg-white border-b border-gray-100 px-4 py-16 sm:py-24">
+      <section id="hero" className="bg-white border-b border-gray-100 px-4 py-10 sm:py-24">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
             {/* ── Colonne gauche — texte ── */}
             <div>
-              <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-full px-3 py-1 mb-8">
+              <div className="hidden sm:inline-flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-full px-3 py-1 mb-8">
                 <Building2 className="h-3.5 w-3.5 text-amber-500" />
                 <span className="text-xs font-semibold text-amber-700">Espace professionnel EDL&amp;DIAGNOSTIC</span>
               </div>
+              <p className="sm:hidden text-[10px] font-semibold uppercase tracking-widest text-amber-600 mb-3">ERP Pro · Diagnostiqueurs immobiliers</p>
               <h1 className="text-4xl sm:text-5xl font-extrabold text-navy-900 tracking-tight leading-[1.1]">
                 Gagnez du temps.<br />
                 Réduisez vos coûts.<br />
@@ -244,16 +245,16 @@ export default function ProLanding() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-10 flex flex-wrap items-center gap-4">
+              <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-4">
                 <Button
                   size="lg"
                   onClick={handleCTA}
-                  className="bg-navy-900 text-white hover:bg-navy-900/90 font-bold h-12 px-8 rounded-lg text-base"
+                  className="w-full sm:w-auto bg-navy-900 text-white hover:bg-navy-900/90 font-bold h-12 px-8 rounded-lg text-base"
                 >
                   {session ? 'Mon espace pro' : "Accéder à l'espace pro"}
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
-                <span className="text-gray-600 text-sm">Sans abonnement · Connexion par lien email</span>
+                <span className="text-gray-500 text-xs sm:text-sm text-center sm:text-left">Sans abonnement · Connexion par lien email</span>
               </div>
             </div>
 
