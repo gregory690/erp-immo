@@ -4,15 +4,6 @@ import { Check, ArrowRight, Building2, ChevronDown, Clock, Banknote, BadgeCheck 
 import { Button } from '../components/ui/button';
 import { getProSession } from '../services/pro.service';
 
-const PACK_FEATURES_BASE = [
-  'ERPs sans date limite d\'utilisation',
-  'PDF conforme arrêté 27/09/2022',
-  'Données officielles Géorisques & IGN',
-  'Historique et retéléchargement',
-];
-
-const PACK_15_EXTRAS = ['Facture automatique par email', 'Support par email'];
-const PACK_50_EXTRAS = ['Meilleur tarif au document', 'Facture automatique par email', 'Support prioritaire'];
 
 const REVIEWS = [
   {
