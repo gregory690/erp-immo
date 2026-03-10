@@ -67,6 +67,7 @@ export default function ProDashboard() {
     () => new URLSearchParams(window.location.search).get('pack_success') === '1'
   );
   const [showAnalytics, setShowAnalytics] = useState(false);
+  const [showMarketplace, setShowMarketplace] = useState(false);
 
   useEffect(() => {
     if (!session) {
@@ -609,16 +610,22 @@ export default function ProDashboard() {
       <div className="max-w-3xl mx-auto px-4 pb-8">
         <div className="bg-white border border-border rounded-xl overflow-hidden">
 
-          {/* Header */}
-          <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
-            <div>
-              <p className="text-sm font-semibold text-gray-900">Marketplace — Leads diagnostics</p>
-              <p className="text-xs text-amber-600 font-medium">Lancement en cours · Réservez votre volume</p>
+          {/* Header — cliquable */}
+          <button
+            onClick={() => setShowMarketplace(v => !v)}
+            className="w-full px-5 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
+              <div className="text-left">
+                <p className="text-sm font-semibold text-gray-900">Marketplace — Leads diagnostics</p>
+                <p className="text-xs text-amber-600 font-medium">Lancement en cours · Réservez votre volume</p>
+              </div>
             </div>
-          </div>
+            <ChevronDown className={`h-4 w-4 text-gray-400 shrink-0 transition-transform ${showMarketplace ? 'rotate-180' : ''}`} />
+          </button>
 
-          <div className="px-5 py-5 space-y-5">
+          {showMarketplace && <div className="border-t border-gray-100 px-5 py-5 space-y-5">
             <p className="text-xs text-gray-500 leading-relaxed">
               Recevez des demandes qualifiées dans votre secteur — particuliers vendeurs, agences, notaires. Indiquez votre volume et votre zone.
             </p>
@@ -669,7 +676,7 @@ export default function ProDashboard() {
               Sans engagement · Tarification sur devis · Réponse sous 24h
             </p>
 
-          </div>
+          </div>}
         </div>
       </div>
 
