@@ -237,19 +237,26 @@ export default function Home() {
     const mount = document.getElementById('ti-hero-mount');
     if (!mount) return;
 
-    // Attend spécifiquement un élément TrustIndex (classe ti-*) — ignore les éléments injectés par extensions
-    const observer = new MutationObserver(() => {
-      const widget = document.body.querySelector<HTMLElement>('[class*="ti-widget"],[class*="trustindex-widget"]');
-      if (widget && widget.parentElement === document.body) {
-        mount.appendChild(widget);
-        observer.disconnect();
+    // Surveille les ajouts dans le body — dès que Trustindex insère son widget, on le déplace
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        for (const node of Array.from(mutation.addedNodes)) {
+          if (
+            node instanceof HTMLElement &&
+            node.tagName !== 'SCRIPT' &&
+            node.id !== 'root'
+          ) {
+            mount.appendChild(node);
+            observer.disconnect();
+            return;
+          }
+        }
       }
     });
-    observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.body, { childList: true });
 
     const script = document.createElement('script');
     script.src = 'https://cdn.trustindex.io/loader.js?6aad671652ea80386376f58365a';
-    script.defer = true;
     script.async = true;
     document.body.appendChild(script);
 
