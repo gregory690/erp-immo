@@ -237,8 +237,7 @@ export default function Home() {
     const mount = document.getElementById('ti-hero-mount');
     if (!mount) return;
 
-    // Snapshot des éléments body au moment du mount React (inclut root, scripts ET extensions déjà injectées)
-    // On ne déplacera QUE les éléments apparus APRÈS ce snapshot → uniquement TrustIndex
+    // Snapshot au mount React → inclut extensions déjà injectées, mais PAS TrustIndex (pas encore chargé)
     const snapshot = new Set(Array.from(document.body.children));
 
     const findAndMove = () => {
@@ -251,14 +250,21 @@ export default function Home() {
       return false;
     };
 
-    if (findAndMove()) return;
-
     const observer = new MutationObserver(() => {
       if (findAndMove()) observer.disconnect();
     });
     observer.observe(document.body, { childList: true });
 
-    return () => observer.disconnect();
+    // Script chargé APRÈS le snapshot — TrustIndex injecte après → capturé par l'observer
+    const script = document.createElement('script');
+    script.src = 'https://cdn.trustindex.io/loader.js?8576f9b665ce87505f269a0b7bc';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      observer.disconnect();
+      if (document.body.contains(script)) document.body.removeChild(script);
+    };
   }, []);
 
   useEffect(() => {
