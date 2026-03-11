@@ -238,9 +238,9 @@ export default async function handler(req, res) {
       console.error('Webhook: email index error:', err.message);
     }
 
-    // Générer le PDF puis envoyer l'email avec pièce jointe
-    // Si le PDF échoue, on ne marque PAS email_sent → Preview.tsx reprend en fallback
-    if (process.env.RESEND_API_KEY && process.env.PDFSHIFT_API_KEY && existingDoc?.bien && existingDoc?.metadata) {
+    // Générer PDF (2 tentatives) puis envoyer email
+    // Si PDF échoue après retries → email sans PDF + alerte admin + email_sent:true (pas de doublon)
+    if (process.env.RESEND_API_KEY && existingDoc?.bien && existingDoc?.metadata) {
       try {
         const { buildEmailHTML } = await import('./_email-template.js');
         const { generatePDFAttachment, buildPDFFilename } = await import('./_generate-pdf.js');
@@ -253,36 +253,50 @@ export default async function handler(req, res) {
         const dateRealisation = new Date(existingDoc.metadata.date_realisation).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
         const dateExpiration = new Date(existingDoc.metadata.validite_jusqu_au).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
 
-        // Génération PDF — timeout 45s (webhook maxDuration: 60s)
-        const pdfAttachment = await Promise.race([
-          generatePDFAttachment(printUrl, buildPDFFilename(existingDoc)),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('PDF timeout')), 45000)),
-        ]);
+        const emailPayload = {
+          bien: existingDoc.bien,
+          metadata: existingDoc.metadata,
+          redownloadUrl,
+          catnatCount: existingDoc.catnat?.length ?? 0,
+          dateRealisation,
+          dateExpiration,
+        };
 
+        // Tentatives PDF (max 2, timeout 40s chacune, 3s entre les deux)
+        let pdfAttachment = null;
+        let pdfErrorMsg = null;
+        if (process.env.PDFSHIFT_API_KEY) {
+          for (let attempt = 1; attempt <= 2; attempt++) {
+            try {
+              pdfAttachment = await Promise.race([
+                generatePDFAttachment(printUrl, buildPDFFilename(existingDoc)),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('PDF timeout')), 40000)),
+              ]);
+              pdfErrorMsg = null;
+              break;
+            } catch (err) {
+              pdfErrorMsg = err.message;
+              console.warn(`Webhook: PDF tentative ${attempt}/2 échouée: ${err.message}`);
+              if (attempt < 2) await new Promise(r => setTimeout(r, 3000));
+            }
+          }
+        }
+
+        // Envoi email (avec ou sans PDF selon résultat)
+        const hasPdf = !!pdfAttachment;
         await fetch('https://api.resend.com/emails', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
-          },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${process.env.RESEND_API_KEY}` },
           body: JSON.stringify({
             from: `EDL&DIAGNOSTIC <${process.env.RESEND_FROM_EMAIL}>`,
             to: customerEmail,
             subject: `Votre ERP est prêt — ${existingDoc.bien.adresse_complete}`,
-            html: buildEmailHTML({
-              bien: existingDoc.bien,
-              metadata: existingDoc.metadata,
-              redownloadUrl,
-              catnatCount: existingDoc.catnat?.length ?? 0,
-              dateRealisation,
-              dateExpiration,
-              hasPdf: true,
-            }),
-            attachments: [pdfAttachment],
+            html: buildEmailHTML({ ...emailPayload, hasPdf }),
+            ...(hasPdf ? { attachments: [pdfAttachment] } : {}),
           }),
         });
 
-        // Marquer email_sent → Preview.tsx skippera (pas de doublon)
+        // Marquer email_sent (dans tous les cas → pas de doublon)
         await kv.set(erpRef, JSON.stringify({
           ...existingDoc,
           paid: true,
@@ -290,13 +304,27 @@ export default async function handler(req, res) {
           email_sent: true,
         }), { ex: 60 * 60 * 24 * 180 });
 
-        console.log(`Webhook: email + PDF envoyé à ${customerEmail} pour ${erpRef}`);
+        if (hasPdf) {
+          console.log(`Webhook: email + PDF envoyé à ${customerEmail} pour ${erpRef}`);
+        } else {
+          // Alerte admin si PDF manquant
+          console.error(`Webhook: PDF échoué (${pdfErrorMsg}), email sans PDF envoyé à ${customerEmail}`);
+          await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${process.env.RESEND_API_KEY}` },
+            body: JSON.stringify({
+              from: `EDL&DIAGNOSTIC <${process.env.RESEND_FROM_EMAIL}>`,
+              to: process.env.RESEND_FROM_EMAIL,
+              subject: `⚠️ PDF manquant — ref ${erpRef}`,
+              html: `<p>La génération PDF a échoué après 2 tentatives pour la commande <strong>${erpRef}</strong>.</p><p>Email envoyé à <strong>${customerEmail}</strong> sans PDF (lien de retéléchargement inclus).</p><p>Erreur : ${pdfErrorMsg}</p><p><a href="${redownloadUrl}">Voir le document →</a></p>`,
+            }),
+          }).catch(() => {});
+        }
       } catch (emailErr) {
-        console.error('Webhook: email/PDF error:', emailErr.message);
-        // email_sent reste false → Preview.tsx tentera en fallback avec PDF
+        console.error('Webhook: erreur critique envoi email:', emailErr.message);
       }
     } else {
-      console.log(`Webhook: email délégué à send-erp-email (clés manquantes ou doc incomplet)`);
+      console.log(`Webhook: email délégué à send-erp-email (RESEND_API_KEY absent ou doc incomplet)`);
     }
   } catch (err) {
     console.error('Webhook: KV update error:', err.message);
