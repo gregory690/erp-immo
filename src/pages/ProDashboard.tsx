@@ -698,6 +698,10 @@ export default function ProDashboard() {
           <a href="mailto:contact@edl-diagnostic-erp.fr" className="underline hover:text-gray-600">
             contact@edl-diagnostic-erp.fr
           </a>
+          {' · '}
+          <button onClick={() => navigate('/')} className="underline hover:text-gray-600">
+            Site grand public
+          </button>
         </p>
       </div>
 

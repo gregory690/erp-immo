@@ -99,6 +99,14 @@ export default function ProLogin() {
                   Découvrir l'offre pro
                 </button>
               </p>
+              <p className="text-xs text-gray-300 text-center">
+                <button
+                  onClick={() => navigate('/')}
+                  className="hover:text-gray-500 transition-colors"
+                >
+                  ← Retour au site grand public
+                </button>
+              </p>
             </>
           ) : (
             <div className="text-center space-y-4">
