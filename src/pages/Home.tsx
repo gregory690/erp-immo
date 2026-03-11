@@ -244,6 +244,10 @@ export default function Home() {
       for (const child of Array.from(document.body.children)) {
         if (!snapshot.has(child) && child instanceof HTMLElement && child.tagName !== 'SCRIPT') {
           mount.appendChild(child);
+          // Cache le message d'erreur TrustIndex si le widget est introuvable
+          if (child.textContent?.includes('Widget not found')) {
+            child.style.display = 'none';
+          }
           return true;
         }
       }
