@@ -60,6 +60,7 @@ export default function ProDashboard() {
   const [showPacks, setShowPacks] = useState(false);
   const [showPurchases, setShowPurchases] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [visibleErpCount, setVisibleErpCount] = useState(5);
   const [buyQty, setBuyQty] = useState(15);
   const [leadQty, setLeadQty] = useState(20);
   const [leadDept, setLeadDept] = useState('');
@@ -537,50 +538,60 @@ export default function ProDashboard() {
                     Effacer la recherche
                   </button>
                 </div>
-              ) : (
-                <div className="divide-y divide-gray-100">
-                  {filteredErps.map(erp => {
-                    const daysLeft = getDaysLeft(erp.validite);
-                    const isExpired = daysLeft !== null && daysLeft <= 0;
-                    const isNearExpiry = daysLeft !== null && daysLeft > 0 && daysLeft <= 30;
-
-                    return (
-                      <div key={erp.ref} className="px-5 py-3.5 flex items-center justify-between gap-3">
-                        <div className="min-w-0 space-y-1">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <p className="text-sm font-medium text-gray-900 truncate">{erp.adresse}</p>
-                            {isExpired && (
-                              <span className="text-[10px] font-semibold bg-red-100 text-red-700 px-1.5 py-0.5 rounded whitespace-nowrap shrink-0">
-                                Expiré
-                              </span>
-                            )}
-                            {isNearExpiry && (
-                              <span className="text-[10px] font-semibold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded whitespace-nowrap shrink-0">
-                                Expire dans {daysLeft} j
-                              </span>
-                            )}
+              ) : (() => {
+                const displayed = searchQuery ? filteredErps : filteredErps.slice(0, visibleErpCount);
+                const remaining = filteredErps.length - displayed.length;
+                return (
+                  <>
+                    <div className="divide-y divide-gray-100">
+                      {displayed.map(erp => {
+                        const daysLeft = getDaysLeft(erp.validite);
+                        const isExpired = daysLeft !== null && daysLeft <= 0;
+                        const isNearExpiry = daysLeft !== null && daysLeft > 0 && daysLeft <= 30;
+                        return (
+                          <div key={erp.ref} className="px-5 py-3.5 flex items-center justify-between gap-3">
+                            <div className="min-w-0 space-y-1">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <p className="text-sm font-medium text-gray-900 truncate">{erp.adresse}</p>
+                                {isExpired && (
+                                  <span className="text-[10px] font-semibold bg-red-100 text-red-700 px-1.5 py-0.5 rounded whitespace-nowrap shrink-0">Expiré</span>
+                                )}
+                                {isNearExpiry && (
+                                  <span className="text-[10px] font-semibold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded whitespace-nowrap shrink-0">Expire dans {daysLeft} j</span>
+                                )}
+                              </div>
+                              <p className="text-xs text-gray-400">
+                                {formatDate(erp.date)}
+                                {erp.commune ? ` · ${erp.commune}` : ''}
+                                {erp.validite && !isExpired && !isNearExpiry && (
+                                  <span className="text-gray-300"> · valide jusqu'au {new Date(erp.validite).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' })}</span>
+                                )}
+                              </p>
+                            </div>
+                            <a
+                              href={`/apercu?ref=${encodeURIComponent(erp.ref)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1 text-xs font-semibold text-navy-900 hover:underline shrink-0"
+                            >
+                              Ouvrir <ExternalLink className="h-3 w-3" />
+                            </a>
                           </div>
-                          <p className="text-xs text-gray-400">
-                            {formatDate(erp.date)}
-                            {erp.commune ? ` · ${erp.commune}` : ''}
-                            {erp.validite && !isExpired && !isNearExpiry && (
-                              <span className="text-gray-300"> · valide jusqu'au {new Date(erp.validite).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' })}</span>
-                            )}
-                          </p>
-                        </div>
-                        <a
-                          href={`/apercu?ref=${encodeURIComponent(erp.ref)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-xs font-semibold text-navy-900 hover:underline shrink-0"
-                        >
-                          Ouvrir <ExternalLink className="h-3 w-3" />
-                        </a>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+                        );
+                      })}
+                    </div>
+                    {!searchQuery && remaining > 0 && (
+                      <button
+                        onClick={() => setVisibleErpCount(v => v + 5)}
+                        className="w-full px-5 py-3 text-xs font-semibold text-navy-900 hover:bg-slate-50 border-t border-gray-100 transition-colors text-center"
+                      >
+                        Voir les {Math.min(remaining, 5)} suivants
+                        <span className="text-gray-400 font-normal ml-1">({remaining} restants)</span>
+                      </button>
+                    )}
+                  </>
+                );
+              })()}
             </div>
 
             {/* Generate CTA if credits > 0 */}
