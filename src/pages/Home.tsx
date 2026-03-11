@@ -337,7 +337,7 @@ export default function Home() {
                 ))}
               </div>
               <span className="text-white font-bold text-sm">4,9</span>
-              <span className="text-white/70 text-xs">· {reviewCount} avis Google</span>
+              <span className="text-white text-xs">· {reviewCount} avis Google</span>
             </div>
           </div>
           <p className="text-xs text-white/95 mt-3 font-medium">
