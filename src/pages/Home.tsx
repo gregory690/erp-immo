@@ -256,7 +256,7 @@ export default function Home() {
     observer.observe(document.body, { childList: true });
 
     const script = document.createElement('script');
-    script.src = 'https://cdn.trustindex.io/loader.js?6aad671652ea80386376f58365a';
+    script.src = 'https://cdn.trustindex.io/loader.js?8576f9b665ce87505f269a0b7bc';
     script.async = true;
     document.body.appendChild(script);
 
