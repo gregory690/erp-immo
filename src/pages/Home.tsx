@@ -234,6 +234,34 @@ export default function Home() {
 
   // Charge le script Trustindex et déplace le widget dans la hero dès qu'il est injecté
   useEffect(() => {
+    const mount = document.getElementById('ti-hero-mount');
+    if (!mount) return;
+
+    // Snapshot des éléments body au moment du mount React (inclut root, scripts ET extensions déjà injectées)
+    // On ne déplacera QUE les éléments apparus APRÈS ce snapshot → uniquement TrustIndex
+    const snapshot = new Set(Array.from(document.body.children));
+
+    const findAndMove = () => {
+      for (const child of Array.from(document.body.children)) {
+        if (!snapshot.has(child) && child instanceof HTMLElement && child.tagName !== 'SCRIPT') {
+          mount.appendChild(child);
+          return true;
+        }
+      }
+      return false;
+    };
+
+    if (findAndMove()) return;
+
+    const observer = new MutationObserver(() => {
+      if (findAndMove()) observer.disconnect();
+    });
+    observer.observe(document.body, { childList: true });
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
     if (window.location.hash) {
       const id = window.location.hash.slice(1);
       const el = document.getElementById(id);
@@ -317,6 +345,8 @@ export default function Home() {
               <ArrowRight className="h-5 w-5" />
             </Button>
           </div>
+          {/* Trustindex — badge avis clients */}
+          <div id="ti-hero-mount" className="flex justify-center mt-5 mb-1 no-print" />
           <p className="text-xs text-white/95 mt-3 font-medium">
             ✓ 19,99 € · ✓ Données officielles Géorisques · ✓ PDF prêt en 2 minutes
           </p>
