@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import maplibregl from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
 
 const IGN_ORTHO_STYLE = {
   version: 8 as const,
