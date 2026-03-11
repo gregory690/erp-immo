@@ -238,17 +238,26 @@ export default async function handler(req, res) {
       console.error('Webhook: email index error:', err.message);
     }
 
-    // Envoyer l'email immédiatement depuis le webhook (sans PDF — juste le lien)
-    // Si Preview.tsx appelle send-erp-email ensuite, il verra email_sent:true et skippera.
-    if (process.env.RESEND_API_KEY && existingDoc?.bien && existingDoc?.metadata) {
+    // Générer le PDF puis envoyer l'email avec pièce jointe
+    // Si le PDF échoue, on ne marque PAS email_sent → Preview.tsx reprend en fallback
+    if (process.env.RESEND_API_KEY && process.env.PDFSHIFT_API_KEY && existingDoc?.bien && existingDoc?.metadata) {
       try {
         const { buildEmailHTML } = await import('./_email-template.js');
+        const { generatePDFAttachment, buildPDFFilename } = await import('./_generate-pdf.js');
+
         const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
           ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
           : 'https://erp-immo.vercel.app';
         const redownloadUrl = `${baseUrl}/apercu?ref=${encodeURIComponent(erpRef)}`;
+        const printUrl = `${baseUrl}/print?ref=${encodeURIComponent(erpRef)}`;
         const dateRealisation = new Date(existingDoc.metadata.date_realisation).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
         const dateExpiration = new Date(existingDoc.metadata.validite_jusqu_au).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+
+        // Génération PDF — timeout 45s (webhook maxDuration: 60s)
+        const pdfAttachment = await Promise.race([
+          generatePDFAttachment(printUrl, buildPDFFilename(existingDoc)),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('PDF timeout')), 45000)),
+        ]);
 
         await fetch('https://api.resend.com/emails', {
           method: 'POST',
@@ -267,12 +276,13 @@ export default async function handler(req, res) {
               catnatCount: existingDoc.catnat?.length ?? 0,
               dateRealisation,
               dateExpiration,
-              hasPdf: false,
+              hasPdf: true,
             }),
+            attachments: [pdfAttachment],
           }),
         });
 
-        // Marquer email_sent pour éviter le doublon côté Preview.tsx
+        // Marquer email_sent → Preview.tsx skippera (pas de doublon)
         await kv.set(erpRef, JSON.stringify({
           ...existingDoc,
           paid: true,
@@ -280,13 +290,13 @@ export default async function handler(req, res) {
           email_sent: true,
         }), { ex: 60 * 60 * 24 * 180 });
 
-        console.log(`Webhook: email envoyé à ${customerEmail} pour ${erpRef}`);
+        console.log(`Webhook: email + PDF envoyé à ${customerEmail} pour ${erpRef}`);
       } catch (emailErr) {
-        console.error('Webhook: email send error:', emailErr.message);
-        // Non bloquant — Preview.tsx tentera avec PDF en fallback
+        console.error('Webhook: email/PDF error:', emailErr.message);
+        // email_sent reste false → Preview.tsx tentera en fallback avec PDF
       }
     } else {
-      console.log(`Webhook: email délégué à send-erp-email (RESEND_API_KEY absent ou doc incomplet)`);
+      console.log(`Webhook: email délégué à send-erp-email (clés manquantes ou doc incomplet)`);
     }
   } catch (err) {
     console.error('Webhook: KV update error:', err.message);
