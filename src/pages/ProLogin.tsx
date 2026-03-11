@@ -101,7 +101,7 @@ export default function ProLogin() {
               </p>
               <p className="text-xs text-gray-300 text-center">
                 <button
-                  onClick={() => navigate('/')}
+                  onClick={() => { window.location.href = '/#hero'; }}
                   className="hover:text-gray-500 transition-colors"
                 >
                   ← Retour au site grand public

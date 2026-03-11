@@ -699,7 +699,7 @@ export default function ProDashboard() {
             contact@edl-diagnostic-erp.fr
           </a>
           {' · '}
-          <button onClick={() => navigate('/')} className="underline hover:text-gray-600">
+          <button onClick={() => { window.location.href = '/#hero'; }} className="underline hover:text-gray-600">
             Site grand public
           </button>
         </p>
