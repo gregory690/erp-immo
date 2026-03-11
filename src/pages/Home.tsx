@@ -234,39 +234,6 @@ export default function Home() {
 
   // Charge le script Trustindex et déplace le widget dans la hero dès qu'il est injecté
   useEffect(() => {
-    const mount = document.getElementById('ti-hero-mount');
-    if (!mount) return;
-
-    // Surveille les ajouts dans le body — dès que Trustindex insère son widget, on le déplace
-    const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        for (const node of Array.from(mutation.addedNodes)) {
-          if (
-            node instanceof HTMLElement &&
-            node.tagName !== 'SCRIPT' &&
-            node.id !== 'root'
-          ) {
-            mount.appendChild(node);
-            observer.disconnect();
-            return;
-          }
-        }
-      }
-    });
-    observer.observe(document.body, { childList: true });
-
-    const script = document.createElement('script');
-    script.src = 'https://cdn.trustindex.io/loader.js?8576f9b665ce87505f269a0b7bc';
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      observer.disconnect();
-      if (document.body.contains(script)) document.body.removeChild(script);
-    };
-  }, []);
-
-  useEffect(() => {
     if (window.location.hash) {
       const id = window.location.hash.slice(1);
       const el = document.getElementById(id);
@@ -350,9 +317,6 @@ export default function Home() {
               <ArrowRight className="h-5 w-5" />
             </Button>
           </div>
-          {/* Trustindex — badge avis clients */}
-          <div id="ti-hero-mount" className="flex justify-center mt-5 mb-1 no-print" />
-
           <p className="text-xs text-white/95 mt-3 font-medium">
             ✓ 19,99 € · ✓ Données officielles Géorisques · ✓ PDF prêt en 2 minutes
           </p>
