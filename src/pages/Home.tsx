@@ -257,7 +257,7 @@ export default function Home() {
 
     // Script chargé APRÈS le snapshot — TrustIndex injecte après → capturé par l'observer
     const script = document.createElement('script');
-    script.src = 'https://cdn.trustindex.io/loader.js?8576f9b665ce87505f269a0b7bc';
+    script.src = 'https://cdn.trustindex.io/loader.js?6aad671652ea80386376f58365a';
     script.async = true;
     document.body.appendChild(script);
 
