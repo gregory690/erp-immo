@@ -324,7 +324,7 @@ export default function Home() {
           <div className="flex justify-center mt-5 mb-1">
             <div className="relative group inline-flex items-center gap-2.5 bg-white/10 border border-white/20 rounded-full px-4 py-2 backdrop-blur-sm cursor-default">
               {/* Tooltip au hover */}
-              <div className="pointer-events-none absolute -bottom-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+              <div className="pointer-events-none absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
                 <span className="text-[9px] tracking-wide" style={{ color: '#1a976a' }}>Généré par Trustindex</span>
               </div>
               <svg viewBox="0 0 24 24" className="w-4 h-4 shrink-0" aria-hidden="true">
