@@ -8,31 +8,30 @@ import { ERPPreview } from '../components/report/ERPPreview';
 import { fetchERPByReference } from '../services/email.service';
 import type { ERPDocument } from '../types/erp.types';
 
-// CSS injecté statiquement pour que PDFShift (use_print: true) rende correctement
+// CSS injecté statiquement pour que PDFShift (use_print: true) rende correctement.
+// IMPORTANT : ne pas utiliser position:absolute sur #erp-document-preview —
+// cela retire l'élément du flux normal et casse break-before:page dans Chromium,
+// provoquant des pages blanches parasites entre chaque section.
 const PRINT_CSS = `
   @media print {
     @page { margin: 8mm 10mm; size: A4 portrait; }
-    body * { visibility: hidden !important; }
-    #erp-document-preview,
-    #erp-document-preview * { visibility: visible !important; }
+    /* Masquer le chrome avec display:none (pas visibility:hidden qui conserve l'espace) */
+    .no-print { display: none !important; }
+    /* #erp-document-preview reste dans le flux normal — indispensable pour la pagination */
     #erp-document-preview {
-      position: absolute !important;
-      top: 0 !important; left: 0 !important;
       width: 100% !important;
-      height: auto !important;
       overflow: visible !important;
       box-shadow: none !important;
       border: none !important;
       border-radius: 0 !important;
     }
-    #erp-document-preview > * { overflow: visible !important; }
-    .no-print, .no-print * { visibility: hidden !important; display: none !important; }
-    .print-only { display: block !important; visibility: visible !important; }
-    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    .erp-page-footer { break-before: avoid !important; orphans: 4; widows: 4; }
+    /* Supprimer les bordures divide-y au niveau des sauts de page */
+    #erp-document-preview > * { border-top: none !important; }
     .erp-block { break-inside: avoid; }
-    /* Empêche la page blanche en fin de document */
+    .erp-page-footer { break-before: avoid !important; orphans: 4; widows: 4; }
+    .erp-risk-legend { break-inside: avoid !important; }
     #erp-document-preview > *:last-child { break-after: avoid !important; page-break-after: avoid !important; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   }
   /* Écran : masquer tous les éléments chrome */
   body { background: white !important; margin: 0 !important; padding: 0 !important; }

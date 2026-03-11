@@ -161,7 +161,7 @@ export function RiskMapPage({
       {mapBlock}
 
       {/* Legend */}
-      <div className="mt-3 flex flex-wrap items-center gap-4 text-[10px] text-gray-700 border border-gray-200 rounded p-2 bg-gray-50">
+      <div className="erp-risk-legend mt-3 flex flex-wrap items-center gap-4 text-[10px] text-gray-700 border border-gray-200 rounded p-2 bg-gray-50">
         <span className="font-semibold text-gray-500 uppercase text-[9px] tracking-wide">
           Légende :
         </span>
