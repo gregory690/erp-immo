@@ -3,7 +3,7 @@
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ],
   "functions": {
-    "api/stripe-webhook.js": { "maxDuration": 120 },
+    "api/stripe-webhook.js": { "maxDuration": 300 },
     "api/send-erp-email.js": { "maxDuration": 120 }
   },
   "headers": [

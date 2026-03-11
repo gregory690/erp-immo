@@ -262,22 +262,24 @@ export default async function handler(req, res) {
           dateExpiration,
         };
 
-        // Tentatives PDF (max 2, timeout 40s chacune, 3s entre les deux)
+        // Tentatives PDF (max 4, timeout 25s chacune, 2s entre chaque)
+        // Budget total : 4×25s + 3×2s = 106s sur maxDuration 300s
         let pdfAttachment = null;
         let pdfErrorMsg = null;
         if (process.env.PDFSHIFT_API_KEY) {
-          for (let attempt = 1; attempt <= 2; attempt++) {
+          for (let attempt = 1; attempt <= 4; attempt++) {
             try {
               pdfAttachment = await Promise.race([
                 generatePDFAttachment(printUrl, buildPDFFilename(existingDoc)),
-                new Promise((_, reject) => setTimeout(() => reject(new Error('PDF timeout')), 40000)),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('PDF timeout')), 25000)),
               ]);
               pdfErrorMsg = null;
+              console.log(`Webhook: PDF généré à la tentative ${attempt}/4`);
               break;
             } catch (err) {
               pdfErrorMsg = err.message;
-              console.warn(`Webhook: PDF tentative ${attempt}/2 échouée: ${err.message}`);
-              if (attempt < 2) await new Promise(r => setTimeout(r, 3000));
+              console.warn(`Webhook: PDF tentative ${attempt}/4 échouée: ${err.message}`);
+              if (attempt < 4) await new Promise(r => setTimeout(r, 2000));
             }
           }
         }
