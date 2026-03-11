@@ -340,7 +340,7 @@ export default function ProLanding() {
                 <div className="bg-white px-5 pt-6 pb-5">
                   <p className="text-gray-400 text-[10px] uppercase tracking-widest font-bold mb-4">Simulez votre tarif</p>
                   <div className="flex items-baseline justify-between mb-3">
-                    <p className="text-navy-900 font-semibold text-sm">Combien d'ERPs par an ?</p>
+                    <p className="text-navy-900 font-semibold text-sm">Quel est votre volume d'ERPs ?</p>
                     <p className="text-navy-900 font-extrabold text-2xl leading-none">{sliderQty}</p>
                   </div>
                   <input
