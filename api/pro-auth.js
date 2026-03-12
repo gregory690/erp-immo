@@ -142,8 +142,8 @@ async function handleWaitlist(req, res) {
   }
 
   const normalizedEmail = email.toLowerCase().trim();
-  const safeDept = String(dept).slice(0, 200);
-  const safeCap = String(cap).slice(0, 50);
+  const safeDept = String(dept).slice(0, 200).replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
+  const safeCap = String(cap).slice(0, 50).replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
 
   // Rate limit : 3 inscriptions / heure / email
   try {

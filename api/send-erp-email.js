@@ -155,10 +155,15 @@ export default async function handler(req, res) {
     });
 
     // Marquer l'email comme envoyé pour éviter les doublons (ex: si webhook arrive ensuite)
+    // Les champs serveur sont explicitement restaurés pour qu'ils ne puissent jamais être
+    // écrasés par des données contrôlées côté client (même logique que la 1re sauvegarde).
     try {
       await kv.set(reference, JSON.stringify({
         ...(existingDoc || {}),
         ...erpDocument,
+        paid: existingDoc?.paid ?? false,
+        stripe_session_id: existingDoc?.stripe_session_id ?? null,
+        customer_email: existingDoc?.customer_email ?? null,
         email_sent: true,
       }), {
         ex: 60 * 60 * 24 * 180,

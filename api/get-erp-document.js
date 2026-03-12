@@ -58,8 +58,14 @@ export default async function handler(req, res) {
 
   // Cas 2 : doc sans stripe_session_id (créé avant cette mise à jour)
   // → comportement legacy, on le délivre pour ne pas bloquer d'anciens clients
-  if (!doc.stripe_session_id) {
+  // SÉCURITÉ : on exclut les docs avec paid:false explicite (jamais passés par checkout)
+  if (!doc.stripe_session_id && doc.paid !== false) {
     return res.status(200).json(sanitizeDoc(doc));
+  }
+
+  // Cas 2b : pas de session Stripe et paiement explicitement refusé → erreur
+  if (!doc.stripe_session_id) {
+    return res.status(403).json({ error: 'Paiement non confirmé' });
   }
 
   // Cas 3 : webhook pas encore passé → vérification directe auprès de Stripe
