@@ -82,7 +82,7 @@ export default function ProLogin() {
                     onChange={e => setRememberMe(e.target.checked)}
                     className="w-4 h-4 rounded border-gray-300 accent-navy-900"
                   />
-                  Rester connecté 7 jours
+                  Se souvenir de moi sur cet appareil
                 </label>
                 <Button
                   type="submit"
