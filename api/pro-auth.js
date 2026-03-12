@@ -47,10 +47,12 @@ async function handleLogin(req, res) {
     // Non bloquant
   }
 
-  // Générer token UUID v4, stocker en KV (TTL 1h)
+  const rememberMe = req.body?.rememberMe === true;
+
+  // Générer token UUID v4, stocker en KV (TTL 1h pour le clic)
   const token = randomUUID();
   try {
-    await kv.set(`pro:session:${token}`, JSON.stringify({ email: normalizedEmail, pending: true }), {
+    await kv.set(`pro:session:${token}`, JSON.stringify({ email: normalizedEmail, pending: true, rememberMe }), {
       ex: 3600,
     });
   } catch (err) {
@@ -112,11 +114,12 @@ async function handleVerify(req, res) {
   if (!email) return res.status(401).json({ error: 'Session invalide' });
 
   // Rotation du token : supprime le magic link (exposé URL), crée session longue
+  const sessionTTL = sessionData.rememberMe ? 60 * 60 * 24 * 7 : 60 * 60 * 24; // 7j ou 24h
   const sessionToken = randomUUID();
   try {
     await kv.del(magicLinkKey);
     await kv.set(`pro:session:${sessionToken}`, JSON.stringify({ email }), {
-      ex: 60 * 60 * 24, // 24h
+      ex: sessionTTL,
     });
   } catch (err) {
     console.error('pro-auth/verify: KV rotate error:', err.message);

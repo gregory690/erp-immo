@@ -58,11 +58,11 @@ export function clearProSession(): void {
 
 // ─── API calls ────────────────────────────────────────────────────────────────
 
-export async function proLogin(email: string): Promise<{ sent: true }> {
+export async function proLogin(email: string, rememberMe = false): Promise<{ sent: true }> {
   const res = await fetch('/api/pro-auth', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'login', email }),
+    body: JSON.stringify({ action: 'login', email, rememberMe }),
   });
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));
@@ -129,8 +129,8 @@ export async function useProCredit(
 ): Promise<{ success: true; credits_remaining: number }> {
   const res = await fetch('/api/pro-use-credit', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ token, erpDocument }),
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+    body: JSON.stringify({ erpDocument }),
   });
   if (res.status === 402) {
     throw new Error('Crédits insuffisants. Rechargez votre compte.');

@@ -7,6 +7,7 @@ import { proLogin, getProSession } from '../services/pro.service';
 export default function ProLogin() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +24,7 @@ export default function ProLogin() {
     setError(null);
     setLoading(true);
     try {
-      await proLogin(email);
+      await proLogin(email, rememberMe);
       setSent(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur lors de l\'envoi du lien');
@@ -74,6 +75,15 @@ export default function ProLogin() {
                   autoFocus
                   autoComplete="email"
                 />
+                <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={e => setRememberMe(e.target.checked)}
+                    className="w-4 h-4 rounded border-gray-300 accent-navy-900"
+                  />
+                  Rester connecté 7 jours
+                </label>
                 <Button
                   type="submit"
                   disabled={loading || !email}

@@ -27,7 +27,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { token, erpDocument } = req.body || {};
+  const { erpDocument } = req.body || {};
+  const authHeader = req.headers['authorization'] || '';
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
 
   if (!erpDocument?.metadata?.reference) {
     return res.status(400).json({ error: 'Document ERP invalide' });
