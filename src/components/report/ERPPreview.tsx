@@ -126,7 +126,7 @@ function SummaryPage({ erp, demoMode, staticMode = false }: { erp: ERPDocument; 
   const totalPages = catnat.length > 0 ? 8 : 7;
 
   return (
-    <div className="p-6 sm:p-8 font-sans text-sm">
+    <div className="erp-summary-page p-6 sm:p-8 font-sans text-sm">
       {/* En-tête */}
       <div className="flex items-start justify-between pb-3 mb-4 border-b-2 border-gray-900">
         <div>
@@ -521,7 +521,7 @@ function ENSAPage({ erp }: { erp: ERPDocument }) {
   const totalPages = catnat.length > 0 ? 8 : 7;
 
   return (
-    <div className="p-4 sm:p-6 font-sans text-gray-900">
+    <div className="erp-ensa-page p-4 sm:p-6 font-sans text-gray-900">
       {/* Titre officiel */}
       <div className="text-center mb-3">
         <h2 className="text-[13px] font-black uppercase tracking-wide">État des Nuisances Sonores Aériennes</h2>
@@ -653,7 +653,7 @@ function CatNatPage({ erp, totalPages }: { erp: ERPDocument; totalPages: number 
   const { bien, catnat } = erp;
 
   return (
-    <div className="p-4 sm:p-6 font-sans text-gray-900">
+    <div className="erp-catnat-page p-4 sm:p-6 font-sans text-gray-900">
       <div className="flex items-start justify-between mb-4">
         <div className="text-[10px] text-gray-600 space-y-0.5">
           <p className="font-bold">Ministère du Développement Durable</p>

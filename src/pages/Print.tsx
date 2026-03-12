@@ -32,10 +32,14 @@ const PRINT_CSS = `
     .erp-risk-legend { break-inside: avoid !important; }
     #erp-document-preview > *:last-child { break-after: avoid !important; page-break-after: avoid !important; }
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    /* ERPFormPage : zoom 0.88 garantit que le contenu tient sur une page A4
-       quelle que soit la combinaison de risques (PPRN/PPRM/SIS/Radon présents ou non).
-       PDFShift utilise Chromium qui supporte parfaitement la propriété zoom. */
-    .erp-form-page { zoom: 0.88; }
+    /* Zoom de sécurité sur chaque page — garantit qu'aucune ne déborde sur A4
+       quelle que soit la combinaison de données (PPR multiples, CatNat nombreux, etc.)
+       PDFShift/Chromium supporte la propriété CSS zoom nativement. */
+    .erp-summary-page { zoom: 0.92; }
+    .erp-form-page    { zoom: 0.88; }
+    .erp-ensa-page    { zoom: 0.92; }
+    .erp-catnat-page  { zoom: 0.88; }
+    /* Les pages de cartes (RiskMapPage) ont un contenu à hauteur fixe — pas de zoom nécessaire */
   }
   /* Écran : masquer tous les éléments chrome */
   body { background: white !important; margin: 0 !important; padding: 0 !important; }
