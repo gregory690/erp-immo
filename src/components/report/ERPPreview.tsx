@@ -649,7 +649,7 @@ function ENSAPage({ erp }: { erp: ERPDocument }) {
 
 // ─── Page 4 : Déclaration CatNat ──────────────────────────────────────────────
 
-function CatNatPage({ erp, totalPages }: { erp: ERPDocument; totalPages: number }) {
+function CatNatPage({ erp, pageNum, totalPages }: { erp: ERPDocument; pageNum: number; totalPages: number }) {
   const { bien, catnat } = erp;
 
   return (
@@ -737,7 +737,7 @@ function CatNatPage({ erp, totalPages }: { erp: ERPDocument; totalPages: number 
 
       <div className="mt-6 pt-3 text-[8px] text-gray-400 text-center border-t border-gray-200">
         <p>Pour en savoir plus, chacun peut consulter en préfecture ou en mairie, le dossier départemental sur les risques majeurs, le document d'information communal sur les risques majeurs et, sur internet, le site portail dédié à la prévention des risques majeurs : <strong>www.georisques.gouv.fr</strong></p>
-        <p className="mt-2 font-semibold text-gray-500">{totalPages} / {totalPages}</p>
+        <p className="mt-2 font-semibold text-gray-500">{pageNum} / {totalPages}</p>
       </div>
     </div>
   );
@@ -862,9 +862,18 @@ export function ERPPreview({ document: erp, onNew, demoMode = false, emailSent =
           <ENSAPage erp={erp} />
         </div>
 
-        {/* Pages 4-7 — Cartes Géorisques */}
+        {/* Page 4 — CatNat (si applicable) — avant les cartes (section III officielle) */}
+        {erp.catnat.length > 0 && (
+          <div style={{ breakBefore: 'page' } as React.CSSProperties}>
+            <CatNatPage erp={erp} pageNum={4} totalPages={8} />
+          </div>
+        )}
+
+        {/* Pages 4-7 (sans CatNat) ou 5-8 (avec CatNat) — Annexes cartographiques */}
         {RISK_MAP_CONFIGS.map((cfg, i) => {
-          const totalPages = erp.catnat.length > 0 ? 8 : 7;
+          const hasCatnat = erp.catnat.length > 0;
+          const totalPages = hasCatnat ? 8 : 7;
+          const pageNum = hasCatnat ? 5 + i : 4 + i;
           return (
             <div key={cfg.title} style={{ breakBefore: 'page' } as React.CSSProperties}>
               <RiskMapPage
@@ -875,20 +884,13 @@ export function ERPPreview({ document: erp, onNew, demoMode = false, emailSent =
                 lat={erp.bien.coordonnees.lat}
                 lng={erp.bien.coordonnees.lng}
                 adresse={erp.bien.adresse_complete}
-                pageNum={4 + i}
+                pageNum={pageNum}
                 totalPages={totalPages}
                 staticMode={staticMode}
               />
             </div>
           );
         })}
-
-        {/* Page 8 — CatNat (si applicable) */}
-        {erp.catnat.length > 0 && (
-          <div style={{ breakBefore: 'page' } as React.CSSProperties}>
-            <CatNatPage erp={erp} totalPages={8} />
-          </div>
-        )}
       </div>
     </div>
   );
