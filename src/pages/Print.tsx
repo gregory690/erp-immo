@@ -32,12 +32,10 @@ const PRINT_CSS = `
     .erp-risk-legend { break-inside: avoid !important; }
     #erp-document-preview > *:last-child { break-after: avoid !important; page-break-after: avoid !important; }
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    /* Compresser ERPFormPage pour tenir sur une seule page A4 */
-    .erp-form-page { padding: 8px 10px !important; }
-    .erp-form-signature { margin-top: 2px !important; }
-    .erp-form-signature .h-7 { height: 12px !important; }
-    .erp-form-signature .p-2 { padding: 4px 6px !important; }
-    .erp-form-page .erp-page-footer { margin-top: 4px !important; padding-top: 4px !important; }
+    /* ERPFormPage : zoom 0.88 garantit que le contenu tient sur une page A4
+       quelle que soit la combinaison de risques (PPRN/PPRM/SIS/Radon présents ou non).
+       PDFShift utilise Chromium qui supporte parfaitement la propriété zoom. */
+    .erp-form-page { zoom: 0.88; }
   }
   /* Écran : masquer tous les éléments chrome */
   body { background: white !important; margin: 0 !important; padding: 0 !important; }
