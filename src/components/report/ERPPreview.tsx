@@ -310,7 +310,7 @@ function ERPFormPage({ erp }: { erp: ERPDocument }) {
   const totalPages = catnat.length > 0 ? 8 : 7;
 
   return (
-    <div className="p-3 sm:p-4 font-sans text-gray-900">
+    <div className="erp-form-page p-3 sm:p-4 font-sans text-gray-900">
       {/* Titre officiel */}
       <div className="text-center mb-1.5">
         <h2 className="text-[13px] font-black uppercase tracking-wide">État des Risques et Pollutions</h2>
@@ -487,7 +487,7 @@ function ERPFormPage({ erp }: { erp: ERPDocument }) {
       </Block>
 
       {/* ─── Signature ─── */}
-      <div className="border border-gray-800 mt-0 text-[10px]" style={{ pageBreakInside: 'avoid' }}>
+      <div className="erp-form-signature border border-gray-800 mt-0 text-[10px]" style={{ pageBreakInside: 'avoid' }}>
         <div className="grid grid-cols-3 divide-x divide-gray-800">
           <div className="p-2">
             <p className="font-semibold text-gray-600">Vendeur ou Bailleur</p>
