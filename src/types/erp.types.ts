@@ -66,6 +66,7 @@ export interface ERPDocument {
     validite_jusqu_au: Date; // +6 mois
     version_reglementaire: 'arrete_27092022';
     mode: ERPMode;
+    operateur?: string; // Nom du diagnostiqueur / entreprise
   };
   bien: {
     adresse_complete: string;

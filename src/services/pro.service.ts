@@ -28,6 +28,7 @@ export interface ProPack {
 
 export interface ProAccount {
   email: string;
+  nom_entreprise?: string;
   credits: number;
   used: number;
   packs: ProPack[];
@@ -119,6 +120,22 @@ export async function createProCheckoutByQty(
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));
     throw new Error(data.error || 'Erreur lors de la création du paiement');
+  }
+  return res.json();
+}
+
+export async function updateProProfile(
+  token: string,
+  nom_entreprise: string
+): Promise<{ success: true }> {
+  const res = await fetch('/api/pro-account', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+    body: JSON.stringify({ nom_entreprise }),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error || 'Erreur lors de la mise à jour');
   }
   return res.json();
 }

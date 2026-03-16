@@ -13,6 +13,7 @@ export interface RiskCalculationInput {
   lng: number;
   cadastre: ReferenceCadastrale | null;
   mode: ERPMode;
+  operateur?: string;
 }
 
 export interface RiskCalculationState {
@@ -104,6 +105,7 @@ export function useRiskCalculation() {
         numero: input.cadastre?.numero ?? '',
         departement: input.cadastre?.departement,
         mode: input.mode,
+        operateur: input.operateur,
         resultats: results.resultats,
         catnat: results.catnat,
         sis: results.sis,

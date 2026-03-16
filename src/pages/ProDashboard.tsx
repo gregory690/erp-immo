@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import {
   Zap, Plus, ExternalLink, Loader2, AlertCircle, LogOut,
   CreditCard, Check, ChevronRight, FileText, Search, X,
-  Receipt, ChevronDown, Clock, BarChart2,
+  Receipt, ChevronDown, Clock, BarChart2, Building2,
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import {
   getProSession, clearProSession,
-  getProAccount, createProCheckoutByQty,
+  getProAccount, createProCheckoutByQty, updateProProfile,
 } from '../services/pro.service';
 import type { ProAccount } from '../services/pro.service';
 
@@ -69,6 +69,11 @@ export default function ProDashboard() {
   );
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [showMarketplace, setShowMarketplace] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const [nomEntreprise, setNomEntreprise] = useState('');
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [profileSaved, setProfileSaved] = useState(false);
+  const [profileError, setProfileError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!session) {
@@ -96,6 +101,7 @@ export default function ProDashboard() {
     try {
       const data = await getProAccount(session.token);
       setAccount(data);
+      setNomEntreprise(data.nom_entreprise ?? '');
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Erreur de chargement';
       if (msg.includes('expirée')) {
@@ -118,6 +124,22 @@ export default function ProDashboard() {
     } catch (err) {
       setPackError(err instanceof Error ? err.message : 'Erreur de paiement');
       setPackLoading(null);
+    }
+  }
+
+  async function handleSaveProfile() {
+    if (!session) return;
+    setSavingProfile(true);
+    setProfileError(null);
+    setProfileSaved(false);
+    try {
+      await updateProProfile(session.token, nomEntreprise);
+      setProfileSaved(true);
+      setTimeout(() => setProfileSaved(false), 3000);
+    } catch (err) {
+      setProfileError(err instanceof Error ? err.message : 'Erreur');
+    } finally {
+      setSavingProfile(false);
     }
   }
 
@@ -381,6 +403,50 @@ export default function ProDashboard() {
                 </div>
               );
             })()}
+
+            {/* Mon profil */}
+            <div className="bg-white border border-border rounded-xl overflow-hidden">
+              <button
+                onClick={() => setShowProfile(v => !v)}
+                className="w-full px-5 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors"
+              >
+                <div className="flex items-center gap-2">
+                  <Building2 className="h-4 w-4 text-gray-400" />
+                  <p className="text-sm font-semibold text-gray-900">Mon profil</p>
+                  {account.nom_entreprise && (
+                    <span className="text-xs text-gray-400 truncate max-w-[160px]">{account.nom_entreprise}</span>
+                  )}
+                </div>
+                <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${showProfile ? 'rotate-180' : ''}`} />
+              </button>
+              {showProfile && (
+                <div className="border-t border-gray-100 px-5 py-4 space-y-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                      Nom de l'entreprise
+                    </label>
+                    <input
+                      type="text"
+                      value={nomEntreprise}
+                      onChange={e => setNomEntreprise(e.target.value)}
+                      placeholder="Ex : Dupont Diagnostic Immobilier"
+                      maxLength={100}
+                      className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-navy-900/20 focus:border-navy-900/30 bg-white placeholder:text-gray-400"
+                    />
+                    <p className="text-[10px] text-gray-400 mt-1">Apparaît en en-tête de chaque ERP généré à la place de "EDL & DIAGNOSTIC"</p>
+                  </div>
+                  {profileError && <p className="text-xs text-red-600">{profileError}</p>}
+                  <button
+                    onClick={handleSaveProfile}
+                    disabled={savingProfile}
+                    className="flex items-center gap-2 bg-navy-900 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-navy-800 transition-colors disabled:opacity-60"
+                  >
+                    {savingProfile ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : profileSaved ? <Check className="h-3.5 w-3.5" /> : null}
+                    {profileSaved ? 'Enregistré !' : 'Enregistrer'}
+                  </button>
+                </div>
+              )}
+            </div>
 
             {/* Mes achats */}
             {account.packs.length > 0 && (

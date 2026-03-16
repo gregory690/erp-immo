@@ -105,6 +105,7 @@ export interface ERPCalculationInput {
   numero: string;
   departement?: string;
   mode: ERPMode;
+  operateur?: string;
   resultats: GeorisquesResultats | null;
   catnat: GeorisquesPaginatedResponse<CatNatArrete> | null;
   sis: SISData | null;
@@ -182,6 +183,7 @@ export function buildERPDocument(input: ERPCalculationInput): ERPDocument {
       validite_jusqu_au: validite,
       version_reglementaire: 'arrete_27092022',
       mode: input.mode,
+      ...(input.operateur ? { operateur: input.operateur } : {}),
     },
     bien: {
       adresse_complete: input.adresse_complete,

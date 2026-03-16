@@ -62,6 +62,7 @@ export default function Generate() {
   // Pro session
   const [isPro, setIsPro] = useState(false);
   const [proCredits, setProCredits] = useState(0);
+  const [proNomEntreprise, setProNomEntreprise] = useState<string | undefined>(undefined);
   const [proConfirmLoading, setProConfirmLoading] = useState(false);
   const [proConfirmError, setProConfirmError] = useState<string | null>(null);
 
@@ -102,7 +103,10 @@ export default function Generate() {
       // Fetch pro account to get current credits
       fetch('/api/pro-account', { headers: { 'Authorization': `Bearer ${session.token}` } })
         .then(r => r.ok ? r.json() : null)
-        .then(data => { if (data?.credits !== undefined) setProCredits(data.credits); })
+        .then(data => {
+          if (data?.credits !== undefined) setProCredits(data.credits);
+          if (data?.nom_entreprise) setProNomEntreprise(data.nom_entreprise);
+        })
         .catch(() => {});
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -145,6 +149,7 @@ export default function Generate() {
     if (!addressState) return;
     setStep(3);
     (window as any).plausible?.('Étape 3 — Position confirmée');
+    const proSession = getProSession();
     await calculate({
       adresse_complete: addressState.feature.properties.label,
       code_insee: addressState.feature.properties.citycode,
@@ -154,6 +159,7 @@ export default function Generate() {
       lng: addressState.lng,
       cadastre,
       mode: 'edition', // will be updated in step 4
+      operateur: proNomEntreprise || proSession?.email,
     });
   }
 

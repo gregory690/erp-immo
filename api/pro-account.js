@@ -19,7 +19,7 @@ async function verifyProToken(token) {
 }
 
 export default async function handler(req, res) {
-  if (req.method !== 'GET') {
+  if (req.method !== 'GET' && req.method !== 'PUT') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
@@ -29,6 +29,36 @@ export default async function handler(req, res) {
   const email = await verifyProToken(token);
   if (!email) {
     return res.status(401).json({ error: 'Non authentifié' });
+  }
+
+  // ─── PUT : mise à jour du profil ─────────────────────────────────────────
+  if (req.method === 'PUT') {
+    const { nom_entreprise } = req.body ?? {};
+    if (typeof nom_entreprise !== 'string') {
+      return res.status(400).json({ error: 'nom_entreprise requis' });
+    }
+    try {
+      const raw = await kv.get(`pro:profile:${email}`);
+      const profile = raw ? (typeof raw === 'string' ? JSON.parse(raw) : raw) : {};
+      profile.nom_entreprise = nom_entreprise.trim().slice(0, 100);
+      await kv.set(`pro:profile:${email}`, JSON.stringify(profile), { ex: 60 * 60 * 24 * 365 });
+      return res.status(200).json({ success: true });
+    } catch (err) {
+      console.error('pro-account PUT error:', err.message);
+      return res.status(500).json({ error: 'Erreur serveur' });
+    }
+  }
+
+  // ─── Profil ───────────────────────────────────────────────────────────────
+  let nom_entreprise = '';
+  try {
+    const raw = await kv.get(`pro:profile:${email}`);
+    if (raw) {
+      const profile = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      nom_entreprise = profile.nom_entreprise ?? '';
+    }
+  } catch (err) {
+    console.error('pro-account: profile error:', err.message);
   }
 
   // ─── Crédits ─────────────────────────────────────────────────────────────
@@ -148,5 +178,5 @@ export default async function handler(req, res) {
     }
   }
 
-  return res.status(200).json({ email, credits, used, packs, erps });
+  return res.status(200).json({ email, nom_entreprise, credits, used, packs, erps });
 }

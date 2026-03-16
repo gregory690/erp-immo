@@ -130,7 +130,7 @@ function SummaryPage({ erp, demoMode, staticMode = false }: { erp: ERPDocument; 
       {/* En-tête */}
       <div className="flex items-start justify-between pb-3 mb-4 border-b-2 border-gray-900">
         <div>
-          <p className="text-[10px] uppercase tracking-widest text-gray-500 mb-0.5">EDL &amp; DIAGNOSTIC</p>
+          <p className="text-[10px] uppercase tracking-widest text-gray-500 mb-0.5">{erp.metadata.operateur ?? 'EDL & DIAGNOSTIC'}</p>
           <h1 className="text-lg font-black text-gray-900 uppercase leading-tight">État des Risques et Pollutions</h1>
           <h2 className="text-base font-bold text-gray-700 uppercase leading-tight">État des Nuisances Sonores Aériennes</h2>
           <p className="text-[10px] text-gray-400 mt-1">Conforme à l'arrêté du 27 septembre 2022</p>
@@ -274,8 +274,9 @@ function SummaryPage({ erp, demoMode, staticMode = false }: { erp: ERPDocument; 
       </div>
 
       <div className="erp-page-footer mt-6 text-[9px] text-gray-400 text-center pt-3 border-t border-gray-200">
-        <p>Source officielle : georisques.gouv.fr · BAN · APICarto IGN</p>
-        <p className="mt-3 font-semibold text-gray-500">1 / {totalPages}</p>
+        <p>Source officielle : georisques.gouv.fr · BAN · APICarto IGN · Données interrogées le {formatDateFr(erp.metadata.date_realisation)}</p>
+        <p className="mt-1 text-[8px] italic text-gray-500">Les informations sont issues de la base nationale Géorisques à la date ci-dessus. Pour tout PPRN, PPRT ou zonage approuvé récemment non encore intégré à la base nationale, il est recommandé de vérifier auprès de la mairie et de la préfecture compétentes.</p>
+        <p className="mt-2 font-semibold text-gray-500">1 / {totalPages}</p>
       </div>
     </div>
   );
@@ -641,6 +642,7 @@ function ENSAPage({ erp }: { erp: ERPDocument }) {
 
       <div className="erp-page-footer mt-6 pt-3 text-[8px] text-gray-400 text-center border-t border-gray-200">
         <p>Information sur les nuisances sonores aériennes : <strong>https://www.ecologie.gouv.fr/</strong></p>
+        <p className="mt-1 italic text-gray-500">Les Plans d'Exposition au Bruit (PEB) sont publiés par la DGAC. En cas de mise à jour récente non encore reflétée dans la base nationale, il est recommandé de vérifier auprès de la mairie ou de la préfecture compétente.</p>
         <p className="mt-2 font-semibold text-gray-500">3 / {totalPages}</p>
       </div>
     </div>
